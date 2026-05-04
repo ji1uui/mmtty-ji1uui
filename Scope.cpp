@@ -129,7 +129,7 @@ void __fastcall TTScope::PaintPosition(void)
 	pCanvas->Font->Color = clWhite;
 	pCanvas->Font->Size = 8;
 	char bf[32];
-	sprintf(bf, "Gain:%.1lf", m_Gain);
+	snprintf(bf, sizeof(bf), "Gain:%.1lf", m_Gain);
 	::SetBkMode(pCanvas->Handle, TRANSPARENT);
 	pCanvas->TextOut(0, 0, bf);
 }

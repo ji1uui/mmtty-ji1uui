@@ -49,9 +49,9 @@ void __fastcall TPlayDlgBox::UpdateItem(void)
 {
 	char bf[32];
 
-	sprintf(bf, "%u[s]", int(pWave->m_length * 0.5 / SampFreq));
+	snprintf(bf, sizeof(bf), "%u[s]", int(pWave->m_length * 0.5 / SampFreq));
 	LTime->Caption = bf;
-	sprintf(bf, "%u[s]", int(pWave->GetPos() * 0.5 / SampFreq));
+	snprintf(bf, sizeof(bf), "%u[s]", int(pWave->GetPos() * 0.5 / SampFreq));
 	LPos->Caption = bf;
 	m_DisEvent++;
 	ScrollBar->Max = int(pWave->m_length * 0.5 / SampFreq);
@@ -83,7 +83,7 @@ void __fastcall TPlayDlgBox::ScrollBarChange(TObject *Sender)
 	pWave->Seek(pos * SampFreq*2);
 	if( !CheckPause->Checked ) pWave->m_pause = 0;
 	char bf[32];
-	sprintf(bf, "%u[s]", pos);
+	snprintf(bf, sizeof(bf), "%u[s]", pos);
 	LPos->Caption = bf;
 }
 //---------------------------------------------------------------------------

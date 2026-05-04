@@ -43,7 +43,7 @@ int __fastcall CMMList::QueryList(LPCSTR pFilter)
 	WIN32_FIND_DATA	fd;
 
 	char	Name[MAX_PATH];
-	sprintf(Name, "%s*.%s", BgnDir, pFilter);
+	snprintf(Name, sizeof(Name), "%s*.%s", BgnDir, pFilter);
 	hFind = ::FindFirstFile(Name, &fd);
 	if( hFind != INVALID_HANDLE_VALUE ){
 		while(1){
@@ -136,7 +136,7 @@ BOOL __fastcall CMMLink::Open(LPCSTR pItemName)
 	m_SessionName = m_ItemName;
 	char LibName[MAX_PATH];
 	if( !*GetEXT(pItemName) ){
-		sprintf(LibName, "%s.mml", pItemName);
+		snprintf(LibName, sizeof(LibName), "%s.mml", pItemName);
 		pItemName = LibName;
 	}
 
@@ -330,7 +330,7 @@ BOOL __fastcall CMMRadio::Open(LPCSTR pItemName)
 	m_ItemName = pItemName;
 	char LibName[MAX_PATH];
 	if( !*GetEXT(pItemName) ){
-		sprintf(LibName, "%s.mmr", pItemName);
+		snprintf(LibName, sizeof(LibName), "%s.mmr", pItemName);
 		pItemName = LibName;
 	}
 	m_hLib = ::LoadLibrary(pItemName);

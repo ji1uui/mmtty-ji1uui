@@ -2,20 +2,46 @@
 *.slo
 *.lo
 *.o
+*.obj
 
 # Compiled Dynamic libraries
 *.so
 *.dylib
+*.dll
 
 # Compiled Static libraries
 *.lai
 *.la
 *.a
+*.lib
+
+# Executables
+*.exe
 
 # C++Builder generated files
+*.tds
+*.map
+*.ilc
+*.ild
+*.ilf
+*.ils
+*.tmp
+*.#*
+*.~*
+
+# C++Builder output and intermediate directories
+Debug_Build/
+Release_Build/
+__history/
+__recovery/
+Win32/
+Win64/
+Win64x/
+
+# Local user/profile settings
 Mmtty.ini
-mmtty.map
-Debug_Build/*
-TEMP.MDT
 UserPara.ini
-mmtty.tds
+TEMP.MDT
+mmtty.cbproj.local
+*.identcache
+*.local
