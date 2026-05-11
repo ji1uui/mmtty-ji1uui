@@ -28,7 +28,7 @@
 // �e�h�q�t�B���^�̂��������݉��Z
 double __fastcall DoFIR(double *hp, double *zp, double d, int tap)
 {
-	memcpy(zp, &zp[1], sizeof(double)*tap);
+	memmove(zp, &zp[1], sizeof(double)*tap);
 	zp[tap] = d;
 	d = 0.0;
 	for( int i = 0; i <= tap; i++, hp++, zp++ ){
@@ -209,13 +209,13 @@ double CLMS::Do(double d)
 	if( m_Type ){
 		if( !m_NotchTap ) return d;	// �X���[�̎�
 		// �m�b�`�t�B���^
-		memcpy(Z, &Z[1], sizeof(double)*m_NotchTap);
+		memmove(Z, &Z[1], sizeof(double)*m_NotchTap);
 		Z[m_NotchTap] = d;
 		for( i = 0; i <= m_NotchTap; i++, zp++, hp++ ){
 			a += (*zp) * (*hp);
 		}
 		if( m_lmsNotch2 && m_twoNotch ){
-			memcpy(D, &D[1], sizeof(double)*m_NotchTap);
+			memmove(D, &D[1], sizeof(double)*m_NotchTap);
 			D[m_NotchTap] = a;
 			zp = D;
 			hp = HBPF;
@@ -229,7 +229,7 @@ double CLMS::Do(double d)
 	else {
 		if( !m_Tap ) return d;	// �X���[�̎�
 		// �g�����X�o�[�T���t�B���^
-		memcpy(Z, &Z[1], sizeof(double)*m_Tap);
+		memmove(Z, &Z[1], sizeof(double)*m_Tap);
 		Z[m_Tap] = D[0];
 		for( i = 0; i <= m_Tap; i++, zp++, hp++ ){
 			a += (*zp) * (*hp);
@@ -240,7 +240,7 @@ double CLMS::Do(double d)
 	m_lmsMErr = m_lmsErr * m_lmsMU2 * m_lmsADJSC;	// lmsADJSC = 1/(32768 * 32768) �X�P�[�����O�����l
 
 	// �x����̈ړ�
-	if( m_lmsDelay ) memcpy(D, &D[1], sizeof(double)*m_lmsDelay);
+	if( m_lmsDelay ) memmove(D, &D[1], sizeof(double)*m_lmsDelay);
 	D[m_lmsDelay] = d;
 
 	// �W���X�V
@@ -276,8 +276,8 @@ CDECM2::CDECM2()
 
 double CDECM2::Do(double d1, double d2)
 {
-	memcpy(Z1, &Z1[1], sizeof(double)*18);
-	memcpy(Z2, &Z2[1], sizeof(double)*17);
+	memmove(Z1, &Z1[1], sizeof(double)*18);
+	memmove(Z2, &Z2[1], sizeof(double)*17);
 	Z1[18] = d1;
 	Z2[17] = d2;
 
@@ -335,8 +335,8 @@ CDECM2H::CDECM2H()
 
 double CDECM2H::Do(double d1, double d2)
 {
-	memcpy(Z1, &Z1[1], sizeof(double)*32);
-	memcpy(Z2, &Z2[1], sizeof(double)*31);
+	memmove(Z1, &Z1[1], sizeof(double)*32);
+	memmove(Z2, &Z2[1], sizeof(double)*31);
 	Z1[32] = d1;
 	Z2[31] = d2;
 
@@ -421,7 +421,7 @@ CINTP2::CINTP2()
 
 void CINTP2::Do(double &d1, double &d2, double d)
 {
-	memcpy(Z, &Z[1], sizeof(double)*18);
+	memmove(Z, &Z[1], sizeof(double)*18);
 	Z[18] = d;
 
 	d1 = Z[0] * H[36];
@@ -476,9 +476,9 @@ CDECM3::CDECM3()
 
 double CDECM3::Do(double d1, double d2, double d3)
 {
-	memcpy(Z1, &Z1[1], sizeof(double)*16);
-	memcpy(Z2, &Z2[1], sizeof(double)*15);
-	memcpy(Z3, &Z3[1], sizeof(double)*15);
+	memmove(Z1, &Z1[1], sizeof(double)*16);
+	memmove(Z2, &Z2[1], sizeof(double)*15);
+	memmove(Z3, &Z3[1], sizeof(double)*15);
 	Z1[16] = d1;
 	Z2[15] = d2;
 	Z3[15] = d3;
@@ -547,7 +547,7 @@ CINTP3::CINTP3()
 
 void CINTP3::Do(double &d1, double &d2, double &d3, double d)
 {
-	memcpy(Z, &Z[1], sizeof(double)*16);
+	memmove(Z, &Z[1], sizeof(double)*16);
 	Z[16] = d;
 
 	d1 = Z[0] * H[48];
@@ -1586,7 +1586,7 @@ CINTPXY2FIR::CINTPXY2FIR()
 
 void CINTPXY2FIR::Do(double *dp, double d)
 {
-	memcpy(Z, &Z[1], sizeof(double)*16);
+	memmove(Z, &Z[1], sizeof(double)*16);
 	Z[16] = d;
 
 	dp[0] = Z[0] * H[32];
@@ -1636,7 +1636,7 @@ CINTPXY4FIR::CINTPXY4FIR()
 
 void __fastcall CINTPXY4FIR::Do(double *dp, double d)
 {
-	memcpy(Z, &Z[1], sizeof(double)*16);
+	memmove(Z, &Z[1], sizeof(double)*16);
 	Z[16] = d;
 
 	dp[0] = Z[0] * H[64];
@@ -1717,7 +1717,7 @@ CINTPXY8FIR::CINTPXY8FIR()
 
 void __fastcall CINTPXY8FIR::Do(double *dp, double d)
 {
-	memcpy(Z, &Z[1], sizeof(double)*12);
+	memmove(Z, &Z[1], sizeof(double)*12);
 	Z[12] = d;
 
 	dp[0] = Z[0] * H[96];
@@ -1847,10 +1847,10 @@ CDECM4::CDECM4()
 
 double __fastcall CDECM4::Do(double *dp)
 {
-	memcpy(Z1, &Z1[1], sizeof(double)*20);
-	memcpy(Z2, &Z2[1], sizeof(double)*19);
-	memcpy(Z3, &Z3[1], sizeof(double)*19);
-	memcpy(Z4, &Z4[1], sizeof(double)*19);
+	memmove(Z1, &Z1[1], sizeof(double)*20);
+	memmove(Z2, &Z2[1], sizeof(double)*19);
+	memmove(Z3, &Z3[1], sizeof(double)*19);
+	memmove(Z4, &Z4[1], sizeof(double)*19);
 #if 1
 	Z4[19] = *dp++;
 	Z3[19] = *dp++;
@@ -1958,7 +1958,7 @@ CINTP4::CINTP4()
 
 void __fastcall CINTP4::Do(double *dp, double d)
 {
-	memcpy(Z, &Z[1], sizeof(double)*20);
+	memmove(Z, &Z[1], sizeof(double)*20);
 	Z[20] = d;
 
 	dp[0] = Z[0] * H[80];

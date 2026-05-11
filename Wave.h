@@ -24,6 +24,25 @@
 #include "mmw.h"
 #include "ComLib.h"
 //---------------------------------------------------------------------------
+// SOLID P2: RAII wrapper for CRITICAL_SECTION â€” guarantees Leave even on
+// early returns or exceptions within the locked scope.
+class TScopedCriticalSection
+{
+public:
+	explicit TScopedCriticalSection(CRITICAL_SECTION &cs) : m_cs(cs)
+	{
+		::EnterCriticalSection(&m_cs);
+	}
+	~TScopedCriticalSection()
+	{
+		::LeaveCriticalSection(&m_cs);
+	}
+private:
+	CRITICAL_SECTION &m_cs;
+	TScopedCriticalSection(const TScopedCriticalSection &);
+	TScopedCriticalSection &operator=(const TScopedCriticalSection &);
+};
+//---------------------------------------------------------------------------
 #ifndef PROC
 #define PROC(Key) ((t##Key)GetProc("_" #Key))
 #endif
@@ -94,8 +113,8 @@ public:
     void __fastcall PumpMessages(void);
 };
 //---------------------------------------------------------------------------
-#define WAVE_TIMEOUT_EVENT  2000		// ƒoƒbƒtƒ@ƒŠƒNƒGƒXƒg‚Ìƒ^ƒCƒ€ƒAƒEƒg
-#define	WAVE_FIFO_MAX	    32			// zŠÂƒoƒbƒtƒ@‚ÌÅ‘åŒÂ”
+#define WAVE_TIMEOUT_EVENT  2000		// ï¿½oï¿½bï¿½tï¿½@ï¿½ï¿½ï¿½Nï¿½Gï¿½Xï¿½gï¿½Ìƒ^ï¿½Cï¿½ï¿½ï¿½Aï¿½Eï¿½g
+#define	WAVE_FIFO_MAX	    32			// ï¿½zï¿½Âƒoï¿½bï¿½tï¿½@ï¿½ÌÅ‘ï¿½Âï¿½
 //---------------------------------------------------------------------------
 class CWave
 {
@@ -108,10 +127,10 @@ public:
 	int     m_SoundStereo;
 
 private:
-	LPWAVEHDR    m_pInBuff[WAVE_FIFO_MAX];	// “ü—Íƒoƒbƒtƒ@
-	LPWAVEHDR    m_pOutBuff[WAVE_FIFO_MAX];	// o—Íƒoƒbƒtƒ@
-	WAVEFORMATEX m_OWFX;		// o—ÍƒtƒH[ƒ}ƒbƒg
-	WAVEFORMATEX m_IWFX;		// “ü—ÍƒtƒH[ƒ}ƒbƒg
+	LPWAVEHDR    m_pInBuff[WAVE_FIFO_MAX];	// ï¿½ï¿½ï¿½Íƒoï¿½bï¿½tï¿½@
+	LPWAVEHDR    m_pOutBuff[WAVE_FIFO_MAX];	// ï¿½oï¿½Íƒoï¿½bï¿½tï¿½@
+	WAVEFORMATEX m_OWFX;		// ï¿½oï¿½Íƒtï¿½Hï¿½[ï¿½}ï¿½bï¿½g
+	WAVEFORMATEX m_IWFX;		// ï¿½ï¿½ï¿½Íƒtï¿½Hï¿½[ï¿½}ï¿½bï¿½g
 
 	CRITICAL_SECTION m_InCS;
 	CRITICAL_SECTION m_OutCS;
