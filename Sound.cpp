@@ -288,6 +288,9 @@ void __fastcall TSound::Execute()
 	m_Stop = FALSE;
 	memset(Buff, 0, sizeof(Buff));
 	TaskPriority();
+	// Hint the scheduler to keep this audio thread on a non-zero core,
+	// leaving core 0 free for the OS and UI (soft preference, not a hard pin).
+	::SetThreadIdealProcessor(::GetCurrentThread(), 1);
 	::Sleep(200);		// 200ms
 	Wave.m_InFifoSize = sys.m_SoundFifoRX;
 	Wave.m_OutFifoSize = sys.m_SoundFifoTX;

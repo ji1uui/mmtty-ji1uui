@@ -22,19 +22,50 @@
 #pragma hdrstop
 
 #include <math.h>
+#include <immintrin.h>   // SSE2 / AVX2 intrinsics
+#include <malloc.h>      // _aligned_malloc / _aligned_free
 #include "fir.h"
 
 //-------------------------------------------------
-// �e�h�q�t�B���^�̂��������݉��Z
+// FIR filter — shift delay line then compute dot product.
+// Inner loop is vectorized: AVX2 path (4 doubles/cycle) when the compiler
+// target enables it; SSE2 path (2 doubles/cycle) otherwise.
 double __fastcall DoFIR(double *hp, double *zp, double d, int tap)
 {
-	memmove(zp, &zp[1], sizeof(double)*tap);
+	memmove(zp, &zp[1], sizeof(double) * tap);
 	zp[tap] = d;
-	d = 0.0;
-	for( int i = 0; i <= tap; i++, hp++, zp++ ){
-		d += (*zp) * (*hp);
+
+	const int n = tap + 1;
+	double s = 0.0;
+	int i = 0;
+
+#if defined(__AVX2__)
+	{
+		__m256d acc = _mm256_setzero_pd();
+		for( ; i <= n - 4; i += 4 )
+			acc = _mm256_add_pd(acc, _mm256_mul_pd(
+				_mm256_loadu_pd(zp + i), _mm256_loadu_pd(hp + i)));
+		// Horizontal reduce: [a,b,c,d] -> a+b+c+d
+		__m128d lo  = _mm256_castpd256_pd128(acc);
+		__m128d hi  = _mm256_extractf128_pd(acc, 1);
+		__m128d v2  = _mm_add_pd(lo, hi);
+		v2 = _mm_add_pd(v2, _mm_shuffle_pd(v2, v2, 1));
+		_mm_store_sd(&s, v2);
 	}
-	return d;
+#elif defined(__SSE2__)
+	{
+		__m128d acc = _mm_setzero_pd();
+		for( ; i <= n - 2; i += 2 )
+			acc = _mm_add_pd(acc, _mm_mul_pd(
+				_mm_loadu_pd(zp + i), _mm_loadu_pd(hp + i)));
+		// Horizontal reduce: [a,b] -> a+b
+		acc = _mm_add_pd(acc, _mm_shuffle_pd(acc, acc, 1));
+		_mm_store_sd(&s, acc);
+	}
+#endif
+	// Scalar tail (handles remainder and non-SIMD builds)
+	for( ; i < n; i++ ) s += zp[i] * hp[i];
+	return s;
 }
 //---------------------------------------------------------------------------
 CIIRTANK::CIIRTANK()
@@ -75,12 +106,12 @@ double CIIRTANK::Do(double d)
 //---------------------------------------------------------------------------
 CLMS::CLMS()
 {
-	Z = new double[TAPMAX+1];
-	H = new double[TAPMAX+1];
-	D = new double[DELAYMAX+1];
-	memset(Z, 0, sizeof(double[TAPMAX+1]));
-	memset(H, 0, sizeof(double[TAPMAX+1]));
-	memset(D, 0, sizeof(double[DELAYMAX+1]));
+	Z = (double*)_aligned_malloc((TAPMAX+1)  * sizeof(double), 32);
+	H = (double*)_aligned_malloc((TAPMAX+1)  * sizeof(double), 32);
+	D = (double*)_aligned_malloc((DELAYMAX+1)* sizeof(double), 32);
+	memset(Z, 0, (TAPMAX+1)  * sizeof(double));
+	memset(H, 0, (TAPMAX+1)  * sizeof(double));
+	memset(D, 0, (DELAYMAX+1)* sizeof(double));
 
 	m_lmsADJSC = 1.0 / double(32768 * 32768);			// �X�P�[�������l
 	m_lmsErr = m_lmsMErr = 0;
@@ -102,9 +133,9 @@ CLMS::CLMS()
 
 CLMS::~CLMS()
 {
-	delete[] D;
-	delete[] H;
-	delete[] Z;
+	_aligned_free(D);
+	_aligned_free(H);
+	_aligned_free(Z);
 }
 
 // IFilter::Clear - LMS フィルタの係数と状態バッファをリセットする
@@ -1472,19 +1503,19 @@ void MakeIIR(double *A, double *B, double fc, double fs, int order, int bc, doub
 CIIR::CIIR()
 {
 	m_order = 0;
-	A = new double[IIRMAX*3];
-	B = new double[IIRMAX*2];
-	Z = new double[IIRMAX*2];
-	memset(A, 0, sizeof(double[IIRMAX*3]));
-	memset(B, 0, sizeof(double[IIRMAX*2]));
-	memset(Z, 0, sizeof(double[IIRMAX*2]));
+	A = (double*)_aligned_malloc(IIRMAX*3 * sizeof(double), 32);
+	B = (double*)_aligned_malloc(IIRMAX*2 * sizeof(double), 32);
+	Z = (double*)_aligned_malloc(IIRMAX*2 * sizeof(double), 32);
+	memset(A, 0, IIRMAX*3 * sizeof(double));
+	memset(B, 0, IIRMAX*2 * sizeof(double));
+	memset(Z, 0, IIRMAX*2 * sizeof(double));
 }
 
 CIIR::~CIIR()
 {
-	if( A != NULL ) delete[] A;
-	if( B != NULL ) delete[] B;
-	if( Z != NULL ) delete[] Z;
+	if( A != NULL ) _aligned_free(A);
+	if( B != NULL ) _aligned_free(B);
+	if( Z != NULL ) _aligned_free(Z);
 }
 
 void CIIR::Clear(void)
