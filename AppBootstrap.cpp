@@ -68,58 +68,69 @@ BOOL __fastcall TSingleInstanceStartupPolicy::CanStart(void) const
 	return m_WindowProbe->IsVisible(hWnd);
 }
 //---------------------------------------------------------------------------
-void __fastcall TVclMmttyApplicationRunner::Initialize(void)
+void __fastcall TVclMmttyRunCommand::Execute(void)
 {
 	Application->Initialize();
-}
-//---------------------------------------------------------------------------
-void __fastcall TVclMmttyApplicationRunner::CreateMainForm(void)
-{
 	Application->CreateForm(__classid(TMmttyWd), &MmttyWd);
-}
-//---------------------------------------------------------------------------
-void __fastcall TVclMmttyApplicationRunner::Run(void)
-{
 	Application->Run();
 }
 //---------------------------------------------------------------------------
-void __fastcall TVclMmttyApplicationRunner::ShowException(Exception *exception)
+void __fastcall TVclExceptionHandler::Handle(Exception *exception)
 {
 	Application->ShowException(exception);
 }
 //---------------------------------------------------------------------------
+__fastcall TExceptionHandlingCommand::TExceptionHandlingCommand(IApplicationCommand *command,
+	IExceptionHandler *exceptionHandler)
+{
+	m_Command = command;
+	m_ExceptionHandler = exceptionHandler;
+}
+//---------------------------------------------------------------------------
+void __fastcall TExceptionHandlingCommand::Execute(void)
+{
+	try
+	{
+		m_Command->Execute();
+	}
+	catch (Exception &exception)
+	{
+		m_ExceptionHandler->Handle(&exception);
+	}
+}
+//---------------------------------------------------------------------------
 __fastcall TMmttyBootstrapper::TMmttyBootstrapper(const IStartupPolicy *startupPolicy,
-	IVclApplicationRunner *applicationRunner)
+	IApplicationCommand *applicationCommand)
 {
 	m_StartupPolicy = startupPolicy;
-	m_ApplicationRunner = applicationRunner;
+	m_ApplicationCommand = applicationCommand;
 }
 //---------------------------------------------------------------------------
 int __fastcall TMmttyBootstrapper::Run(void)
 {
-	if( !m_StartupPolicy->CanStart() ) return 0;
-
-	try
-	{
-		m_ApplicationRunner->Initialize();
-		m_ApplicationRunner->CreateMainForm();
-		m_ApplicationRunner->Run();
-	}
-	catch (Exception &exception)
-	{
-		m_ApplicationRunner->ShowException(&exception);
+	if( m_StartupPolicy->CanStart() ){
+		m_ApplicationCommand->Execute();
 	}
 	return 0;
 }
 //---------------------------------------------------------------------------
+__fastcall TDefaultMmttyBootstrapFactory::TDefaultMmttyBootstrapFactory()
+	: m_StartupPolicy(&m_CommandLine, &m_WindowProbe, "-Z", "TMmttyWd"),
+	m_ExceptionHandlingCommand(&m_RunCommand, &m_ExceptionHandler),
+	m_Bootstrapper(&m_StartupPolicy, &m_ExceptionHandlingCommand)
+{
+}
+//---------------------------------------------------------------------------
+TMmttyBootstrapper * __fastcall TDefaultMmttyBootstrapFactory::Create(void)
+{
+	return &m_Bootstrapper;
+}
+//---------------------------------------------------------------------------
 int __fastcall RunMmttyApplication(void)
 {
-	TWin32CommandLineProvider commandLine;
-	TWin32WindowProbe windowProbe;
-	TSingleInstanceStartupPolicy startupPolicy(&commandLine, &windowProbe, "-Z", "TMmttyWd");
-	TVclMmttyApplicationRunner applicationRunner;
-	TMmttyBootstrapper bootstrapper(&startupPolicy, &applicationRunner);
+	TDefaultMmttyBootstrapFactory factory;
+	TMmttyBootstrapper *bootstrapper = factory.Create();
 
-	return bootstrapper.Run();
+	return bootstrapper->Run();
 }
 //---------------------------------------------------------------------------

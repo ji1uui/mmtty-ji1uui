@@ -45,14 +45,18 @@ public:
 	virtual BOOL __fastcall CanStart(void) const = 0;
 };
 
-class IVclApplicationRunner
+class IApplicationCommand
 {
 public:
-	virtual ~IVclApplicationRunner() {}
-	virtual void __fastcall Initialize(void) = 0;
-	virtual void __fastcall CreateMainForm(void) = 0;
-	virtual void __fastcall Run(void) = 0;
-	virtual void __fastcall ShowException(Exception *exception) = 0;
+	virtual ~IApplicationCommand() {}
+	virtual void __fastcall Execute(void) = 0;
+};
+
+class IExceptionHandler
+{
+public:
+	virtual ~IExceptionHandler() {}
+	virtual void __fastcall Handle(Exception *exception) = 0;
 };
 
 class TWin32CommandLineProvider : public ICommandLineProvider
@@ -86,25 +90,63 @@ public:
 	virtual BOOL __fastcall CanStart(void) const;
 };
 
-class TVclMmttyApplicationRunner : public IVclApplicationRunner
+class TVclMmttyRunCommand : public IApplicationCommand
 {
 public:
-	virtual void __fastcall Initialize(void);
-	virtual void __fastcall CreateMainForm(void);
-	virtual void __fastcall Run(void);
-	virtual void __fastcall ShowException(Exception *exception);
+	virtual void __fastcall Execute(void);
+};
+
+class TVclExceptionHandler : public IExceptionHandler
+{
+public:
+	virtual void __fastcall Handle(Exception *exception);
+};
+
+class TExceptionHandlingCommand : public IApplicationCommand
+{
+private:
+	IApplicationCommand *m_Command;
+	IExceptionHandler *m_ExceptionHandler;
+
+public:
+	__fastcall TExceptionHandlingCommand(IApplicationCommand *command,
+		IExceptionHandler *exceptionHandler);
+	virtual void __fastcall Execute(void);
 };
 
 class TMmttyBootstrapper
 {
 private:
 	const IStartupPolicy *m_StartupPolicy;
-	IVclApplicationRunner *m_ApplicationRunner;
+	IApplicationCommand *m_ApplicationCommand;
 
 public:
 	__fastcall TMmttyBootstrapper(const IStartupPolicy *startupPolicy,
-		IVclApplicationRunner *applicationRunner);
+		IApplicationCommand *applicationCommand);
 	int __fastcall Run(void);
+};
+
+class IApplicationBootstrapFactory
+{
+public:
+	virtual ~IApplicationBootstrapFactory() {}
+	virtual TMmttyBootstrapper * __fastcall Create(void) = 0;
+};
+
+class TDefaultMmttyBootstrapFactory : public IApplicationBootstrapFactory
+{
+private:
+	TWin32CommandLineProvider m_CommandLine;
+	TWin32WindowProbe m_WindowProbe;
+	TSingleInstanceStartupPolicy m_StartupPolicy;
+	TVclMmttyRunCommand m_RunCommand;
+	TVclExceptionHandler m_ExceptionHandler;
+	TExceptionHandlingCommand m_ExceptionHandlingCommand;
+	TMmttyBootstrapper m_Bootstrapper;
+
+public:
+	__fastcall TDefaultMmttyBootstrapFactory();
+	virtual TMmttyBootstrapper * __fastcall Create(void);
 };
 
 int __fastcall RunMmttyApplication(void);
