@@ -191,6 +191,10 @@
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
     </PropertyGroup>
     <ItemGroup>
+        <CppCompile Include="AppBootstrap.cpp">
+            <BuildOrder>45</BuildOrder>
+            <DependentOn>AppBootstrap.h</DependentOn>
+        </CppCompile>
         <CppCompile Include="ClockAdj.cpp">
             <BuildOrder>9</BuildOrder>
             <Form>ClockAdjDlg</Form>

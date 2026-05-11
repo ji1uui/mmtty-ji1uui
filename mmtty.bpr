@@ -6,7 +6,7 @@ BCB = $(MAKEDIR)\..
 !endif
 # ---------------------------------------------------------------------------
 PROJECT = mmtty.exe
-OBJFILES = mmtty.obj Main.obj ComLib.obj fir.obj Sound.obj Rtty.obj Wave.obj Fft.obj \
+OBJFILES = mmtty.obj AppBootstrap.obj Main.obj ComLib.obj fir.obj Sound.obj Rtty.obj Wave.obj Fft.obj \
   Scope.obj Option.obj Comm.obj EditDlg.obj TextEdit.obj LogFile.obj LogList.obj \
   QsoDlg.obj country.obj mmcg.obj MmcgDlg.obj FreqDisp.obj VerDsp.obj LogConv.obj \
   ConvDef.obj PlayDlg.obj ShortCut.obj LogSet.obj ClockAdj.obj SetHelp.obj \
