@@ -139,6 +139,7 @@ __fastcall CCradio::CCradio(bool CreateSuspended)
 
 	m_ScanAddr = 0;
 	m_pRadio = NULL;
+	m_pProtocol = NULL;     // IRadioProtocol Strategy: Open 時に RadioProtocolFactory で設定
 }
 
 //---------------------------------------------------------------------------
@@ -492,12 +493,14 @@ DWORD CCradio::Read(BYTE *p, DWORD len)
 --------------------------------------------------------------
 ==============================================================
 */
-void CCradio::PutChar(char c)
+// ISerialDevice::PutChar - 1バイトを送信バッファに積む
+// (旧 PutChar(char c) から型を BYTE に変更 - ISP/LSP 準拠)
+void CCradio::PutChar(BYTE c)
 {
 	if( m_CreateON == TRUE ){
 		if( m_PSKGNRId ) return;
 		if( m_txcnt < RADIO_TXBUFSIZE ){
-			m_txbuf[m_txwp] = c;
+			m_txbuf[m_txwp] = (char)c;
 			m_txwp++;
 			if( m_txwp >= RADIO_TXBUFSIZE ) m_txwp = 0;
 			m_txcnt++;
@@ -516,16 +519,18 @@ len : 送信するサイズ
 --------------------------------------------------------------
 ==============================================================
 */
-void CCradio::Write(void *s, DWORD len)
+// ISerialDevice::Write - バイト列をまとめて送信する
+void CCradio::Write(const void *pData, DWORD len)
 {
 	if( m_CreateON == TRUE ){
 		if( m_PSKGNRId ) return;
-		char	*p;
-		for( p = (char *)s; len; len--, p++ ){
-			PutChar(*p);
+		const BYTE *p = static_cast<const BYTE*>(pData);
+		for( DWORD i = 0; i < len; i++ ){
+			PutChar(p[i]);
 		}
 	}
 }
+
 
 /*#$%
 ==============================================================

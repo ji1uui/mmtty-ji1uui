@@ -37,9 +37,9 @@ void InitCOMMPara(void)
 __fastcall CComm::CComm(bool CreateSuspended)
 	: TThread(CreateSuspended)
 {
-	m_CreateON = FALSE;	// ƒNƒŠƒGƒCƒgƒtƒ‰ƒO
+	m_CreateON = FALSE;	// ï¿½Nï¿½ï¿½ï¿½Gï¿½Cï¿½gï¿½tï¿½ï¿½ï¿½O
 	m_Command = 0;
-	m_fHnd = NULL;		// ƒtƒ@ƒCƒ‹ƒnƒ“ƒhƒ‹
+	m_fHnd = NULL;		// ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½nï¿½ï¿½ï¿½hï¿½ï¿½
 	m_inv = 0;
 	m_Execute = 0;
 	m_txwp = m_txrp = m_txcnt = 0;
@@ -114,7 +114,7 @@ void __fastcall CComm::Timer(void)
 	}
 }
 //-----------------------------------------------------------------
-// DTR‚Å•„†‘—M—p
+// DTRï¿½Å•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Mï¿½p
 void __fastcall CComm::OutData(BYTE d)
 {
 	const BYTE tbl[]={
@@ -158,7 +158,7 @@ void __fastcall CComm::Execute()
 {
 	m_Execute = 1;
     int BitLen = pMod->m_BitLen;
-	//---- ƒXƒŒƒbƒh‚ÌƒR[ƒh‚ğ‚±‚±‚É‹Lq ----
+	//---- ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½ÌƒRï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‹Lï¿½q ----
 //	Priority = tpLower;
 	while(1){
 _try:;
@@ -174,12 +174,12 @@ _try:;
 				::Sleep(10);
 			}
 			else if( !TxBusy() ){
-				if( m_FirstGaurd ){		// Å‰‚ÌƒK[ƒhŠÔ‚ÌŠm•Û
+				if( m_FirstGaurd ){		// ï¿½Åï¿½ï¿½ÌƒKï¿½[ï¿½hï¿½ï¿½ï¿½Ô‚ÌŠmï¿½ï¿½
 					m_FirstGaurd = 0;
 					::Sleep(250);
 					if( m_DisDiddle == -1 ) m_DisDiddle = 0;
 				}
-				else if( m_txcnt && (FSKDeff <= DEFFSOUND) ){	// ‘—Mƒf[ƒ^‚ ‚è
+				else if( m_txcnt && (FSKDeff <= DEFFSOUND) ){	// ï¿½ï¿½ï¿½Mï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½
 					m_DisDiddle = pMod->m_DisDiddle;
 					m_Data = m_txbuf[m_txrp];
 					if( m_figout && (m_fig == 0x1b) && (m_Data != 0x1f) ){
@@ -191,7 +191,7 @@ _try:;
 								::Sleep((pMod->m_ReCount * 3 * 1000) / SampFreq);
 								NextBuf();
 								goto _try;
-							case 0xfe:		// ƒLƒƒƒŠƒA’f‘±
+							case 0xfe:		// ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½fï¿½ï¿½
 								NextBuf();
 								goto _try;
 							case 0xfd:		// disable diddle
@@ -273,7 +273,7 @@ _try:;
 }
 /*#$%
 ==============================================================
-	’ÊM‰ñü‚ğƒNƒ[ƒY‚·‚é
+	ï¿½ÊMï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½Yï¿½ï¿½ï¿½ï¿½
 --------------------------------------------------------------
 --------------------------------------------------------------
 --------------------------------------------------------------
@@ -284,11 +284,11 @@ void __fastcall CComm::Close(void)
 	if( m_CreateON == TRUE ){
 		if( m_Execute ){
 			m_TxEnb = 0;
-			m_Command = COMM_CLOSE;	// ƒXƒŒƒbƒhI—¹ƒRƒ}ƒ“ƒh
-			Priority = tpNormal;		//ƒXƒŒƒbƒh‚Í’Êí‚Ì—Dæ“x‚Å‚ ‚é
+			m_Command = COMM_CLOSE;	// ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½Iï¿½ï¿½ï¿½Rï¿½}ï¿½ï¿½ï¿½h
+			Priority = tpNormal;		//ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½Í’Êï¿½Ì—Dï¿½ï¿½xï¿½Å‚ï¿½ï¿½ï¿½
 #if 0
 			DWORD tim = GetTickCount();
-			while( m_Command && (GetTickCount() < (tim + 3000)) ){			// ƒXƒŒƒbƒhI—¹‘Ò‚¿
+			while( m_Command && (GetTickCount() < (tim + 3000)) ){			// ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½Iï¿½ï¿½ï¿½Ò‚ï¿½
 				::Sleep(1);
 			}
 #else
@@ -311,8 +311,8 @@ void __fastcall CComm::ReqClose(void)
 	if( m_CreateON == TRUE ){
 		if( m_Execute ){
 			m_TxEnb = 0;
-			m_Command = COMM_CLOSE;	// ƒXƒŒƒbƒhI—¹ƒRƒ}ƒ“ƒh
-			Priority = tpNormal;		//ƒXƒŒƒbƒh‚Í’Êí‚Ì—Dæ“x‚Å‚ ‚é
+			m_Command = COMM_CLOSE;	// ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½Iï¿½ï¿½ï¿½Rï¿½}ï¿½ï¿½ï¿½h
+			Priority = tpNormal;		//ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½Í’Êï¿½Ì—Dï¿½ï¿½xï¿½Å‚ï¿½ï¿½ï¿½
 			FSKCount1+=1000;
 		}
 	}
@@ -323,7 +323,7 @@ void __fastcall CComm::WaitClose(void)
 		if( m_Execute && m_Command ){
 #if 0
 			DWORD tim = GetTickCount();
-			while( GetTickCount() < (tim + 3000) ){		// 1[s]‚ÌƒEƒGƒCƒg
+			while( GetTickCount() < (tim + 3000) ){		// 1[s]ï¿½ÌƒEï¿½Gï¿½Cï¿½g
 				if( !m_Command ) break;
 				::Sleep(1);
 			}
@@ -343,12 +343,12 @@ void __fastcall CComm::WaitClose(void)
 }
 /*#$%
 ==============================================================
-	’ÊM‰ñü‚ğƒI[ƒvƒ“‚·‚é
+	ï¿½ÊMï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 --------------------------------------------------------------
-PortName : ‰ñü‚Ì–¼‘O
-pCP		 : COMMPARA‚Ìƒ|ƒCƒ“ƒ^iƒkƒ‹‚Ì‚ÍƒfƒtƒHƒ‹ƒg‚Å‰Šú‰»j
-RBufSize : óMƒoƒbƒtƒ@‚ÌƒTƒCƒY(default=2048)
-TBufSize : ‘—Mƒoƒbƒtƒ@‚ÌƒTƒCƒY(default=2048)
+PortName : ï¿½ï¿½ï¿½ï¿½Ì–ï¿½ï¿½O
+pCP		 : COMMPARAï¿½Ìƒ|ï¿½Cï¿½ï¿½ï¿½^ï¿½iï¿½kï¿½ï¿½ï¿½Ìï¿½ï¿½Íƒfï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½Åï¿½ï¿½ï¿½ï¿½ï¿½ï¿½j
+RBufSize : ï¿½ï¿½Mï¿½oï¿½bï¿½tï¿½@ï¿½ÌƒTï¿½Cï¿½Y(default=2048)
+TBufSize : ï¿½ï¿½ï¿½Mï¿½oï¿½bï¿½tï¿½@ï¿½ÌƒTï¿½Cï¿½Y(default=2048)
 --------------------------------------------------------------
 TRUE/FALSE
 --------------------------------------------------------------
@@ -425,8 +425,8 @@ BOOL __fastcall CComm::Open(LPCTSTR PortName, int inv, COMMPARA *cp)
 	m_dcb.fOutxDsrFlow = FALSE;
 	m_dcb.EvtChar = 0x0d;
 
-	m_dcb.fRtsControl = m_inv ? RTS_CONTROL_ENABLE : RTS_CONTROL_DISABLE;		// ‘—M‹Ö~
-	m_dcb.fDtrControl = m_inv ? DTR_CONTROL_ENABLE : DTR_CONTROL_DISABLE;		// ‘—M‹Ö~
+	m_dcb.fRtsControl = m_inv ? RTS_CONTROL_ENABLE : RTS_CONTROL_DISABLE;		// ï¿½ï¿½ï¿½Mï¿½Ö~
+	m_dcb.fDtrControl = m_inv ? DTR_CONTROL_ENABLE : DTR_CONTROL_DISABLE;		// ï¿½ï¿½ï¿½Mï¿½Ö~
 
 //	m_dcb.fTXContinueOnXoff = TRUE;
 	m_dcb.XonLim = USHORT(1024/4);			// 1/4 of RBufSize
@@ -458,7 +458,7 @@ BOOL __fastcall CComm::Open(LPCTSTR PortName, int inv, COMMPARA *cp)
 	return TRUE;
 }
 //-----------------------------------------------------------------
-// PTTØ‚è‘Ö‚¦—p
+// PTTï¿½Ø‚ï¿½Ö‚ï¿½ï¿½p
 void __fastcall CComm::SetTXRX(int sw)
 {
 	if( m_CreateON == FALSE ) return;
@@ -478,7 +478,7 @@ void __fastcall CComm::SetTXRX(int sw)
 }
 #if 0
 //-----------------------------------------------------------------
-// DTR‚Å•„†‘—M—p
+// DTRï¿½Å•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Mï¿½p
 void __fastcall CComm::SetDTR(int sw)
 {
 	if( m_CreateON == FALSE ) return;
@@ -492,7 +492,7 @@ void __fastcall CComm::SetDTR(int sw)
 }
 #endif
 //-----------------------------------------------------------------
-// ‘—MƒrƒW[‚©‚Ç‚¤‚©’²‚×‚é   TRUE : ‘—MƒrƒW[ó‘Ô
+// ï¿½ï¿½ï¿½Mï¿½rï¿½Wï¿½[ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×‚ï¿½   TRUE : ï¿½ï¿½ï¿½Mï¿½rï¿½Wï¿½[ï¿½ï¿½ï¿½
 int __fastcall CComm::TxBusy(void)
 {
 	if( m_CreateON == FALSE ) return 0;
@@ -511,7 +511,7 @@ int __fastcall CComm::TxBusy(void)
 
 /*#$%
 ==============================================================
-	’ÊM‰ñü‚Éƒf[ƒ^‚ğ‘—M‚·‚é
+	ï¿½ÊMï¿½ï¿½ï¿½ï¿½Éƒfï¿½[ï¿½^ï¿½ğ‘—Mï¿½ï¿½ï¿½ï¿½
 --------------------------------------------------------------
 --------------------------------------------------------------
 --------------------------------------------------------------
@@ -531,13 +531,23 @@ void __fastcall CComm::PutChar(BYTE c)
 	}
 }
 
+// ISerialDevice::Write - ãƒã‚¤ãƒˆåˆ—ã‚’ã¾ã¨ã‚ã¦é€ä¿¡ã™ã‚‹
+// Write ã¯ PutChar ã®é€£ç¶šå‘¼ã³å‡ºã—ã¨ã—ã¦å®Ÿè£…ã•ã‚Œã‚‹ (SRP: æ—¢å­˜ PutChar ã®å†åˆ©ç”¨)
+void CComm::Write(const void *pData, DWORD len)
+{
+	const BYTE *p = static_cast<const BYTE*>(pData);
+	for (DWORD i = 0; i < len; i++) {
+		PutChar(p[i]);
+	}
+}
+
 #if 0
 /*#$%
 ==============================================================
-	óMƒoƒbƒtƒ@“à‚ÌŠi”[ƒf[ƒ^’·‚ğ“¾‚é
+ï¿½ï¿½Mï¿½oï¿½bï¿½tï¿½@ï¿½ï¿½ï¿½ÌŠiï¿½[ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½ğ“¾‚ï¿½
 --------------------------------------------------------------
 --------------------------------------------------------------
-	ƒf[ƒ^‚Ì’·‚³
+	ï¿½fï¿½[ï¿½^ï¿½Ì’ï¿½ï¿½ï¿½
 --------------------------------------------------------------
 ==============================================================
 */

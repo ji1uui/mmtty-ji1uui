@@ -18,7 +18,7 @@
 
 
 ///----------------------------------------------------------
-///  RadioƒRƒ~ƒjƒ…ƒP[ƒVƒ‡ƒ“ƒNƒ‰ƒX
+///  Radioï¿½Rï¿½~ï¿½jï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
 ///
 ///  (C) JE3HHT Makoto.Mori
 ///
@@ -27,13 +27,15 @@
 #define CradioH
 #include "ComLib.h"
 #include "mmlink.h"
+#include "ISerialDevice.h"
+#include "IRadioProtocol.h"
 //---------------------------------------------------------------------------
 #include <Classes.hpp>
 typedef struct {
 	int		change;
 
-	char	StrPort[32];	// ƒ|[ƒg‚Ì–¼‘O
-	int		BaudRate;		// ƒ{[ƒŒ[ƒg
+	char	StrPort[32];	// ï¿½|ï¿½[ï¿½gï¿½Ì–ï¿½ï¿½O
+	int		BaudRate;		// ï¿½{ï¿½[ï¿½ï¿½ï¿½[ï¿½g
 	int		BitLen;			// 0-7Bit, 1-8Bit
 	int		Stop;			// 0-1Bit, 1-2Bit
 	int		Parity;			// 0-PN, 1-PE, 2-PO
@@ -41,7 +43,7 @@ typedef struct {
 	int		flwCTS;			// CTS-RTS ON
 	int		usePTT;
 
-	long	ByteWait;		// ƒoƒCƒgŠÔ‚Ì‘—MƒEƒGƒCƒg
+	long	ByteWait;		// ï¿½oï¿½Cï¿½gï¿½Ô‚Ì‘ï¿½ï¿½Mï¿½Eï¿½Gï¿½Cï¿½g
 
 	int		Cmdxx;
 
@@ -91,17 +93,26 @@ enum {
 	RADIO_POLLFT891,    //1.70E AA6YQ
 };
 
-class CCradio : public TThread
+//---------------------------------------------------------------------------
+// SOLID: DIP + ISP + OCP
+//
+// CCradio ã¯ ISerialDevice ã‚’å®Ÿè£…ã™ã‚‹ã“ã¨ã§ Main.h ãŒå…·ä½“ã‚¯ãƒ©ã‚¹ã«ä¾å­˜ã—ãªããªã‚‹ã€‚
+// IRadioProtocol ã‚’å†…åŒ…ã™ã‚‹ã“ã¨ã§ç„¡ç·šæ©Ÿç¨®åˆ¥ãƒ—ãƒ­ãƒˆã‚³ãƒ«ã®åˆ‡ã‚Šæ›¿ãˆãŒ
+// CCradio æœ¬ä½“ã‚’å¤‰æ›´ã›ãšã«è¡Œãˆã‚‹ã‚ˆã†ã«ãªã‚‹ (OCP)ã€‚
+// m_pProtocol ã« RadioProtocolFactory::Create() ã§ç”Ÿæˆã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’
+// ã‚»ãƒƒãƒˆã™ã‚‹ã ã‘ã§æ–°æ©Ÿç¨®ã«å¯¾å¿œã§ãã‚‹ã€‚
+//---------------------------------------------------------------------------
+class CCradio : public TThread, public ISerialDevice
 {
 public:
-	BOOL	m_CreateON;		// ƒNƒŠƒGƒCƒgƒtƒ‰ƒO
-	DCB		m_dcb;			// ‚c‚b‚a
-	HANDLE	m_fHnd;			// ƒtƒ@ƒCƒ‹ƒnƒ“ƒhƒ‹
-	HWND	m_wHnd;			// e‚ÌƒEƒCƒ“ƒhƒEƒnƒ“ƒhƒ‹
+	BOOL	m_CreateON;		// ï¿½Nï¿½ï¿½ï¿½Gï¿½Cï¿½gï¿½tï¿½ï¿½ï¿½O
+	DCB		m_dcb;			// ï¿½cï¿½bï¿½a
+	HANDLE	m_fHnd;			// ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½nï¿½ï¿½ï¿½hï¿½ï¿½
+	HWND	m_wHnd;			// ï¿½eï¿½ÌƒEï¿½Cï¿½ï¿½ï¿½hï¿½Eï¿½nï¿½ï¿½ï¿½hï¿½ï¿½
 	UINT	m_uMsg;
-	UINT	m_ID;			// ƒƒbƒZ[ƒW‚Ì‚h‚c”Ô†
-	volatile	int	m_Command;		// ƒXƒŒƒbƒh‚Ö‚ÌƒRƒ}ƒ“ƒh
-	BOOL	m_TxAbort;		// ‘—M’†~ƒtƒ‰ƒO
+	UINT	m_ID;			// ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½Ì‚hï¿½cï¿½Ôï¿½
+	volatile	int	m_Command;		// ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½Ö‚ÌƒRï¿½}ï¿½ï¿½ï¿½h
+	BOOL	m_TxAbort;		// ï¿½ï¿½ï¿½Mï¿½ï¿½ï¿½~ï¿½tï¿½ï¿½ï¿½O
 	AnsiString	Name;
 	CMMRadio	*m_pRadio;
 
@@ -121,6 +132,10 @@ public:
 	int		m_MarkFreq;
 
 	int		m_ScanAddr;
+
+	// IRadioProtocol Strategy: ç„¡ç·šæ©Ÿç¨®åˆ¥ãƒ—ãƒ­ãƒˆã‚³ãƒ«ã‚’æ³¨å…¥å¯èƒ½ã«ã™ã‚‹ (OCP)
+	// RadioProtocolFactory::Create(RADIO.PollType) ã§ç”Ÿæˆã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚»ãƒƒãƒˆã™ã‚‹
+	IRadioProtocol  *m_pProtocol;
 protected:
 	void virtual __fastcall Execute();
 	BOOL 	OpenPipe(CRADIOPARA *cp, HWND hwnd, UINT nID);
@@ -136,26 +151,37 @@ public:
 	__fastcall CCradio(bool CreateSuspended);
 	__fastcall ~CCradio(){
 		Close();
+		delete m_pProtocol;
 	};
-	inline BOOL IsOpen(void){
-		return m_CreateON;
-	};
+
+	// --- ISerialDevice å®Ÿè£… ---
+	BOOL    IsOpen()  const  { return m_CreateON; }
+	void    Close(void);
+	void    ReqClose(void);
+	void    WaitClose(void);
+	void    Write(const void *pData, DWORD len);    // ISerialDevice::Write
+	void    PutChar(BYTE c);                         // ISerialDevice::PutChar
+	int     TxBusy(void);
+	void    SetPTT(int sw);
+	// --- ISerialDevice å®Ÿè£… çµ‚ã‚ã‚Š ---
+
 	inline void UpdateHandle(HWND hwnd, UINT uMsg){
 		m_wHnd = hwnd; m_uMsg = uMsg;
 	};
+
+	// ãƒ—ãƒ­ãƒˆã‚³ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å·®ã—æ›¿ãˆã‚‹ (OCP: æ–°æ©Ÿç¨®è¿½åŠ æ™‚ã« CCradio ã‚’å¤‰æ›´ä¸è¦)
+	void SetProtocol(IRadioProtocol *pProtocol) {
+		delete m_pProtocol;
+		m_pProtocol = pProtocol;
+	}
+	IRadioProtocol* GetProtocol() const { return m_pProtocol; }
+
 	BOOL Open(CRADIOPARA *cp, HWND hwnd, UINT uMsg, UINT nID);
-	void Close(void);
-	void ReqClose(void);
-	void WaitClose(void);
 	DWORD RecvLen(void);
-	int TxBusy(void);
 	DWORD Read(BYTE *p, DWORD len);
-	void Write(void *p, DWORD len);
-	void PutChar(char c);
 	void OutStr(LPCSTR fmt, ...);
 	void OutLine(LPCSTR fmt, ...);
 	void SendCommand(LPCSTR p);
-	void SetPTT(int sw);
 	void Timer(int tx, int interval);
 
 	inline LPCSTR GetFreq(void){

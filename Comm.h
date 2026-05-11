@@ -8,17 +8,17 @@
 // MMTTY is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License
 // as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-// MMTTY is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of 
+// MMTTY is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
 
-// You should have received a copy of the GNU Lesser General Public License along with MMTTY.  If not, see 
+// You should have received a copy of the GNU Lesser General Public License along with MMTTY.  If not, see
 // <http://www.gnu.org/licenses/>.
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
 ///----------------------------------------------------------
-///  �q�r�Q�R�Q�b�ʐM�N���X
+///  シリアル通信クラス
 ///
 ///  (C) JE3HHT Makoto.Mori
 ///
@@ -26,6 +26,7 @@
 #ifndef CommH
 #define CommH
 #include "rtty.h"
+#include "ISerialDevice.h"
 //---------------------------------------------------------------------------
 #include <Classes.hpp>
 //---------------------------------------------------------------------------
@@ -74,14 +75,26 @@ public:
 };
 
 #define	COMM_TXBUFSIZE		MODBUFMAX
-class CComm : public TThread
+
+//---------------------------------------------------------------------------
+// SOLID: Dependency Inversion Principle (DIP) + Interface Segregation Principle (ISP)
+//
+// CComm は ISerialDevice を実装することで、上位モジュール (Main.h 等) が
+// 具体クラスに依存せずにシリアル通信デバイスを操作できるようになる。
+// CComm / CCtnc / CCradio を同一インターフェース (ISerialDevice) で扱えるため、
+// デバイス種別に応じた if-else 分岐が不要になる。
+//
+// 既存の __fastcall メソッドがそのまま純粋仮想関数の実装となる。
+// 追加メソッド: Write(), SetPTT()  (旧コードには存在しなかった)
+//---------------------------------------------------------------------------
+class CComm : public TThread, public ISerialDevice
 {
 public:
-	BOOL	m_CreateON;		// �N���G�C�g�t���O
+	BOOL	m_CreateON;		// クリエイトフラグ
 	volatile	int	m_Command;
 	int		m_Execute;
-	DCB		m_dcb;			// �c�b�a
-	HANDLE	m_fHnd;			// �t�@�C���n���h��
+	DCB		m_dcb;			// DCB
+	HANDLE	m_fHnd;			// ファイルハンドル
 	int		m_inv;
 
 	int		m_TxEnb;
@@ -121,19 +134,24 @@ public:
 	__fastcall ~CComm(){
 		Close();
 	};
-	inline BOOL __fastcall IsOpen(void){
-		return m_CreateON;
-	};
+
+	// --- ISerialDevice 実装 ---
+	// Borland C++ では __fastcall メソッドが純粋仮想関数をオーバーライドできる。
+	// 既存の __fastcall メソッドがそのまま ISerialDevice の実装を担う。
+	BOOL    IsOpen()  const  { return m_CreateON; }         // ISerialDevice::IsOpen
+	void    __fastcall Close(void);                         // ISerialDevice::Close
+	void    __fastcall ReqClose(void);                      // ISerialDevice::ReqClose
+	void    __fastcall WaitClose(void);                     // ISerialDevice::WaitClose
+	void    __fastcall PutChar(BYTE c);                     // ISerialDevice::PutChar
+	int     __fastcall TxBusy(void);                        // ISerialDevice::TxBusy
+	void    SetPTT(int sw) { SetTXRX(sw); }                 // ISerialDevice::SetPTT (→SetTXRX)
+	void    Write(const void *pData, DWORD len);            // ISerialDevice::Write (追加)
+	// --- ISerialDevice 実装 終わり ---
+
 	inline void __fastcall SetInv(int inv){m_inv = inv;};
 	BOOL __fastcall Open(LPCTSTR PortName, int inv, COMMPARA *cp);
-	void __fastcall Close(void);
-	void __fastcall ReqClose(void);
-	void __fastcall WaitClose(void);
 	void __fastcall SetTXRX(int sw);
 //	void __fastcall SetDTR(int sw);
-	int __fastcall TxBusy(void);
-//	void Out(BYTE d);
-	void __fastcall PutChar(BYTE c);
 	void __fastcall EnbTX(int sw);
 	void __fastcall Timer(void);
 	inline __fastcall GetBufCount(void){
@@ -154,9 +172,3 @@ public:
 
 void InitCOMMPara(void);
 #endif
-
-
-
-
-
-
