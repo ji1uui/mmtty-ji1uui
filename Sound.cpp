@@ -30,16 +30,16 @@ WAVEINCAPS InCaps;
 WAVEOUTCAPS OutCaps;
 
 //---------------------------------------------------------------------------
-//   ’ˆÓ: VCL ƒIƒuƒWƒFƒNƒg‚Ìƒƒ\ƒbƒh‚ÆƒvƒƒpƒeƒB‚ğg—p‚·‚é‚É‚Í, Synchronize
-//         ‚ğg‚Á‚½ƒƒ\ƒbƒhŒÄ‚Ño‚µ‚Å‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñBŸ‚É—á‚ğ¦‚µ‚Ü‚·B
+//   æ³¨æ„: VCL ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒ¡ã‚½ãƒƒãƒ‰ã¨ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’ä½¿ç”¨ã™ã‚‹ã«ã¯, Synchronize
+//         ã‚’ä½¿ã£ãŸãƒ¡ã‚½ãƒƒãƒ‰å‘¼ã³å‡ºã—ã§ãªã‘ã‚Œã°ãªã‚Šã¾ã›ã‚“ã€‚æ¬¡ã«ä¾‹ã‚’ç¤ºã—ã¾ã™ã€‚
 //
 //      Synchronize(UpdateCaption);
 //
-//   ‚±‚±‚Å, UpdateCaption ‚ÍŸ‚Ì‚æ‚¤‚É‹Lq‚Å‚«‚Ü‚·B
+//   ã“ã“ã§, UpdateCaption ã¯æ¬¡ã®ã‚ˆã†ã«è¨˜è¿°ã§ãã¾ã™ã€‚
 //
 //      void __fastcall TSound::UpdateCaption()
 //      {
-//        Form1->Caption = "ƒXƒŒƒbƒh‚©‚ç‘‚«Š·‚¦‚Ü‚µ‚½";
+//        Form1->Caption = "ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰æ›¸ãæ›ãˆã¾ã—ãŸ";
 //      }
 //---------------------------------------------------------------------------
 __fastcall TSound::TSound(bool CreateSuspended)
@@ -92,6 +92,46 @@ __fastcall TSound::TSound(bool CreateSuspended)
 __fastcall TSound::~TSound()
 {
 	::VirtualUnlock(this, sizeof(TSound));
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TSound::TimingWait(void)
+{
+	while( (Wave.IsOutOpen() == TRUE) && (Wave.GetOutBC() > 0) ){
+		if( Terminated == TRUE ) break;
+		Wave.PumpMessages();
+		::Sleep(10);
+	}
+}
+//---------------------------------------------------------------------------
+void __fastcall TSound::SetTXRX(int sw)
+{
+	m_ReqTx = sw ? 1 : 0;
+}
+//---------------------------------------------------------------------------
+void __fastcall TSound::ReadWrite(double *s, int size)
+{
+	WaveFile.ReadWrite(s, size);
+}
+//---------------------------------------------------------------------------
+void __fastcall TSound::FileClose(void)
+{
+	WaveFile.FileClose();
+}
+//---------------------------------------------------------------------------
+void __fastcall TSound::Rec(LPCSTR pName)
+{
+	WaveFile.Rec(pName);
+}
+//---------------------------------------------------------------------------
+void __fastcall TSound::Play(LPCSTR pName)
+{
+	WaveFile.Play(pName);
+}
+//---------------------------------------------------------------------------
+void __fastcall TSound::Rewind(void)
+{
+	WaveFile.Rewind();
 }
 
 void __fastcall TSound::InitWFX(void)
@@ -159,7 +199,7 @@ void __fastcall TSound::ErrorMsg(void)
 		InfoMB("Sound I/O failed in the MMW (%s)", sys.m_SoundMMW.c_str());
     }
     else {
-		ErrorMB((sys.m_WinFontCharset != SHIFTJIS_CHARSET)?"Can't open Sound card (%d)":"ƒTƒEƒ“ƒhƒJ[ƒh‚ªƒI[ƒvƒ“‚Å‚«‚Ü‚¹‚ñ.", m_IDDevice);
+		ErrorMB((sys.m_WinFontCharset != SHIFTJIS_CHARSET)?"Can't open Sound card (%d)":"ã‚µã‚¦ãƒ³ãƒ‰ã‚«ãƒ¼ãƒ‰ãŒã‚ªãƒ¼ãƒ—ãƒ³ã§ãã¾ã›ã‚“.", m_IDDevice);
     }
 }
 //---------------------------------------------------------------------------
@@ -217,22 +257,22 @@ void __fastcall TSound::TaskPriority(void)
 	switch(sys.m_SoundPriority){
 		case 0:
 			if( Priority != tpNormal ){
-				Priority = tpNormal;		//ƒXƒŒƒbƒh‚Í’Êí‚Ì—Dæ“x‚Å‚ ‚é
+				Priority = tpNormal;		//ã‚¹ãƒ¬ãƒƒãƒ‰ã¯é€šå¸¸ã®å„ªå…ˆåº¦ã§ã‚ã‚‹
 			}
 			break;
 		case 1:
 			if( Priority != tpHigher ){
-				Priority = tpHigher;		//ƒXƒŒƒbƒh‚Ì—Dæ“x‚Í’Êí‚æ‚è‚à 1 ƒ|ƒCƒ“ƒg‚‚¢
+				Priority = tpHigher;		//ã‚¹ãƒ¬ãƒƒãƒ‰ã®å„ªå…ˆåº¦ã¯é€šå¸¸ã‚ˆã‚Šã‚‚ 1 ãƒã‚¤ãƒ³ãƒˆé«˜ã„
 			}
 			break;
 		case 2:
 			if( Priority != tpHighest ){
-				Priority = tpHighest;		//ƒXƒŒƒbƒh‚Ì—Dæ“x‚Í’Êí‚æ‚è‚à 2 ƒ|ƒCƒ“ƒg‚‚¢
+				Priority = tpHighest;		//ã‚¹ãƒ¬ãƒƒãƒ‰ã®å„ªå…ˆåº¦ã¯é€šå¸¸ã‚ˆã‚Šã‚‚ 2 ãƒã‚¤ãƒ³ãƒˆé«˜ã„
 			}
 			break;
 		default:
 			if( Priority != tpTimeCritical ){
-				Priority = tpTimeCritical;	//ƒXƒŒƒbƒh‚Í‚à‚Á‚Æ‚à‚‚¢—Dæ“x‚ğæ“¾‚·‚é
+				Priority = tpTimeCritical;	//ã‚¹ãƒ¬ãƒƒãƒ‰ã¯ã‚‚ã£ã¨ã‚‚é«˜ã„å„ªå…ˆåº¦ã‚’å–å¾—ã™ã‚‹
 			}
 			break;
 	}
@@ -268,7 +308,7 @@ _init:;
 			if( timeout ) ErrorMsg();
 			if( Terminated == TRUE ) goto _ex;
             int Count = 3000/50;
-			while(1){							// ‹[—Às
+			while(1){							// æ“¬ä¼¼å®Ÿè¡Œ
 				if( Terminated == TRUE ) goto _ex;
 				::Sleep(50);
                 Wave.PumpMessages();
@@ -474,13 +514,13 @@ void __fastcall TSound::JobSpeedTest()
 	m_ReqSpeedTest = 0;
 }
 //---------------------------------------------------------------------------
-// ƒXƒŒƒbƒh“à‚ÅƒR[ƒ‹‚µ‚Ä‚Í‚¢‚¯‚È‚¢
+// ã‚¹ãƒ¬ãƒƒãƒ‰å†…ã§ã‚³ãƒ¼ãƒ«ã—ã¦ã¯ã„ã‘ãªã„
 #define	AFC_PEAKDOWN	128
 int __fastcall TSound::DoAFC(void)
 {
 	if( !sys.m_AFC ) return 0;
 	if( sys.m_echo != 2 ){
-		if( m_Tx ) return 0;	// ‘—M’†‚ÍÀs‚µ‚È‚¢
+		if( m_Tx ) return 0;	// é€ä¿¡ä¸­ã¯å®Ÿè¡Œã—ãªã„
 	}
 
 	double mfq = FSKDEM.GetMarkFreq();
@@ -621,16 +661,16 @@ int __fastcall TSound::DoAFC(void)
 	else {
 		if( (max1L - avg) < sys.m_AFCSQ*0.5 ) return 0;
 	}
-	int ns = m2L - m1L;						// ŒŸo‚µ‚½ƒVƒtƒg•
+	int ns = m2L - m1L;						// æ¤œå‡ºã—ãŸã‚·ãƒ•ãƒˆå¹…
 	if( !nb ){
 		if( ns < int(140.0 * (FFT_SIZE / SampFreq)) ) return 0;
 	}
 	if( ns > int(1500.0 * (FFT_SIZE / SampFreq)) ) return 0;
 
-	int os = (sft * (FFT_SIZE / SampFreq));	// Œ»İ‚ÌƒVƒtƒg•
+	int os = (sft * (FFT_SIZE / SampFreq));	// ç¾åœ¨ã®ã‚·ãƒ•ãƒˆå¹…
 	double nmfq = m1L * (SampFreq / FFT_SIZE);
 	double nsfq = m2L * (SampFreq / FFT_SIZE);
-	int ds = ABS(ns-os);					// ƒVƒtƒg•‚Ì·
+	int ds = ABS(ns-os);					// ã‚·ãƒ•ãƒˆå¹…ã®å·®
 	switch(sys.m_FixShift){
 		case 0:		// Free
 			if( nb ) goto _fixed;
@@ -813,7 +853,7 @@ double __fastcall TSound::GetScopeRange(double &low, double center, double shift
 	return FM;
 }
 //---------------------------------------------------------------------------
-// ƒXƒŒƒbƒh“à‚ÅƒR[ƒ‹‚µ‚Ä‚Í‚¢‚¯‚È‚¢
+// ã‚¹ãƒ¬ãƒƒãƒ‰å†…ã§ã‚³ãƒ¼ãƒ«ã—ã¦ã¯ã„ã‘ãªã„
 int __fastcall TSound::DrawFFT(Graphics::TBitmap *pBitmap, int sw, int XRD)
 {
 	if( m_FFTSW ){
@@ -991,7 +1031,7 @@ double __fastcall TSound::GetScreenFreq(int x, int XW, int XRD)
 }
 
 //---------------------------------------------------------------------------
-// ƒXƒŒƒbƒh“à‚ÅƒR[ƒ‹‚µ‚Ä‚Í‚¢‚¯‚È‚¢
+// ã‚¹ãƒ¬ãƒƒãƒ‰å†…ã§ã‚³ãƒ¼ãƒ«ã—ã¦ã¯ã„ã‘ãªã„
 int __fastcall TSound::DrawFFTWater(Graphics::TBitmap *pBitmap, int sw, int XRD)
 {
 	if( Remote & REMSHOWOFF ) return 2;
@@ -1105,7 +1145,7 @@ void __fastcall CWaveFile::ReadWrite(double *s, int size)
 	SHORT	d;
 
 	if( m_Handle != NULL ){
-		if( m_mode == 2 ){		// ‘‚«‚±‚İ
+		if( m_mode == 2 ){		// æ›¸ãã“ã¿
 			if( !m_pause ){
 				for( ; size; s++, size-- ){
 					d = SHORT(*s);
@@ -1121,7 +1161,7 @@ void __fastcall CWaveFile::ReadWrite(double *s, int size)
 				}
 			}
 		}
-		else {						// “Ç‚İo‚µ
+		else {						// èª­ã¿å‡ºã—
 			if( m_pause || m_dis ){
 				memset(s, 0, sizeof(double)*size);
 			}
@@ -1180,7 +1220,7 @@ void __fastcall CWaveFile::Rec(LPCSTR pName)
 	m_FileName = pName;
 	m_Handle = mmioOpen(m_FileName.c_str(), NULL, MMIO_CREATE|MMIO_WRITE|MMIO_ALLOCBUF);
 	if( m_Handle == NULL ){
-		ErrorMB( (sys.m_WinFontCharset != SHIFTJIS_CHARSET)?"Can't open '%s'":"'%s'‚ğì¬‚Å‚«‚Ü‚¹‚ñ.", pName);
+		ErrorMB( (sys.m_WinFontCharset != SHIFTJIS_CHARSET)?"Can't open '%s'":"'%s'ã‚’ä½œæˆã§ãã¾ã›ã‚“.", pName);
 		return;
 	}
 	m_Head[0] = 0x55;
@@ -1200,7 +1240,7 @@ BOOL __fastcall CWaveFile::Play(LPCSTR pName)
 	FileClose();
 	FILE *fp = fopen(pName, "rb");
 	if( fp == NULL ){
-		ErrorMB( (sys.m_WinFontCharset != SHIFTJIS_CHARSET)?"Can't open '%s'":"'%s'‚ğƒI[ƒvƒ“‚Å‚«‚Ü‚¹‚ñ.", pName);
+		ErrorMB( (sys.m_WinFontCharset != SHIFTJIS_CHARSET)?"Can't open '%s'":"'%s'ã‚’ã‚ªãƒ¼ãƒ—ãƒ³ã§ãã¾ã›ã‚“.", pName);
 		return FALSE;
 	}
 	m_length = filelength(fileno(fp));
@@ -1208,7 +1248,7 @@ BOOL __fastcall CWaveFile::Play(LPCSTR pName)
 	fclose(fp);
 	m_Handle = mmioOpen(m_FileName.c_str(), NULL, MMIO_READ|MMIO_ALLOCBUF);
 	if( m_Handle == NULL ){
-		ErrorMB( (sys.m_WinFontCharset != SHIFTJIS_CHARSET)?"Can't open '%s'":"'%s'‚ğƒI[ƒvƒ“‚Å‚«‚Ü‚¹‚ñ.", pName);
+		ErrorMB( (sys.m_WinFontCharset != SHIFTJIS_CHARSET)?"Can't open '%s'":"'%s'ã‚’ã‚ªãƒ¼ãƒ—ãƒ³ã§ãã¾ã›ã‚“.", pName);
 		return FALSE;
 	}
 	m_pos = 0;
@@ -1224,7 +1264,7 @@ BOOL __fastcall CWaveFile::Play(LPCSTR pName)
 			if( YesNoMB(
 				(sys.m_WinFontCharset != SHIFTJIS_CHARSET)
 				? "%s\r\n\r\nThis file has been recorded based on %uHz, play it with sampling conversion?"
-				: "%s\r\n\r\n‚±‚Ìƒtƒ@ƒCƒ‹‚Í %uHz ƒx[ƒX‚Å‹L˜^‚³‚ê‚Ä‚¢‚Ü‚·. ü”g”•ÏŠ·‚µ‚ÄÄ¶‚µ‚Ü‚·‚©H",
+				: "%s\r\n\r\nã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ %uHz ãƒ™ãƒ¼ã‚¹ã§è¨˜éŒ²ã•ã‚Œã¦ã„ã¾ã™. å‘¨æ³¢æ•°å¤‰æ›ã—ã¦å†ç”Ÿã—ã¾ã™ã‹ï¼Ÿ",
 				m_FileName.c_str(), SampTable[type] ) == IDNO ){
 				mmioClose(m_Handle, 0);
 				m_Handle = 0;
@@ -1325,7 +1365,7 @@ int __fastcall CWaveFile::ChangeSampFreq(LPCSTR tName, LPCSTR pName, int sSamp)
 				rlen = fread(rp, 1, rsize * 2, fp);
 				if( !rlen ) break;
 				rlen /= 2;
-				if( SampBase < sSamp ){             // ƒfƒVƒ[ƒVƒ‡ƒ“
+				if( SampBase < sSamp ){             // ãƒ‡ã‚·ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
 					tp = rp;
 					for( i = 0; i < rlen; i++, tp++ ){
 						*tp = riir.Do(*tp);
