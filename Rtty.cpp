@@ -28,7 +28,7 @@
 CSinTable	g_SinTable;
 
 //---------------------------------------------------------------------------
-// CSinTableƒNƒ‰ƒX
+// CSinTableã‚¯ãƒ©ã‚¹
 // Added by JE3HHT on Aug.2010
 __fastcall CSinTable::CSinTable()
 {
@@ -86,7 +86,7 @@ int *CTICK::GetData(void)
 	return ptbl[sel];
 }
 //---------------------------------------------------------------------------
-// VCOƒNƒ‰ƒX
+// VCOã‚¯ãƒ©ã‚¹
 CVCO::CVCO()
 {
 	m_vlock = 0;
@@ -166,7 +166,7 @@ double CVCO::Do(double d)
 }
 
 //---------------------------------------------------------------------------
-// VCOXƒNƒ‰ƒX
+// VCOXã‚¯ãƒ©ã‚¹
 __fastcall CVCOX::CVCOX()
 {
 	m_SampleFreq = SampFreq;
@@ -238,7 +238,7 @@ double __fastcall CVCOX::DoCos(void)
 }
 
 //---------------------------------------------------------------------------
-// CFSKMODƒNƒ‰ƒX
+// CFSKMODã‚¯ãƒ©ã‚¹
 CFSKMOD::CFSKMOD()
 {
 	m_SampFreq = sys.m_SampFreq + sys.m_TxOffset;
@@ -370,7 +370,7 @@ double CFSKMOD::Do(int echo){
 	if( !m_Count ){
 		m_Count = m_ReCount;
 		switch(m_mode){
-			case 0:		// ƒXƒ^[ƒgƒrƒbƒgo—Í
+			case 0:		// ã‚¹ã‚¿ãƒ¼ãƒˆãƒ“ãƒƒãƒˆå‡ºåŠ›
 				if( sys.m_TxPort == txTXD ) FSKDeff = m_cnt - FSKCount;
 				if( !m_CharWaitDiddle ){
 					if( m_CharWaitCount ){
@@ -398,7 +398,7 @@ _try:;
 						}
 					}
 					else {
-						if( sys.m_TxPort == txTXDOnly ){		// FSK Only‚Ì“¯Šú
+						if( sys.m_TxPort == txTXDOnly ){		// FSK Onlyæ™‚ã®åŒæœŸ
 #if 0
 							while( FSKCount1 == FSKCount2 ){
 								::Sleep(10);
@@ -407,7 +407,7 @@ _try:;
 							FSKCount2++;
 						}
 						m_Data = m_Buff[m_rp];
-						if( m_Data == 0xff ){		// ƒ}[ƒNM†‘—M
+						if( m_Data == 0xff ){		// ãƒãƒ¼ã‚¯ä¿¡å·é€ä¿¡
 							m_out = 1;
 							m_Count = m_ReCount * 3;
 							m_cnt--;
@@ -416,7 +416,7 @@ _try:;
 							m_CharWaitCount = 0;
 							break;
 						}
-						else if( m_Data == 0xfe ){	// ƒLƒƒƒŠƒAØ’f
+						else if( m_Data == 0xfe ){	// ã‚­ãƒ£ãƒªã‚¢åˆ‡æ–­
 							m_out = -1;
 							m_Count = m_ReCount * 3;
 							m_cnt--;
@@ -533,7 +533,7 @@ _try:;
 					}
 				}
 				break;
-			case 1:		// •„†o—Í
+			case 1:		// ç¬¦å·å‡ºåŠ›
 				if( m_DataCount ){
 					switch(m_BitLen){
 						case 6:
@@ -553,7 +553,7 @@ _try:;
 					m_DataCount--;
 					if( m_out ) m_SumParity++;
 				}
-				else {	// ƒXƒgƒbƒvƒrƒbƒg
+				else {	// ã‚¹ãƒˆãƒƒãƒ—ãƒ“ãƒƒãƒˆ
 					if( m_Parity ){
 						m_mode++;
 						switch(m_Parity){
@@ -595,7 +595,7 @@ _nx:;
 						break;
 				}
 				break;
-			case 3:		// ƒXƒgƒbƒvƒrƒbƒgI—¹
+			case 3:		// ã‚¹ãƒˆãƒƒãƒ—ãƒ“ãƒƒãƒˆçµ‚äº†
 				m_mode = 0;
 				break;
 		}
@@ -629,7 +629,7 @@ _nx:;
 
 
 //---------------------------------------------------------------------------
-// CFSKDEMƒNƒ‰ƒX
+// CFSKDEMã‚¯ãƒ©ã‚¹
 CFSKDEM::CFSKDEM()
 {
 	m_OverFlow = 0;
@@ -727,6 +727,15 @@ void CFSKDEM::SetSmoozFreq(double f)
 	m_SmoozFreq = f;
 	m_Smooz = int(DemSamp / f + 0.5);
 
+	avgMark.SetCount(m_Smooz);
+	avgSpace.SetCount(m_Smooz);
+}
+
+void CFSKDEM::SetSmoozCount(int n)
+{
+	if( n < 1 ) n = 1;
+	m_Smooz = n;
+	m_SmoozFreq = DemSamp / double(m_Smooz);
 	avgMark.SetCount(m_Smooz);
 	avgSpace.SetCount(m_Smooz);
 }
@@ -833,10 +842,10 @@ void CFSKDEM::DoFSK(void)
 		Tick.Write(m_dMark);
 		return;
 	}
-	if( m_dMark >= m_dSpace ){	// ƒ}[ƒN‚Ì
+	if( m_dMark >= m_dSpace ){	// ãƒãƒ¼ã‚¯ã®æ™‚
 		b = m_inv ? 0 : 1;
 	}
-	else {						// ƒXƒy[ƒX‚Ì
+	else {						// ã‚¹ãƒšãƒ¼ã‚¹ã®æ™‚
 		b = m_inv ? 1 : 0;
 	}
 	double deff = fabs(m_dMark - m_dSpace);
@@ -858,12 +867,12 @@ void CFSKDEM::DoFSK(void)
 
 	if( m_sq ){
 		if( !m_mode ){
-			if( m_Limit  ){		// óM
+			if( m_Limit  ){		// å—ä¿¡æ™‚
 				if( (m_SQLevel * 10.0) > m_avgdeff ){
 					b = 1;
 				}
 			}
-			else {				// ‘—M
+			else {				// é€ä¿¡æ™‚
 				if( m_SQLevel > m_avgdeff ){
 					b = 1;
 				}
@@ -876,12 +885,12 @@ void CFSKDEM::DoFSK(void)
 		m_ScopeBit.WriteData(b ? 8192.0 : 0);
 	}
 	switch(m_mode){
-		case 0:			// ƒXƒ^[ƒgƒrƒbƒgŒŸo‘Ò‚¿
+		case 0:			// ã‚¹ã‚¿ãƒ¼ãƒˆãƒ“ãƒƒãƒˆæ¤œå‡ºå¾…ã¡
 			if( !b ){
 				m_Count = m_ReCount/2;
 				if( m_majority ){
 					m_mark = m_space = 0;
-					m_mode = 256;	// ‘½”ŒˆƒƒWƒbƒN
+					m_mode = 256;	// å¤šæ•°æ±ºãƒ­ã‚¸ãƒƒã‚¯
 				}
 				else {
 					m_mode++;
@@ -895,14 +904,14 @@ void CFSKDEM::DoFSK(void)
 				m_Count = m_ReCount;
 			}
 			break;
-// ’ÊíƒƒWƒbƒN‚É‚æ‚é”»’è
-		case 1:			// ƒXƒ^[ƒgƒrƒbƒgŒŸo‘Ò‚¿(Half)
+// é€šå¸¸ãƒ­ã‚¸ãƒƒã‚¯ã«ã‚ˆã‚‹åˆ¤å®š
+		case 1:			// ã‚¹ã‚¿ãƒ¼ãƒˆãƒ“ãƒƒãƒˆæ¤œå‡ºå¾…ã¡(Half)
 			if( b ){
 				m_mode = 0;
 			}
 			else if( !m_Count ){
 				if( m_Scope ){
-					m_ScopeSync.UpdateData(-8192.0);	// ƒXƒ^[ƒgƒrƒbƒgˆÊ’u
+					m_ScopeSync.UpdateData(-8192.0);	// ã‚¹ã‚¿ãƒ¼ãƒˆãƒ“ãƒƒãƒˆä½ç½®
 				}
 				m_Count = m_ReCount;
 				m_Data = 0;
@@ -911,7 +920,7 @@ void CFSKDEM::DoFSK(void)
 				m_mode++;
 			}
 			break;
-		case 2:			// •„†‹L˜^’†
+		case 2:			// ç¬¦å·è¨˜éŒ²ä¸­
 			if( !m_Count ){
 				m_Count = m_ReCount;
 				m_Data = BYTE(m_Data << 1);
@@ -930,16 +939,16 @@ void CFSKDEM::DoFSK(void)
 				}
 			}
 			break;
-		case 3:			// ƒpƒŠƒeƒBƒrƒbƒg
+		case 3:			// ãƒ‘ãƒªãƒ†ã‚£ãƒ“ãƒƒãƒˆ
 			if( !m_Count ){
 				m_Count = m_ReCount;
 				m_mode++;
 				switch(m_Parity){
 					case 1:			// Even
-						if( (!(m_SumParity & 1) ^ b) & 1 ) m_mode = 0;		// ƒpƒŠƒeƒBƒGƒ‰[
+						if( (!(m_SumParity & 1) ^ b) & 1 ) m_mode = 0;		// ãƒ‘ãƒªãƒ†ã‚£ã‚¨ãƒ©ãƒ¼
 						break;
 					case 2:			// Odd
-						if( ((m_SumParity & 1) ^ b) & 1 ) m_mode = 0;		// ƒpƒŠƒeƒBƒGƒ‰[
+						if( ((m_SumParity & 1) ^ b) & 1 ) m_mode = 0;		// ãƒ‘ãƒªãƒ†ã‚£ã‚¨ãƒ©ãƒ¼
 						break;
 					case 3:
 						if( !b ) m_mode = 0;
@@ -950,16 +959,16 @@ void CFSKDEM::DoFSK(void)
 					default:
 						break;
 				}
-				if( !m_mode ){	// ƒpƒŠƒeƒBƒGƒ‰[
+				if( !m_mode ){	// ãƒ‘ãƒªãƒ†ã‚£ã‚¨ãƒ©ãƒ¼
 					m_Count = m_ReCount;
 					m_mode = 7;
 				}
 			}
 			break;
-		case 4:			// ƒXƒgƒbƒvƒrƒbƒg‚ÌŠm”F
+		case 4:			// ã‚¹ãƒˆãƒƒãƒ—ãƒ“ãƒƒãƒˆã®ç¢ºèª
 			if( !m_Count ){
 				if( m_Scope ){
-					m_ScopeSync.UpdateData(-4096.0);	// StopbitˆÊ’u
+					m_ScopeSync.UpdateData(-4096.0);	// Stopbitä½ç½®
 				}
 				if( b  || m_ignoreFream ){
 					if( m_BufCount < DEMBUFMAX ){
@@ -970,57 +979,57 @@ void CFSKDEM::DoFSK(void)
 					}
 					switch(m_StopLen){
 						case 2:		// 2bit
-							m_Count = (m_ReCount * 11/8);		// 23/16bitŠÔ‚ÌƒEƒGƒCƒg
+							m_Count = (m_ReCount * 11/8);		// 23/16bitæ™‚é–“ã®ã‚¦ã‚¨ã‚¤ãƒˆ
 							break;
 						case 1:		// 1.5bit
-							m_Count = (m_ReCount * 7/8);		// 15/16bitŠÔ‚ÌƒEƒGƒCƒg
+							m_Count = (m_ReCount * 7/8);		// 15/16bitæ™‚é–“ã®ã‚¦ã‚¨ã‚¤ãƒˆ
 							break;
 						case 4:		// 1.42bit
-							m_Count = (m_ReCount * 4/5);		// 0.82bitŠÔ‚ÌƒEƒGƒCƒg
+							m_Count = (m_ReCount * 4/5);		// 0.82bitæ™‚é–“ã®ã‚¦ã‚¨ã‚¤ãƒˆ
 							break;
 						case 3:
 						default:	// 1bit
-							m_Count = (m_ReCount * 3/8);		// 7/16bitŠÔ‚ÌƒEƒGƒCƒg
+							m_Count = (m_ReCount * 3/8);		// 7/16bitæ™‚é–“ã®ã‚¦ã‚¨ã‚¤ãƒˆ
 							break;
 					}
 					m_mode++;
 				}
-				if( !b ){			// ƒtƒŒ[ƒ~ƒ“ƒOƒGƒ‰[
+				if( !b ){			// ãƒ•ãƒ¬ãƒ¼ãƒŸãƒ³ã‚°ã‚¨ãƒ©ãƒ¼
 					m_mode = 8;
 				}
 			}
 			break;
-		case 5:			// ƒXƒgƒbƒvƒrƒbƒgI—¹‘Ò‚¿ƒ^ƒCƒ}[
+		case 5:			// ã‚¹ãƒˆãƒƒãƒ—ãƒ“ãƒƒãƒˆçµ‚äº†å¾…ã¡ã‚¿ã‚¤ãƒãƒ¼
 			if( !m_Count ){
 				if( m_Scope ){
-					m_ScopeSync.UpdateData(-4096.0);	// StopbitsI—¹ˆÊ’u
+					m_ScopeSync.UpdateData(-4096.0);	// Stopbitsçµ‚äº†ä½ç½®
 				}
 				m_mode++;
 			}
 			break;
-		case 6:			// ƒXƒgƒbƒvI—¹‘Ò‚¿
+		case 6:			// ã‚¹ãƒˆãƒƒãƒ—çµ‚äº†å¾…ã¡
 			if( b ){
 				m_Count = m_ReCount;
 			}
-			else {		// Ÿ‚ÌƒXƒ^[ƒgƒrƒbƒg
+			else {		// æ¬¡ã®ã‚¹ã‚¿ãƒ¼ãƒˆãƒ“ãƒƒãƒˆ
 				m_Count = m_ReCount/2;
 				m_mode = 0;
 			}
 			break;
-		case 7:			// ƒpƒŠƒeƒBƒGƒ‰[
+		case 7:			// ãƒ‘ãƒªãƒ†ã‚£ã‚¨ãƒ©ãƒ¼æ™‚
 			if( !m_Count ){
-				m_ScopeSync.UpdateData(-4096.0);	// StopbitˆÊ’u
+				m_ScopeSync.UpdateData(-4096.0);	// Stopbitä½ç½®
 				m_mode--;
 			}
 			break;
-		case 8:			// ƒtƒŒ[ƒ~ƒ“ƒOƒGƒ‰[
+		case 8:			// ãƒ•ãƒ¬ãƒ¼ãƒŸãƒ³ã‚°ã‚¨ãƒ©ãƒ¼æ™‚
 			m_Count = m_ReCount;
 			if( b ){
 				m_mode = 0;
 			}
 			break;
-// ‘½”ŒˆƒƒWƒbƒN‚É‚æ‚éƒf[ƒ^æ‚è‚±‚İ
-		case 256:		// ƒXƒ^[ƒgƒrƒbƒgŒŸo‘Ò‚¿(Half)
+// å¤šæ•°æ±ºãƒ­ã‚¸ãƒƒã‚¯ã«ã‚ˆã‚‹ãƒ‡ãƒ¼ã‚¿å–ã‚Šã“ã¿
+		case 256:		// ã‚¹ã‚¿ãƒ¼ãƒˆãƒ“ãƒƒãƒˆæ¤œå‡ºå¾…ã¡(Half)
 			if( b ){m_mark++;} else {m_space++;}
 			if( !m_Count ){
 				b = (m_mark >= m_space) ? 1 : 0;
@@ -1029,17 +1038,17 @@ void CFSKDEM::DoFSK(void)
 				}
 				else {
 					if( m_Scope ){
-						m_ScopeSync.UpdateData(-8192.0);	// ƒXƒ^[ƒgƒrƒbƒgˆÊ’u
+						m_ScopeSync.UpdateData(-8192.0);	// ã‚¹ã‚¿ãƒ¼ãƒˆãƒ“ãƒƒãƒˆä½ç½®
 					}
 					m_Count = m_ReCount/2;
 					m_mode++;
 				}
 			}
 			break;
-		case 257:		// ƒXƒ^[ƒgƒrƒbƒgI—¹‘Ò‚¿
+		case 257:		// ã‚¹ã‚¿ãƒ¼ãƒˆãƒ“ãƒƒãƒˆçµ‚äº†å¾…ã¡
 			if( !m_Count ){
 				if( m_Scope ){
-					m_ScopeSync.UpdateData(-8192.0);	// ƒXƒ^[ƒgƒrƒbƒgˆÊ’u
+					m_ScopeSync.UpdateData(-8192.0);	// ã‚¹ã‚¿ãƒ¼ãƒˆãƒ“ãƒƒãƒˆä½ç½®
 				}
 				m_Count = m_ReCount;
 				m_mark = m_space = 0;
@@ -1049,7 +1058,7 @@ void CFSKDEM::DoFSK(void)
 				m_mode++;
 			}
 			break;
-		case 258:			// •„†‹L˜^’†
+		case 258:			// ç¬¦å·è¨˜éŒ²ä¸­
 			if( b ){m_mark++;} else {m_space++;}
 			if( !m_Count ){
 				b = (m_mark >= m_space) ? 1 : 0;
@@ -1081,7 +1090,7 @@ void CFSKDEM::DoFSK(void)
 				}
 			}
 			break;
-		case 259:			// ƒpƒŠƒeƒBƒrƒbƒg
+		case 259:			// ãƒ‘ãƒªãƒ†ã‚£ãƒ“ãƒƒãƒˆ
 			if( b ){
 				m_mark++;
 			}
@@ -1095,10 +1104,10 @@ void CFSKDEM::DoFSK(void)
 				m_mode++;
 				switch(m_Parity){
 					case 1:			// Even
-						if( (!(m_SumParity & 1) ^ b) & 1 ) m_mode = 0;		// ƒpƒŠƒeƒBƒGƒ‰[
+						if( (!(m_SumParity & 1) ^ b) & 1 ) m_mode = 0;		// ãƒ‘ãƒªãƒ†ã‚£ã‚¨ãƒ©ãƒ¼
 						break;
 					case 2:			// Odd
-						if( ((m_SumParity & 1) ^ b) & 1 ) m_mode = 0;		// ƒpƒŠƒeƒBƒGƒ‰[
+						if( ((m_SumParity & 1) ^ b) & 1 ) m_mode = 0;		// ãƒ‘ãƒªãƒ†ã‚£ã‚¨ãƒ©ãƒ¼
 						break;
 					case 3:
 						if( !b ) m_mode = 0;
@@ -1109,7 +1118,7 @@ void CFSKDEM::DoFSK(void)
 					default:
 						break;
 				}
-				if( !m_mode ){	// ƒpƒŠƒeƒBƒGƒ‰[
+				if( !m_mode ){	// ãƒ‘ãƒªãƒ†ã‚£ã‚¨ãƒ©ãƒ¼
 					m_Count = m_ReCount;
 					m_mode = 7;
 				}
@@ -1127,7 +1136,7 @@ void CFSKDEM::DoFSK(void)
 				}
 			}
 			break;
-		case 260:			// ƒXƒgƒbƒvƒrƒbƒg‚ÌŠm”F
+		case 260:			// ã‚¹ãƒˆãƒƒãƒ—ãƒ“ãƒƒãƒˆã®ç¢ºèª
 			if( b ){
 				m_mark++;
 			}
@@ -1138,7 +1147,7 @@ void CFSKDEM::DoFSK(void)
 				b = (m_mark >= m_space) ? 1 : 0;
 				m_mark = m_space = 0;
 				if( m_Scope ){
-					m_ScopeSync.UpdateData(-4096.0);	// StopbitˆÊ’u
+					m_ScopeSync.UpdateData(-4096.0);	// Stopbitä½ç½®
 				}
 				if( b || m_ignoreFream ){
 					if( m_BufCount < DEMBUFMAX ){
@@ -1161,31 +1170,31 @@ void CFSKDEM::DoFSK(void)
 						default:	// 1bit
 							m_Count = m_ReCount;
 							if( m_Scope ){
-								m_ScopeSync.UpdateData(-4096.0);	// StopbitsI—¹ˆÊ’u
+								m_ScopeSync.UpdateData(-4096.0);	// Stopbitsçµ‚äº†ä½ç½®
 							}
 							m_mode = -1;
 							break;
 					}
 					m_mode++;
 				}
-				if( !b ){		// ƒtƒŒ[ƒ~ƒ“ƒOƒGƒ‰[
+				if( !b ){		// ãƒ•ãƒ¬ãƒ¼ãƒŸãƒ³ã‚°ã‚¨ãƒ©ãƒ¼
 					m_mode = 8;
 				}
 			}
 			break;
-		case 261:			// ƒXƒgƒbƒvƒrƒbƒgI—¹‘Ò‚¿ƒ^ƒCƒ}[
+		case 261:			// ã‚¹ãƒˆãƒƒãƒ—ãƒ“ãƒƒãƒˆçµ‚äº†å¾…ã¡ã‚¿ã‚¤ãƒãƒ¼
 			if( !m_Count ){
 				if( m_Scope ){
-					m_ScopeSync.UpdateData(-4096.0);	// StopbitsI—¹ˆÊ’u
+					m_ScopeSync.UpdateData(-4096.0);	// Stopbitsçµ‚äº†ä½ç½®
 				}
 				m_mode++;
 			}
 			break;
-		case 262:			// ƒXƒgƒbƒvI—¹‘Ò‚¿
+		case 262:			// ã‚¹ãƒˆãƒƒãƒ—çµ‚äº†å¾…ã¡
 			if( b ){
 				m_Count = m_ReCount;
 			}
-			else {		// Ÿ‚ÌƒXƒ^[ƒgƒrƒbƒg
+			else {		// æ¬¡ã®ã‚¹ã‚¿ãƒ¼ãƒˆãƒ“ãƒƒãƒˆ
 				m_Count = m_ReCount/2;
 				m_mode = 0;
 			}
@@ -1244,7 +1253,7 @@ void CFSKDEM::Do(double d)
 //		if( m_AA6YQ.m_fEnabled ) d *= 0.3333;	// Delete by JE3HHT (Ver1.68A)
 	}
 	if( (Count & 1) || (!DemOver) ){
-		if( DemOver ) d = DECM2.Do(d, i2);		// 1/2ƒfƒVƒ[ƒ^
+		if( DemOver ) d = DECM2.Do(d, i2);		// 1/2ãƒ‡ã‚·ãƒ¡ãƒ¼ã‚¿
 
 		switch(m_type){
 			case 2:			// PLL
@@ -1273,7 +1282,7 @@ void CFSKDEM::Do(double d)
 					m_dMark = 0;
 					m_dSpace = -d;
 				}
-				// •½ŠŠ
+				// å¹³æ»‘
 				if( m_lpf ){
 					m_dMark = LpfMark.Do(m_dMark);
 					m_dSpace = LpfSpace.Do(m_dSpace);
@@ -1315,7 +1324,7 @@ void CFSKDEM::Do(double d)
 						m_ScopeSpace[0].WriteData(ds);
 					}
                 }
-				// ŒŸ”g
+				// æ¤œæ³¢
 //				m_dMark = fabs(m_dMark);
 //				m_dSpace = fabs(m_dSpace);
 				if( m_dMark < 0.0 ) m_dMark = -m_dMark;
@@ -1324,7 +1333,7 @@ void CFSKDEM::Do(double d)
 					m_ScopeMark[1].WriteData(m_dMark);
 					m_ScopeSpace[1].WriteData(m_dSpace);
 				}
-				// •½ŠŠ
+				// å¹³æ»‘
 				if( m_lpf ){
 					m_dMark = LpfMark.Do(m_dMark);
 					m_dSpace = LpfSpace.Do(m_dSpace);
@@ -1345,7 +1354,7 @@ void CFSKDEM::Do(double d)
 						m_ScopeSpace[3].WriteData(m_dSpace);
 					}
 				}
-#if 1			// ‚‘¬ŒvZ
+#if 1			// é«˜é€Ÿè¨ˆç®—
 				m_dMark /= (64*32768.0);
                 m_dSpace /= (64*32768.0);
 #else
@@ -1374,7 +1383,7 @@ void CFSKDEM::Do(double d)
 					m_ScopeMark[0].WriteData(m_dMark);
 					m_ScopeSpace[0].WriteData(m_dSpace);
 				}
-				// ŒŸ”g
+				// æ¤œæ³¢
 //				m_dMark = fabs(m_dMark);
 //				m_dSpace = fabs(m_dSpace);
 				if( m_dMark < 0 ) m_dMark = -m_dMark;
@@ -1383,7 +1392,7 @@ void CFSKDEM::Do(double d)
 					m_ScopeMark[1].WriteData(m_dMark);
 					m_ScopeSpace[1].WriteData(m_dSpace);
 				}
-				// •½ŠŠ
+				// å¹³æ»‘
 				if( m_lpf ){
 					m_dMark = LpfMark.Do(m_dMark);
 					m_dSpace = LpfSpace.Do(m_dSpace);
@@ -1578,7 +1587,7 @@ int CRTTY::ConvRTTY(char d)
 			m_outfig = fig;
 		}
 	}
-	else if( r == 0x04 ){	// ƒXƒy[ƒX‚Ì
+	else if( r == 0x04 ){	// ã‚¹ãƒšãƒ¼ã‚¹ã®æ™‚
 		if( sys.m_txuos && (m_outfig == 1) ) m_outfig = 2;
 	}
 	return r;
@@ -1650,7 +1659,7 @@ char CRTTY::InvShift(char c)
 }
 
 //--------------------------------------------------------
-// CScopeƒNƒ‰ƒX
+// CScopeã‚¯ãƒ©ã‚¹
 CScope::CScope()
 {
 	m_ScopeSize = SCOPESIZE;
@@ -1698,7 +1707,7 @@ void CScope::Collect(int size)
 
 
 //--------------------------------------------------------
-// CNoiseƒNƒ‰ƒX
+// CNoiseã‚¯ãƒ©ã‚¹
 CNoise::CNoise()
 {
 	reg = 0x12345;
@@ -1719,11 +1728,11 @@ double CNoise::GetNoise(void)
 	reg = r;
 	double d = double(reg) / 500000.0;
 //    return d;
-	return DoFIR(H, Z, d, NOISEBPFTAP);		// ‘Ñˆæ§ŒÀ
+	return DoFIR(H, Z, d, NOISEBPFTAP);		// å¸¯åŸŸåˆ¶é™
 }
 
 //--------------------------------------------------------
-// CSamplePeakƒNƒ‰ƒX
+// CSamplePeakã‚¯ãƒ©ã‚¹
 CSamplePeak::CSamplePeak()
 {
 	memset(Strage, 0, sizeof(Strage));
@@ -1774,7 +1783,7 @@ int CSamplePeak::Sample(double d)
 }
 
 //--------------------------------------------------------
-// CAGCƒNƒ‰ƒX
+// CAGCã‚¯ãƒ©ã‚¹
 CAGC::CAGC()
 {
 	m_MaxGain = 2048.0;
@@ -1856,7 +1865,7 @@ double CAGC::SampleSpace(double d)
 }
 
 //--------------------------------------------------------
-// CATCƒNƒ‰ƒX
+// CATCã‚¯ãƒ©ã‚¹
 CATC::CATC()
 {
 	m_Low = 0;
@@ -1910,7 +1919,7 @@ double CATC::Do(double d)
 }
 
 //---------------------------------------------------------------------------
-// CFIRƒNƒ‰ƒX
+// CFIRã‚¯ãƒ©ã‚¹
 __fastcall CFIR::CFIR()
 {
 	m_pZ = NULL;
@@ -1954,7 +1963,7 @@ void __fastcall CFIR::SaveCoef(LPCSTR pName)
 }
 
 //---------------------------------------------------------------------------
-// CFIR2ƒNƒ‰ƒX
+// CFIR2ã‚¯ãƒ©ã‚¹
 __fastcall CFIR2::CFIR2()
 {
 	m_pZ = NULL;
@@ -2117,7 +2126,7 @@ void __fastcall CFIR2::Do(CLX &z, double d)
 
 
 //---------------------------------------------------------------------------
-// CFIRXƒNƒ‰ƒX
+// CFIRXã‚¯ãƒ©ã‚¹
 __fastcall CFIRX::CFIRX()
 {
 	m_pZ = NULL;
@@ -2175,7 +2184,7 @@ void __fastcall CFIRX::Do(CLX &d)
 }
 
 /*=============================================================================
-  CSlideFFTƒNƒ‰ƒX  ƒXƒ‰ƒCƒfƒBƒ“ƒO@FFT
+  CSlideFFTã‚¯ãƒ©ã‚¹  ã‚¹ãƒ©ã‚¤ãƒ‡ã‚£ãƒ³ã‚°ã€€FFT
 =============================================================================*/
 #define	SLIDE_WINDOW_COEFF		0.9999
 __fastcall CSlideFFT::CSlideFFT(void)
@@ -2247,7 +2256,7 @@ CLX* __fastcall CSlideFFT::Do(const CLX &zIn)
 }
 
 /*=============================================================================
-  CPHASEƒNƒ‰ƒX
+  CPHASEã‚¯ãƒ©ã‚¹
 =============================================================================*/
 __fastcall CPHASE::CPHASE()
 {
@@ -2314,12 +2323,12 @@ void __fastcall CPHASE::SetCarrierFreq(double f)
 //--------------------------------------------------------------------------
 CLX* __fastcall CPHASE::Do(double d)
 {
-	m_Hilbert.Do(m_sig, d);					// •¡‘f”‰»
+	m_Hilbert.Do(m_sig, d);					// è¤‡ç´ æ•°åŒ–
 
     CLX z;
 	z.r = m_VCO.Do();
     z.j = m_VCO.DoCos();
-	z *= m_sig;								// ü”g”•ÏŠ·
+	z *= m_sig;								// å‘¨æ³¢æ•°å¤‰æ›
 
 //	m_LPF.Do(z);
 	return m_SlideFFT.Do(z);
@@ -2400,7 +2409,7 @@ double __fastcall CFAVG::Do(double d)
 }
 
 //--------------------------------------------------------
-// CAGCƒNƒ‰ƒX
+// CAGCã‚¯ãƒ©ã‚¹
 __fastcall CAGCX::CAGCX()
 {
 	m_fc = 1000.0;

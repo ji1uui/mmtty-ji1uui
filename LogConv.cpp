@@ -28,7 +28,7 @@
 #include "InputWin.h"
 CLogText	LogText;
 //***************************************************************************
-// CLogConv Šî–{ ƒNƒ‰ƒX
+// CLogConv åŸºæœ¬ ã‚¯ãƒ©ã‚¹
 CLogConv::CLogConv()
 {
 	m_Mode = 0;
@@ -39,7 +39,7 @@ CLogConv::~CLogConv()
 {
 }
 //***************************************************************************
-// CLogText ƒNƒ‰ƒX
+// CLogText ã‚¯ãƒ©ã‚¹
 CLogText::CLogText()
 {
 	m_Type = 0;
@@ -73,7 +73,7 @@ CLogText::CLogText()
 	}
 }
 //---------------------------------------------------------------------------
-// ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚ÌƒI[ƒvƒ“
+// ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚ªãƒ¼ãƒ—ãƒ³
 int CLogText::Open(LPCSTR pName)
 {
 	Close();
@@ -89,12 +89,12 @@ int CLogText::Open(LPCSTR pName)
 		return TRUE;
 	}
 	else {
-		ErrorMB( (sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Can't open '%s'":"'%s'‚ªƒI[ƒvƒ“‚Å‚«‚Ü‚¹‚ñ.", pName);
+		ErrorMB( (sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Can't open '%s'":"'%s'ãŒã‚ªãƒ¼ãƒ—ãƒ³ã§ãã¾ã›ã‚“.", pName);
 		return FALSE;
 	}
 }
 //---------------------------------------------------------------------------
-// ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚Ìì¬
+// ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ
 int CLogText::Create(LPCSTR pName)
 {
 	Close();
@@ -108,12 +108,12 @@ int CLogText::Create(LPCSTR pName)
 		return TRUE;
 	}
 	else {
-		ErrorMB( (sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Can't write to '%s'":"'%s'‚ªì¬‚Å‚«‚Ü‚¹‚ñ.", pName);
+		ErrorMB( (sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Can't write to '%s'":"'%s'ãŒä½œæˆã§ãã¾ã›ã‚“.", pName);
 		return FALSE;
 	}
 }
 //---------------------------------------------------------------------------
-// ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚ÌƒI[ƒvƒ“
+// ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚ªãƒ¼ãƒ—ãƒ³
 int CLogText::Close(void)
 {
 	int r = 0;
@@ -121,16 +121,16 @@ int CLogText::Close(void)
 		r = fclose(m_fp);
 		m_fp = NULL;
 		if( r ){
-			ErrorMB((sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Can't close '%s'":"'%s'‚ª³‚µ‚­ƒNƒ[ƒY‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½.", m_FileName.c_str());
+			ErrorMB((sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Can't close '%s'":"'%s'ãŒæ­£ã—ãã‚¯ãƒ­ãƒ¼ã‚ºã§ãã¾ã›ã‚“ã§ã—ãŸ.", m_FileName.c_str());
 		}
 		else if( m_Mode ){
-			InfoMB((sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Done (write to '%s')":"'%s'‚Ö‚Ì‘‚«‚±‚İ‚ğI—¹‚µ‚Ü‚µ‚½.", m_FileName.c_str());
+			InfoMB((sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Done (write to '%s')":"'%s'ã¸ã®æ›¸ãã“ã¿ã‚’çµ‚äº†ã—ã¾ã—ãŸ.", m_FileName.c_str());
 		}
 	}
 	return r ? FALSE : TRUE;
 }
 //---------------------------------------------------------------------------
-// ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚Ì“Ç‚İo‚µ
+// ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿å‡ºã—
 int CLogText::Read(SDMMLOG *sp)
 {
 	if( !IsOpen() ) return FALSE;
@@ -149,7 +149,7 @@ int CLogText::Read(SDMMLOG *sp)
 	}
 }
 //---------------------------------------------------------------------------
-// o—Í•ÏŠ·
+// å‡ºåŠ›å¤‰æ›
 int CLogText::Write(SDMMLOG *sp)
 {
 	if( !IsOpen() ) return FALSE;
@@ -373,7 +373,7 @@ void MMLOG2Text(LPSTR t, SDMMLOG *sp, AnsiString &Key)
 	}
 }
 //---------------------------------------------------------------------------
-// 1s‚Ìo—Í•ÏŠ·
+// 1è¡Œã®å‡ºåŠ›å¤‰æ›
 void CLogText::MMLOG2Text(LPSTR t, SDMMLOG *sp)
 {
 	char	bf[512];
@@ -604,7 +604,7 @@ int Text2MMLOG(SDMMLOG *sp, LPCSTR s, AnsiString &Key)
 	return TRUE;
 }
 //---------------------------------------------------------------------------
-// 1s‚Ì“ü—Í•ÏŠ·
+// 1è¡Œã®å…¥åŠ›å¤‰æ›
 int CLogText::Text2MMLOG(SDMMLOG *sp, LPSTR p, int &err)
 {
 	char	bf[512];
@@ -627,7 +627,7 @@ int CLogText::Text2MMLOG(SDMMLOG *sp, LPSTR p, int &err)
 			t = SkipSpace(t);
 			if( ::Text2MMLOG(sp, t, m_rConv[i].Key ) == FALSE ){
 				if( !err ){
-					ErrorMB((sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "An error occurred with conversion type [%s]." : "•ÏŠ·®[%s]‚ÅƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½.", m_rConv[i].Key.c_str() );
+					ErrorMB((sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "An error occurred with conversion type [%s]." : "å¤‰æ›å¼[%s]ã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ.", m_rConv[i].Key.c_str() );
 				}
 				err++;
 			}
@@ -643,14 +643,14 @@ int CLogText::Text2MMLOG(SDMMLOG *sp, LPSTR p, int &err)
 //
 //
 //***************************************************************************
-// CLog200 ƒNƒ‰ƒX
+// CLog200 ã‚¯ãƒ©ã‚¹
 CLog200::CLog200()
 {
 	m_Type = 1;
 	m_err = 0;
 }
 //---------------------------------------------------------------------------
-// LOG200ƒtƒ@ƒCƒ‹‚ÌƒI[ƒvƒ“
+// LOG200ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚ªãƒ¼ãƒ—ãƒ³
 int CLog200::Open(LPCSTR pName)
 {
 	Close();
@@ -664,12 +664,12 @@ int CLog200::Open(LPCSTR pName)
 		return TRUE;
 	}
 	else {
-		ErrorMB("'%s'‚ªƒI[ƒvƒ“‚Å‚«‚Ü‚¹‚ñ.", pName);
+		ErrorMB("'%s'ãŒã‚ªãƒ¼ãƒ—ãƒ³ã§ãã¾ã›ã‚“.", pName);
 		return FALSE;
 	}
 }
 //---------------------------------------------------------------------------
-// LOG200ƒtƒ@ƒCƒ‹‚Ìì¬
+// LOG200ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ
 int CLog200::Create(LPCSTR pName)
 {
 	Close();
@@ -684,14 +684,14 @@ int CLog200::Create(LPCSTR pName)
 		char BackName[256];
 		strcpy(BackName, pName);
 		SetEXT(BackName, ".BAK");
-		int r = YesNoCancelMB( "'%s'‚ÍŠù‚É‘¶İ‚µ‚Ä‚¢‚Ü‚·.\r\n‚l‚l‚s‚s‚x‚Í‚±‚Ìƒtƒ@ƒCƒ‹‚Éƒf[ƒ^‚ğ’Ç‰Á‚µ‚Ü‚·.\r\n\r\n"
-							"‚±‚Ì‘€ì‚ğÀs‚·‚é‘O‚ÉŒ³‚ÌƒƒOƒtƒ@ƒCƒ‹‚ÌƒoƒbƒNƒAƒbƒvƒtƒ@ƒCƒ‹\r\n\r\n"
-							"'%s' -> '%s'\r\n\r\n‚ğì¬‚µ‚Ü‚·‚©H\r\n\r\n"
-							"[d—v]\r\n”O‚Ì‚½‚ß‚ÉƒoƒbƒNƒAƒbƒv‚ğì¬‚·‚é–‚ğ‚¨Š©‚ß‚µ‚Ü‚·.", pName, pName, BackName);
+		int r = YesNoCancelMB( "'%s'ã¯æ—¢ã«å­˜åœ¨ã—ã¦ã„ã¾ã™.\r\nï¼­ï¼­ï¼´ï¼´ï¼¹ã¯ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã«ãƒ‡ãƒ¼ã‚¿ã‚’è¿½åŠ ã—ã¾ã™.\r\n\r\n"
+							"ã“ã®æ“ä½œã‚’å®Ÿè¡Œã™ã‚‹å‰ã«å…ƒã®ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ãƒ•ã‚¡ã‚¤ãƒ«\r\n\r\n"
+							"'%s' -> '%s'\r\n\r\nã‚’ä½œæˆã—ã¾ã™ã‹ï¼Ÿ\r\n\r\n"
+							"[é‡è¦]\r\nå¿µã®ãŸã‚ã«ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚’ä½œæˆã™ã‚‹äº‹ã‚’ãŠå‹§ã‚ã—ã¾ã™.", pName, pName, BackName);
 		if( r == IDYES ){
 			CWaitCursor w;
 			if( ::CopyFile(pName, BackName, FALSE) == FALSE ){
-				ErrorMB("ƒoƒbƒNƒAƒbƒv‚Ìì¬‚É¸”s‚µ‚Ü‚µ‚½.\r\n‚±‚Ìˆ—‚Í’†’f‚³‚ê‚Ü‚·.Œ³‚ÌƒƒOƒtƒ@ƒCƒ‹‚Í•ÏX‚³‚ê‚Ü‚¹‚ñ.");
+				ErrorMB("ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã®ä½œæˆã«å¤±æ•—ã—ã¾ã—ãŸ.\r\nã“ã®å‡¦ç†ã¯ä¸­æ–­ã•ã‚Œã¾ã™.å…ƒã®ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã¯å¤‰æ›´ã•ã‚Œã¾ã›ã‚“.");
 				return FALSE;
 			}
 		}
@@ -706,12 +706,12 @@ int CLog200::Create(LPCSTR pName)
 		return TRUE;
 	}
 	else {
-		ErrorMB( "'%s'‚ªì¬‚Å‚«‚Ü‚¹‚ñ.", pName);
+		ErrorMB( "'%s'ãŒä½œæˆã§ãã¾ã›ã‚“.", pName);
 		return FALSE;
 	}
 }
 //---------------------------------------------------------------------------
-// LOG200ƒtƒ@ƒCƒ‹‚ÌƒNƒ[ƒY
+// LOG200ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¯ãƒ­ãƒ¼ã‚º
 int CLog200::Close(void)
 {
 	int r = 0;
@@ -719,16 +719,16 @@ int CLog200::Close(void)
 		r = fclose(m_fp);
 		m_fp = NULL;
 		if( r ){
-			ErrorMB("'%s'‚ª³‚µ‚­ƒNƒ[ƒY‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½.", m_FileName.c_str());
+			ErrorMB("'%s'ãŒæ­£ã—ãã‚¯ãƒ­ãƒ¼ã‚ºã§ãã¾ã›ã‚“ã§ã—ãŸ.", m_FileName.c_str());
 		}
 		else if( m_Mode ){
-			InfoMB("'%s'‚Ö‚Ì’Ç‰Á‚ğI—¹‚µ‚Ü‚µ‚½.", m_FileName.c_str());
+			InfoMB("'%s'ã¸ã®è¿½åŠ ã‚’çµ‚äº†ã—ã¾ã—ãŸ.", m_FileName.c_str());
 		}
 	}
 	return r ? FALSE : TRUE;
 }
 //---------------------------------------------------------------------------
-// LOG200 -> MMLOG ƒtƒH[ƒ}ƒbƒg‚Ì•ÏŠ·
+// LOG200 -> MMLOG ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã®å¤‰æ›
 void LOG200toMMLOG(SDMMLOG *sp, LPSTR s)
 {
 	LPSTR	t;
@@ -845,7 +845,7 @@ void LOG200toMMLOG(SDMMLOG *sp, LPSTR s)
 	if( *pContest ) AddL2(sp->qsl, "TEST", pContest, '[', ']', MLQSL);
 }
 //---------------------------------------------------------------------------
-// LOG200ƒtƒ@ƒCƒ‹‚Ì“Ç‚İo‚µ
+// LOG200ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿å‡ºã—
 int CLog200::Read(SDMMLOG *sp)
 {
 	if( !IsOpen() ) return FALSE;
@@ -861,7 +861,7 @@ int CLog200::Read(SDMMLOG *sp)
 }
 
 //---------------------------------------------------------------------------
-// MMLOG -> LOG200ƒtƒH[ƒ}ƒbƒg•ÏŠ·
+// MMLOG -> LOG200ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆå¤‰æ›
 void MMLOGtoLOG200(LPSTR t, SDMMLOG *sp, int &err)
 {
 	LPSTR s = t;
@@ -883,7 +883,7 @@ void MMLOGtoLOG200(LPSTR t, SDMMLOG *sp, int &err)
 	sprintf(t, "%02u%02u\x1e", h, m);
 	t += strlen(t);
 	// CALL
-	StrCopy(t, sp->call, 15);	// 15•¶š‚É§ŒÀ‚³‚ê‚Ä‚¢‚é
+	StrCopy(t, sp->call, 15);	// 15æ–‡å­—ã«åˆ¶é™ã•ã‚Œã¦ã„ã‚‹
 	t += strlen(t);
 	*t++ = 0x1e;
 	// FREQ
@@ -961,7 +961,7 @@ void MMLOGtoLOG200(LPSTR t, SDMMLOG *sp, int &err)
 	if( len >= 199 ){
 		if( !err ){
 			err++;
-			WarningMB("•ÏŠ·‚µ‚½Œ‹‰Ê‚ªLOG200ƒŒƒR[ƒh’·‚ğ‰z‚¦‚Ü‚µ‚½.\r\n\r\nƒŠƒ}[ƒNƒtƒB[ƒ‹ƒh‚Ì’·‚³‚ğ’²®‚µ‚Ü‚·.");
+			WarningMB("å¤‰æ›ã—ãŸçµæœãŒLOG200ãƒ¬ã‚³ãƒ¼ãƒ‰é•·ã‚’è¶Šãˆã¾ã—ãŸ.\r\n\r\nãƒªãƒãƒ¼ã‚¯ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®é•·ã•ã‚’èª¿æ•´ã—ã¾ã™.");
 		}
 		len -= 199;
 		bf[strlen(bf)-len] = 0;
@@ -986,14 +986,14 @@ void MMLOGtoLOG200(LPSTR t, SDMMLOG *sp, int &err)
 	s[198] = '\r'; s[199] = '\n';
 }
 //---------------------------------------------------------------------------
-// LOG200ƒtƒ@ƒCƒ‹‚Ì‘‚«‚±‚İ
+// LOG200ãƒ•ã‚¡ã‚¤ãƒ«ã®æ›¸ãã“ã¿
 int CLog200::Write(SDMMLOG *sp)
 {
 	if( !IsOpen() ) return FALSE;
 
 	MMLOGtoLOG200(m_bf, sp, m_err);
 	if( fwrite(m_bf, 1, 200, m_fp) != 200 ){
-		ErrorMB("'%s'‚É‘‚«‚İ’†‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½.", m_FileName.c_str());
+		ErrorMB("'%s'ã«æ›¸ãè¾¼ã¿ä¸­ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ.", m_FileName.c_str());
 		return FALSE;
 	}
 	else {
@@ -1004,19 +1004,19 @@ int CLog200::Write(SDMMLOG *sp)
 //
 //
 //***************************************************************************
-// CHamLog ƒNƒ‰ƒX
+// CHamLog ã‚¯ãƒ©ã‚¹
 //---------------------------------------------------------------------------
 CHamLog::CHamLog()
 {
 	m_Type = 2;
 	m_err = 0;
 
-	m_DBRName = "";		// DBRƒtƒ@ƒCƒ‹‚Ì–¼‘O
-	m_dbrfp = NULL;		// DBRƒtƒ@ƒCƒ‹‚Ìƒtƒ@ƒCƒ‹ƒ|ƒCƒ“ƒ^
+	m_DBRName = "";		// DBRãƒ•ã‚¡ã‚¤ãƒ«ã®åå‰
+	m_dbrfp = NULL;		// DBRãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒã‚¤ãƒ³ã‚¿
 }
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
-// HamLogƒtƒ@ƒCƒ‹‚ÌƒI[ƒvƒ“
+// HamLogãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚ªãƒ¼ãƒ—ãƒ³
 int CHamLog::Open(LPCSTR pName)
 {
 	Close();
@@ -1024,10 +1024,10 @@ int CHamLog::Open(LPCSTR pName)
 	m_err = 0;
 	m_Mode = 0;
 
-	m_fp = fopen(pName, "rb");		// DBS‚ÌƒI[ƒvƒ“
+	m_fp = fopen(pName, "rb");		// DBSã®ã‚ªãƒ¼ãƒ—ãƒ³
 
 	if( m_fp == NULL ){
-		ErrorMB( "'%s'‚ªƒI[ƒvƒ“‚Å‚«‚Ü‚¹‚ñ.", pName);
+		ErrorMB( "'%s'ãŒã‚ªãƒ¼ãƒ—ãƒ³ã§ãã¾ã›ã‚“.", pName);
 		return FALSE;
 	}
 	m_FileName = pName;
@@ -1038,7 +1038,7 @@ int CHamLog::Open(LPCSTR pName)
 	){
 		fclose(m_fp);
 		m_fp = NULL;
-		ErrorMB("—\Šú‚µ‚È‚¢ƒtƒ@ƒCƒ‹Œ`®‚Å‚·.");
+		ErrorMB("äºˆæœŸã—ãªã„ãƒ•ã‚¡ã‚¤ãƒ«å½¢å¼ã§ã™.");
 		return FALSE;
 	}
 	char dbrName[256];
@@ -1047,10 +1047,10 @@ int CHamLog::Open(LPCSTR pName)
 	m_DBRName = dbrName;
 	m_dbrfp = fopen(dbrName, "rb");
 	if( m_dbrfp == NULL ){
-		WarningMB( "'%s'‚ªƒI[ƒvƒ“‚Å‚«‚Ü‚¹‚ñ.", dbrName);
+		WarningMB( "'%s'ãŒã‚ªãƒ¼ãƒ—ãƒ³ã§ãã¾ã›ã‚“.", dbrName);
 	}
 	else if( fread(&m_dbrhd, 1, sizeof(m_dbrhd), m_dbrfp)!=sizeof(m_dbrhd) ){
-		ErrorMB( "'%s'‚ª³í‚É“Ç‚İ‚±‚ß‚Ü‚¹‚ñ. ˆ—‚ğ’†’f‚µ‚Ü‚·.", dbrName);
+		ErrorMB( "'%s'ãŒæ­£å¸¸ã«èª­ã¿ã“ã‚ã¾ã›ã‚“. å‡¦ç†ã‚’ä¸­æ–­ã—ã¾ã™.", dbrName);
 		fclose(m_fp);
 		m_fp = NULL;
 		fclose(m_dbrfp);
@@ -1060,7 +1060,7 @@ int CHamLog::Open(LPCSTR pName)
 
 	if( Seek(0) == FALSE ){
 		Close();
-		ErrorMB("Å‰‚ÌƒŒƒR[ƒh‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ.");
+		ErrorMB("æœ€åˆã®ãƒ¬ã‚³ãƒ¼ãƒ‰ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“.");
 		return FALSE;
 	}
 	return TRUE;
@@ -1070,7 +1070,7 @@ int CHamLog::Close(void)
 {
 	int r = 0;
 	if( m_fp != NULL ){
-		if( m_Mode ){		// ‘‚«‚±‚İ
+		if( m_Mode ){		// æ›¸ãã“ã¿
 			fseek(m_fp, 0, SEEK_SET);
 			if( fwrite(&m_hd, 1, sizeof(m_hd), m_fp) != sizeof(m_hd) ) r = 1;
 		}
@@ -1086,16 +1086,16 @@ int CHamLog::Close(void)
 		m_dbrfp = NULL;
 	}
 	if( r ){
-		ErrorMB("ƒtƒ@ƒCƒ‹‚ÌƒNƒ[ƒY‚É¸”s‚µ‚Ü‚µ‚½.");
+		ErrorMB("ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¯ãƒ­ãƒ¼ã‚ºã«å¤±æ•—ã—ã¾ã—ãŸ.");
 	}
 	else if( m_Mode ){
-		InfoMB("'%s'‚Ö‚Ì’Ç‰Á‚ğI—¹‚µ‚Ü‚µ‚½.", m_FileName.c_str());
+		InfoMB("'%s'ã¸ã®è¿½åŠ ã‚’çµ‚äº†ã—ã¾ã—ãŸ.", m_FileName.c_str());
 	}
 	return r ? FALSE : TRUE;
 }
 
 //---------------------------------------------------------------------------
-// HamLogƒtƒ@ƒCƒ‹‚Ìì¬
+// HamLogãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ
 int CHamLog::Create(LPCSTR pName)
 {
 	Close();
@@ -1116,16 +1116,16 @@ int CHamLog::Create(LPCSTR pName)
 		char BackNameDBR[256];
 		strcpy(BackNameDBR, dbrName);
 		SetEXT(BackNameDBR, ".$BR");
-		int r = YesNoCancelMB( "'%s'‚ÍŠù‚É‘¶İ‚µ‚Ä‚¢‚Ü‚·. ƒf[ƒ^‚Í‚±‚Ìƒtƒ@ƒCƒ‹‚É’Ç‰Á‚³‚ê‚Ü‚·.\r\n\r\n‚±‚Ì‘€ì‚ğÀs‚·‚é‘O‚ÉŒ³‚ÌƒƒOƒtƒ@ƒCƒ‹‚ÌƒoƒbƒNƒAƒbƒvƒtƒ@ƒCƒ‹\r\n\r\n'%s'->'%s'\r\n'%s'->'%s'\r\n\r\n‚ğì¬‚µ‚Ü‚·‚©H\r\n\r\n"
-					"[d—v]\r\n”O‚Ì‚½‚ß‚ÉƒoƒbƒNƒAƒbƒv‚ğì¬‚·‚é–‚ğ‚¨Š©‚ß‚µ‚Ü‚·.", pName, pName, BackNameDBS, dbrName, BackNameDBR);
+		int r = YesNoCancelMB( "'%s'ã¯æ—¢ã«å­˜åœ¨ã—ã¦ã„ã¾ã™. ãƒ‡ãƒ¼ã‚¿ã¯ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã«è¿½åŠ ã•ã‚Œã¾ã™.\r\n\r\nã“ã®æ“ä½œã‚’å®Ÿè¡Œã™ã‚‹å‰ã«å…ƒã®ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ãƒ•ã‚¡ã‚¤ãƒ«\r\n\r\n'%s'->'%s'\r\n'%s'->'%s'\r\n\r\nã‚’ä½œæˆã—ã¾ã™ã‹ï¼Ÿ\r\n\r\n"
+					"[é‡è¦]\r\nå¿µã®ãŸã‚ã«ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚’ä½œæˆã™ã‚‹äº‹ã‚’ãŠå‹§ã‚ã—ã¾ã™.", pName, pName, BackNameDBS, dbrName, BackNameDBR);
 		if( r == IDYES ){
 			CWaitCursor w;
 			if( ::CopyFile(pName, BackNameDBS, FALSE) == FALSE ){
-				ErrorMB("ƒoƒbƒNƒAƒbƒv‚Ìì¬‚É¸”s‚µ‚Ü‚µ‚½.\r\n‚±‚Ìˆ—‚Í’†’f‚³‚ê‚Ü‚·.Œ³‚ÌƒƒOƒtƒ@ƒCƒ‹‚Í•ÏX‚³‚ê‚Ü‚¹‚ñ.");
+				ErrorMB("ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã®ä½œæˆã«å¤±æ•—ã—ã¾ã—ãŸ.\r\nã“ã®å‡¦ç†ã¯ä¸­æ–­ã•ã‚Œã¾ã™.å…ƒã®ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã¯å¤‰æ›´ã•ã‚Œã¾ã›ã‚“.");
 				return FALSE;
 			}
 			if( ::CopyFile(dbrName, BackNameDBR, FALSE) == FALSE ){
-				ErrorMB("ƒoƒbƒNƒAƒbƒv‚Ìì¬‚É¸”s‚µ‚Ü‚µ‚½.\r\n‚±‚Ìˆ—‚Í’†’f‚³‚ê‚Ü‚·.Œ³‚ÌƒƒOƒtƒ@ƒCƒ‹‚Í•ÏX‚³‚ê‚Ü‚¹‚ñ.");
+				ErrorMB("ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã®ä½œæˆã«å¤±æ•—ã—ã¾ã—ãŸ.\r\nã“ã®å‡¦ç†ã¯ä¸­æ–­ã•ã‚Œã¾ã™.å…ƒã®ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã¯å¤‰æ›´ã•ã‚Œã¾ã›ã‚“.");
 				return FALSE;
 			}
 		}
@@ -1135,16 +1135,16 @@ int CHamLog::Create(LPCSTR pName)
 	}
 	m_fp = fopen(pName, add ? "r+b":"wb");
 	if( m_fp == NULL ){
-		ErrorMB( "'%s'‚ªƒI[ƒvƒ“‚Å‚«‚Ü‚¹‚ñ.", pName);
+		ErrorMB( "'%s'ãŒã‚ªãƒ¼ãƒ—ãƒ³ã§ãã¾ã›ã‚“.", pName);
 		return FALSE;
 	}
 	m_dbrfp = fopen(dbrName, add ? "r+b":"wb");
 	if( m_dbrfp == NULL ){
-		ErrorMB( "'%s'‚ªƒI[ƒvƒ“‚Å‚«‚Ü‚¹‚ñ.", dbrName);
+		ErrorMB( "'%s'ãŒã‚ªãƒ¼ãƒ—ãƒ³ã§ãã¾ã›ã‚“.", dbrName);
 		return FALSE;
 	}
 
-	if( add ){		// ’Ç‰Á‚Ì
+	if( add ){		// è¿½åŠ ã®æ™‚
 		if( (fread(&m_hd, 1, sizeof(m_hd), m_fp)!=sizeof(m_hd)) ||
 			(m_hd.Memo != 0x1a) ||
 			(m_hd.HeadLen != 449) ||
@@ -1154,7 +1154,7 @@ int CHamLog::Create(LPCSTR pName)
 			m_fp = NULL;
 			fclose(m_dbrfp);
 			m_dbrfp = NULL;
-			ErrorMB("'%s'‚Í—\Šú‚µ‚È‚¢ƒtƒ@ƒCƒ‹Œ`®‚Å‚·.", pName);
+			ErrorMB("'%s'ã¯äºˆæœŸã—ãªã„ãƒ•ã‚¡ã‚¤ãƒ«å½¢å¼ã§ã™.", pName);
 			return FALSE;
 		}
 		if( (fread(&m_dbrhd, 1, sizeof(m_dbrhd), m_dbrfp)!=sizeof(m_dbrhd)) ||
@@ -1165,12 +1165,12 @@ int CHamLog::Create(LPCSTR pName)
 			m_fp = NULL;
 			fclose(m_dbrfp);
 			m_dbrfp = NULL;
-			ErrorMB("'%s'‚Í—\Šú‚µ‚È‚¢ƒtƒ@ƒCƒ‹Œ`®‚Å‚·.", dbrName);
+			ErrorMB("'%s'ã¯äºˆæœŸã—ãªã„ãƒ•ã‚¡ã‚¤ãƒ«å½¢å¼ã§ã™.", dbrName);
 			return FALSE;
 		}
-		fseek(m_dbrfp, 0, SEEK_END);	// DBR‚ÌÅŒã‚ÉˆÚ“®
+		fseek(m_dbrfp, 0, SEEK_END);	// DBRã®æœ€å¾Œã«ç§»å‹•
 	}
-	else {			// V‹K‚Ì
+	else {			// æ–°è¦ã®æ™‚
 		MakeHD();
 	}
 	m_FileName = pName;
@@ -1190,7 +1190,7 @@ int CHamLog::Seek(DWORD Index)
 }
 
 //----------------------------------------------------------------------
-//‚g‚`‚l‚k‚n‚f‚Ìƒwƒbƒ_‚ğì¬
+//ï¼¨ï¼¡ï¼­ï¼¬ï¼¯ï¼§ã®ãƒ˜ãƒƒãƒ€ã‚’ä½œæˆ
 BOOL CHamLog::MakeHD(void)
 {
 	memset(&m_hd, 0, sizeof(m_hd));
@@ -1227,7 +1227,7 @@ BOOL CHamLog::MakeHD(void)
 }
 
 //---------------------------------------------------------------------------
-// HamLogƒtƒ@ƒCƒ‹‚Ì“Ç‚İo‚µ
+// HamLogãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿å‡ºã—
 int CHamLog::Read(SDMMLOG *sp)
 {
 	if( !IsOpen() ) return FALSE;
@@ -1243,18 +1243,18 @@ int CHamLog::Read(SDMMLOG *sp)
 	}
 }
 //---------------------------------------------------------------------------
-// HamLogƒtƒ@ƒCƒ‹‚Ì‘‚«‚±‚İ
+// HamLogãƒ•ã‚¡ã‚¤ãƒ«ã®æ›¸ãã“ã¿
 int CHamLog::Write(SDMMLOG *sp)
 {
 	if( !IsOpen() ) return FALSE;
 
 	if( MMLOGtoHAMLOG(&m_RecBuf, sp, m_dbrfp) == FALSE ){
-		ErrorMB("'%s'‚É‘‚«‚İ’†‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½.", m_DBRName.c_str());
+		ErrorMB("'%s'ã«æ›¸ãè¾¼ã¿ä¸­ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ.", m_DBRName.c_str());
 		return FALSE;
 	}
 	Seek(m_hd.Max);
 	if( fwrite(&m_RecBuf, 1, sizeof(m_RecBuf), m_fp) != sizeof(m_RecBuf) ){
-		ErrorMB("'%s'‚É‘‚«‚İ’†‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½.", m_FileName.c_str());
+		ErrorMB("'%s'ã«æ›¸ãè¾¼ã¿ä¸­ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ.", m_FileName.c_str());
 		return FALSE;
 	}
 	else {
@@ -1264,16 +1264,16 @@ int CHamLog::Write(SDMMLOG *sp)
 	}
 }
 //----------------------------------------------------------------------
-//‚g‚`‚l‚k‚n‚f‚Ìü”g”‹L˜^•û®‚ğ’Êí‚Ì•¶š—ñ‚É•ÏŠ·
+//ï¼¨ï¼¡ï¼­ï¼¬ï¼¯ï¼§ã®å‘¨æ³¢æ•°è¨˜éŒ²æ–¹å¼ã‚’é€šå¸¸ã®æ–‡å­—åˆ—ã«å¤‰æ›
 void DecBand(LPSTR t, BYTE *pBand)
 {
-	if( pBand[3] & 0x80 ){	// ‚T`‚V•¶š‚Ì•¶š—ñ
+	if( pBand[3] & 0x80 ){	// ï¼•ï½ï¼—æ–‡å­—ã®æ–‡å­—åˆ—
 		int DotPos = pBand[3] & 0x7f;
 		int Len = (DotPos >> 3) & 0x07;
 		DotPos &= 0x07;
 		LPSTR p = t;
 		wsprintf(p, "%-7lu", (*((LONG *)pBand) & 0x00ffffffL));
-		if( Len < 4 ){		// Ver3.19‚Ü‚Å‚Ì‹L˜^•û®
+		if( Len < 4 ){		// Ver3.19ã¾ã§ã®è¨˜éŒ²æ–¹å¼
 			for(int i = 6; i > 3; i--){
 				if(p[i]>'0'){
 					break;
@@ -1290,7 +1290,7 @@ void DecBand(LPSTR t, BYTE *pBand)
 		p[DotPos] = '.';
 		p[8] = 0;
 	}
-	else {					// ‚»‚Ì‚Ü‚Ü
+	else {					// ãã®ã¾ã¾
 		StrCopy(t, (LPCSTR)pBand, 4);
 	}
 	clipsp(t);
@@ -1338,7 +1338,7 @@ void SetMMLOGKey(SDMMLOG *sp, LPSTR bf)
 	}
 }
 //---------------------------------------------------------------------------
-// HamLog -> MMLOG ƒtƒH[ƒ}ƒbƒg‚Ì•ÏŠ·
+// HamLog -> MMLOG ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã®å¤‰æ›
 void HAMLOGtoMMLOG(SDMMLOG *sp, SDHAMLOG *hp, FILE *dbrfp)
 {
 	int		CallOrder = 0;
@@ -1426,7 +1426,7 @@ _ex:;
 	if( hp->qsl[0] == 'N' ){
 		sp->send = 'N';
 	}
-	else if( hp->send[0] == ' ' ){	// –¢”­‘—
+	else if( hp->send[0] == ' ' ){	// æœªç™ºé€
 		if( (hp->qsl[0] == 'J')||(hp->qsl[0] == ' ') ){
 			sp->send = 0;
 		}
@@ -1434,7 +1434,7 @@ _ex:;
 			sp->send = BYTE(tolower(hp->qsl[0]));
 		}
 	}
-	else {							// ”­‘—Ï‚İ
+	else {							// ç™ºé€æ¸ˆã¿
 		sp->send = BYTE(toupper(hp->send[0]));
 	}
 	sp->recv = hp->rcv[0];
@@ -1444,7 +1444,7 @@ _ex:;
 	StrCopy(sp->opt2, hp->glid, 6);
 
 	if( !sp->call[0] ){
-		if( CallOrder && (hp->potbl[0] != ' ') ){	/* KH6/JE3HHT‚ÌŒ`®	*/
+		if( CallOrder && (hp->potbl[0] != ' ') ){	/* KH6/JE3HHTã®å½¢å¼	*/
 			StrCopy(bf, hp->potbl, 3);
 			clipsp(bf);
 			strcat(sp->call, bf);
@@ -1453,7 +1453,7 @@ _ex:;
 			clipsp(bf);
 			strcat(sp->call, bf);
 		}
-		else {											/* JE3HHT/KH6‚ÌŒ`®	*/
+		else {											/* JE3HHT/KH6ã®å½¢å¼	*/
 			StrCopy(bf, hp->calls, 7);
 			clipsp(bf);
 			strcat(sp->call, bf);
@@ -1468,7 +1468,7 @@ _ex:;
 	if( !sp->etime ) sp->etime = sp->btime;
 }
 //----------------------------------------------------------------------
-//•¶š—ñ‚ÌƒRƒs[iƒkƒ‹‚ÍƒZƒbƒg‚³‚ê‚È‚¢j
+//æ–‡å­—åˆ—ã®ã‚³ãƒ”ãƒ¼ï¼ˆãƒŒãƒ«ã¯ã‚»ãƒƒãƒˆã•ã‚Œãªã„ï¼‰
 void SpaceCopy(LPSTR t, LPCSTR s, int n)
 {
 	for( ; n && *s; s++, t++, n-- ){
@@ -1476,7 +1476,7 @@ void SpaceCopy(LPSTR t, LPCSTR s, int n)
 	}
 }
 //----------------------------------------------------------------------
-//‚q‚r‚s•¶š—ñ‚ğ‚g‚`‚l‚k‚n‚fŒ`®‚É•ÏŠ·‚µ‚ÄŠi”[
+//ï¼²ï¼³ï¼´æ–‡å­—åˆ—ã‚’ï¼¨ï¼¡ï¼­ï¼¬ï¼¯ï¼§å½¢å¼ã«å¤‰æ›ã—ã¦æ ¼ç´
 void SetRST(char *pRST, LPCSTR p, BYTE mode)
 {
 	char	rs[3];
@@ -1494,7 +1494,7 @@ void SetRST(char *pRST, LPCSTR p, BYTE mode)
 	pRST[1] = *(p+2);
 }
 //----------------------------------------------------------------------
-//ü”g”‚Ì•¶š—ñ‚ğ‚g‚`‚l‚k‚n‚f‚Ìü”g”‹L˜^•û®‚É•ÏŠ·
+//å‘¨æ³¢æ•°ã®æ–‡å­—åˆ—ã‚’ï¼¨ï¼¡ï¼­ï¼¬ï¼¯ï¼§ã®å‘¨æ³¢æ•°è¨˜éŒ²æ–¹å¼ã«å¤‰æ›
 void EncBand(BYTE *pBand, LPCSTR pStr)
 {
 	char	bf[32];
@@ -1558,7 +1558,7 @@ void AddMMLOGKey(AnsiString &REM1, AnsiString &REM2, LPCSTR s, LPCSTR pKey)
 	}
 }
 //---------------------------------------------------------------------------
-// MMLOG -> HamLog ƒtƒH[ƒ}ƒbƒg‚Ì•ÏŠ·
+// MMLOG -> HamLog ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã®å¤‰æ›
 int MMLOGtoHAMLOG(SDHAMLOG *hp, SDMMLOG *sp, FILE *dbrfp)
 {
 	char bf[512];
@@ -1601,7 +1601,7 @@ int MMLOGtoHAMLOG(SDHAMLOG *hp, SDMMLOG *sp, FILE *dbrfp)
 	strcpy(bf, sp->call);
 	LPSTR	pp, p2, t;
 	t = bf;
-	if( (pp = strchr(bf, '/')) != NULL ){		// KH6/JE3HHT or JE3HHT/KH6 ‚ÌŒ`®
+	if( (pp = strchr(bf, '/')) != NULL ){		// KH6/JE3HHT or JE3HHT/KH6 ã®å½¢å¼
 		*pp = 0;
 		pp++;
 		int LenC = strlen(t);
@@ -1612,7 +1612,7 @@ int MMLOGtoHAMLOG(SDHAMLOG *hp, SDMMLOG *sp, FILE *dbrfp)
 			((LenC > LenP) && (LenP>3)) ||
 			((LenC < LenP) && (LenC>3))
 		){
-			// HAMLOG‚Å‚Í•\Œ»‚Å‚«‚È‚¢•\‹L‚Ìê‡
+			// HAMLOGã§ã¯è¡¨ç¾ã§ããªã„è¡¨è¨˜ã®å ´åˆ
 			AddMMLOGKey(REM1, REM2, sp->call, "ToRadio");
 			if( p2 != NULL ){
 				*p2 = 0;
@@ -1743,13 +1743,13 @@ int MMLOGtoHAMLOG(SDHAMLOG *hp, SDMMLOG *sp, FILE *dbrfp)
 }
 
 //***************************************************************************
-// CLogADIF ƒNƒ‰ƒX
+// CLogADIF ã‚¯ãƒ©ã‚¹
 CLogADIF::CLogADIF()
 {
 	m_bf[sizeof(m_bf)-1] = 0;
 }
 //---------------------------------------------------------------------------
-// ADIFƒtƒ@ƒCƒ‹‚ÌƒI[ƒvƒ“
+// ADIFãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚ªãƒ¼ãƒ—ãƒ³
 int CLogADIF::Open(LPCSTR pName)
 {
 	Close();
@@ -1765,12 +1765,12 @@ int CLogADIF::Open(LPCSTR pName)
 		return TRUE;
 	}
 	else {
-		ErrorMB((sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Can't open '%s'": "'%s'‚ªƒI[ƒvƒ“‚Å‚«‚Ü‚¹‚ñ.", pName);
+		ErrorMB((sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Can't open '%s'": "'%s'ãŒã‚ªãƒ¼ãƒ—ãƒ³ã§ãã¾ã›ã‚“.", pName);
 		return FALSE;
 	}
 }
 //---------------------------------------------------------------------------
-// ADIFƒtƒ@ƒCƒ‹‚Ìì¬
+// ADIFãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ
 int CLogADIF::Create(LPCSTR pName)
 {
 	Close();
@@ -1786,12 +1786,12 @@ int CLogADIF::Create(LPCSTR pName)
 		return TRUE;
 	}
 	else {
-		ErrorMB( (sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Can't write to '%s'":"'%s'‚ªì¬‚Å‚«‚Ü‚¹‚ñ.", pName);
+		ErrorMB( (sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Can't write to '%s'":"'%s'ãŒä½œæˆã§ãã¾ã›ã‚“.", pName);
 		return FALSE;
 	}
 }
 //---------------------------------------------------------------------------
-// ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚ÌƒI[ƒvƒ“
+// ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚ªãƒ¼ãƒ—ãƒ³
 int CLogADIF::Close(void)
 {
 	int r = 0;
@@ -1799,10 +1799,10 @@ int CLogADIF::Close(void)
 		r = fclose(m_fp);
 		m_fp = NULL;
 		if( r ){
-			ErrorMB((sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Can't write to '%s'":"'%s'‚ª³‚µ‚­ƒNƒ[ƒY‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½.", m_FileName.c_str());
+			ErrorMB((sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Can't write to '%s'":"'%s'ãŒæ­£ã—ãã‚¯ãƒ­ãƒ¼ã‚ºã§ãã¾ã›ã‚“ã§ã—ãŸ.", m_FileName.c_str());
 		}
 		else if( m_Mode ){
-			InfoMB((sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Done (write to '%s')":"'%s'‚Ö‚Ì‘‚«‚±‚İ‚ğI—¹‚µ‚Ü‚µ‚½.", m_FileName.c_str());
+			InfoMB((sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Done (write to '%s')":"'%s'ã¸ã®æ›¸ãã“ã¿ã‚’çµ‚äº†ã—ã¾ã—ãŸ.", m_FileName.c_str());
 		}
 	}
 	return r ? FALSE : TRUE;
@@ -1813,7 +1813,7 @@ const char	*_mb[]={
 	"4mm","2mm","1mm","65m","1.25m",NULL,
 };
 //---------------------------------------------------------------------------
-// ADIFƒtƒ@ƒCƒ‹‚Ì“Ç‚İo‚µ
+// ADIFãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿å‡ºã—
 void CLogADIF::SetData(SDMMLOG *sp, LPCSTR pKey, LPSTR pData)
 {
 	int l;
@@ -1933,7 +1933,7 @@ void CLogADIF::AdjustData(SDMMLOG *sp)
 	if( !sp->my[0] ) StrCopy(sp->my, "599", GetLMode(sp->mode));
 }
 //---------------------------------------------------------------------------
-// ADIFƒtƒ@ƒCƒ‹‚Ì“Ç‚İo‚µ
+// ADIFãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿å‡ºã—
 int CLogADIF::Read(SDMMLOG *sp)
 {
 	if( !IsOpen() ) return FALSE;
@@ -2018,7 +2018,7 @@ void CLogADIF::OutF(int &col, FILE *fp, LPCSTR fmt, ...)
 	col += l;
 }
 //---------------------------------------------------------------------------
-// o—Í•ÏŠ·
+// å‡ºåŠ›å¤‰æ›
 //
 //<CALL:6>KD4MUL <QSO_DATE:8:D>19930921 <TIME_ON:6>223558 <TIME_OFF:6>150000
 //<FREQ:5>3.690 <BAND:3>80M <MODE:2>CW <TX_PWR:3>100 <RST_SENT:3>599
@@ -2075,13 +2075,13 @@ int CLogADIF::Write(SDMMLOG *sp)
 
 
 //***************************************************************************
-// CLogCabrillo ƒNƒ‰ƒX
+// CLogCabrillo ã‚¯ãƒ©ã‚¹
 CLogCabrillo::CLogCabrillo()
 {
 	m_bf[sizeof(m_bf)-1] = 0;
 }
 //---------------------------------------------------------------------------
-// LogCabrilloƒtƒ@ƒCƒ‹‚ÌƒI[ƒvƒ“
+// LogCabrilloãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚ªãƒ¼ãƒ—ãƒ³
 int CLogCabrillo::Open(LPCSTR pName)
 {
 	Close();
@@ -2097,12 +2097,12 @@ int CLogCabrillo::Open(LPCSTR pName)
 		return TRUE;
 	}
 	else {
-		ErrorMB((sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Can't open '%s'": "'%s'‚ªƒI[ƒvƒ“‚Å‚«‚Ü‚¹‚ñ.", pName);
+		ErrorMB((sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Can't open '%s'": "'%s'ãŒã‚ªãƒ¼ãƒ—ãƒ³ã§ãã¾ã›ã‚“.", pName);
 		return FALSE;
 	}
 }
 //---------------------------------------------------------------------------
-// LogCabrilloƒtƒ@ƒCƒ‹‚Ìì¬
+// LogCabrilloãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ
 int CLogCabrillo::Create(LPCSTR pName)
 {
 	Close();
@@ -2128,12 +2128,24 @@ int CLogCabrillo::Create(LPCSTR pName)
 		return TRUE;
 	}
 	else {
-		ErrorMB( (sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Can't write to '%s'":"'%s'‚ªì¬‚Å‚«‚Ü‚¹‚ñ.", pName);
+		ErrorMB( (sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Can't write to '%s'":"'%s'ãŒä½œæˆã§ãã¾ã›ã‚“.", pName);
 		return FALSE;
 	}
 }
 //---------------------------------------------------------------------------
-// ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚ÌƒI[ƒvƒ“
+void CLogCabrillo::AdjustData(SDMMLOG *sp)
+{
+	if( !sp->etime ) sp->etime = sp->btime;
+	if( sp->call[0] ){
+		LPCSTR pCC = ClipCC(sp->call);
+		Log.SetOptStr(0, sp, Cty.GetCountry(pCC));
+		if( !sp->opt2[0] ) Log.SetOptStr(1, sp, Cty.GetCont(pCC));
+	}
+	if( !sp->ur[0] ) StrCopy(sp->ur, "599", GetLMode(sp->mode));
+	if( !sp->my[0] ) StrCopy(sp->my, "599", GetLMode(sp->mode));
+}
+//---------------------------------------------------------------------------
+// ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚ªãƒ¼ãƒ—ãƒ³
 int CLogCabrillo::Close(void)
 {
 	int r = 0;
@@ -2142,10 +2154,10 @@ int CLogCabrillo::Close(void)
 		r = fclose(m_fp);
 		m_fp = NULL;
 		if( r ){
-			ErrorMB((sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Can't write to '%s'":"'%s'‚ª³‚µ‚­ƒNƒ[ƒY‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½.", m_FileName.c_str());
+			ErrorMB((sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Can't write to '%s'":"'%s'ãŒæ­£ã—ãã‚¯ãƒ­ãƒ¼ã‚ºã§ãã¾ã›ã‚“ã§ã—ãŸ.", m_FileName.c_str());
 		}
 		else if( m_Mode ){
-			InfoMB((sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Done (write to '%s')\r\n\r\nMMTTY did only make QSO section.\r\nEdit to the contest name, category, your name and address, etc... in the file.":"'%s'‚Ö‚Ì‘‚«‚±‚İ‚ğI—¹‚µ‚Ü‚µ‚½.\r\n\r\nMMTTY‚ÍQSOƒZƒNƒVƒ‡ƒ“‚µ‚©ì¬‚µ‚Ü‚¹‚ñB\r\nƒRƒ“ƒeƒXƒg–¼AQ‰ÁƒJƒeƒSƒŠ“™‚ğ•ÒW‚µ‚Ä‚­‚¾‚³‚¢.", m_FileName.c_str());
+			InfoMB((sys.m_WinFontCharset!= SHIFTJIS_CHARSET) ? "Done (write to '%s')\r\n\r\nMMTTY did only make QSO section.\r\nEdit to the contest name, category, your name and address, etc... in the file.":"'%s'ã¸ã®æ›¸ãã“ã¿ã‚’çµ‚äº†ã—ã¾ã—ãŸ.\r\n\r\nMMTTYã¯QSOã‚»ã‚¯ã‚·ãƒ§ãƒ³ã—ã‹ä½œæˆã—ã¾ã›ã‚“ã€‚\r\nã‚³ãƒ³ãƒ†ã‚¹ãƒˆåã€å‚åŠ ã‚«ãƒ†ã‚´ãƒªç­‰ã‚’ç·¨é›†ã—ã¦ãã ã•ã„.", m_FileName.c_str());
 			sprintf(m_bf, "NOTEPAD.EXE %s", m_FileName.c_str());
 			WinExec(m_bf, SW_SHOWDEFAULT);
 		}
@@ -2153,13 +2165,13 @@ int CLogCabrillo::Close(void)
 	return r ? FALSE : TRUE;
 }
 //---------------------------------------------------------------------------
-// LogCabrilloƒtƒ@ƒCƒ‹‚Ì“Ç‚İo‚µ
+// LogCabrilloãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿å‡ºã—
 int CLogCabrillo::Read(SDMMLOG *sp)
 {
 	return FALSE;
 }
 //---------------------------------------------------------------------------
-// o—Í•ÏŠ·
+// å‡ºåŠ›å¤‰æ›
 //
 int CLogCabrillo::Write(SDMMLOG *sp)
 {
@@ -2207,7 +2219,7 @@ int CLogCabrillo::Write(SDMMLOG *sp)
 				r = InputMB("Does not exist the Sent-NR information", "Enter contest number which you sent", m_SNR);
 			}
 			else {
-				r = InputMB("Sent-NRî•ñ‚ª‘¶İ‚µ‚Ü‚¹‚ñ", "Sent-NR‚ğ“ü—Í‚µ‚Ä‰º‚³‚¢", m_SNR);
+				r = InputMB("Sent-NRæƒ…å ±ãŒå­˜åœ¨ã—ã¾ã›ã‚“", "Sent-NRã‚’å…¥åŠ›ã—ã¦ä¸‹ã•ã„", m_SNR);
 			}
 			if( r == FALSE ) return FALSE;
 		}
