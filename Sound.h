@@ -26,6 +26,7 @@
 #include "Wave.h"
 #include "fft.h"
 #include "rtty.h"
+#include "ISignalEventObserver.h"
 //---------------------------------------------------------------------------
 class CWaveFile
 {
@@ -54,6 +55,16 @@ public:
 };
 
 
+//---------------------------------------------------------------------------
+// SOLID: Dependency Inversion Principle (DIP)
+//
+// TSound は TMmttyWd (UI) への直接参照を持つ代わりに、
+// ISignalEventObserver インターフェース経由でイベントを通知する。
+// これにより TSound (音声処理層) が UI 層に依存しなくなる (DIP)。
+//
+// Observer パターン: TMmttyWd が ISignalEventObserver を実装して
+// TSound::GetNotifier().Subscribe() で登録することで通知を受け取る。
+//---------------------------------------------------------------------------
 class TSound : public TThread
 {
 private:
@@ -150,11 +161,18 @@ public:
 	int		m_FFTSW;
 	int		m_FFTFW;
 
+	// Observer パターン: UI 層など外部オブザーバーへのイベント通知
+	// TSound が UI クラスを直接参照しないための DIP 対応
+	SignalEventNotifier m_Notifier;
+
 	int		m_FFTWINDOW;
 
     int		m_ReqSpeedTest;
     DWORD	m_SpeedValue;
 	void __fastcall JobSpeedTest();
+
+	// オブザーバーの登録・解除 (TMmttyWd から呼ぶ)
+	inline SignalEventNotifier& GetNotifier() { return m_Notifier; }
 
 	inline int __fastcall GetOutCount(int sw){
 		return (sw ? Wave.GetOutBCC() : Wave.GetOutBC()) * m_BuffSize;

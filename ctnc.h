@@ -18,7 +18,7 @@
 
 
 ///----------------------------------------------------------
-///  TNCƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“ƒNƒ‰ƒX
+///  TNCï¿½Vï¿½~ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
 ///
 ///  (C) JE3HHT Makoto.Mori
 ///
@@ -28,13 +28,14 @@
 #include "ComLib.h"
 #include "comm.h"
 #include "Mmlink.h"
+#include "ISerialDevice.h"
 //---------------------------------------------------------------------------
 #include <Classes.hpp>
 typedef struct {
 	int		change;
 
-	char	StrPort[32];	// ƒ|[ƒg‚Ì–¼‘O
-	int		BaudRate;		// ƒ{[ƒŒ[ƒg
+	char	StrPort[32];	// ï¿½|ï¿½[ï¿½gï¿½Ì–ï¿½ï¿½O
+	int		BaudRate;		// ï¿½{ï¿½[ï¿½ï¿½ï¿½[ï¿½g
 	int		BitLen;			// 0-7Bit, 1-8Bit
 	int		Stop;			// 0-1Bit, 1-2Bit
 	int		Parity;			// 0-PN, 1-PE, 2-PO
@@ -181,16 +182,23 @@ void SaveTNCSetup(TMemIniFile *pIniFile);
 #define	TNC_COMBUFSIZE	4096
 #define	TNC_TXBUFSIZE	1024
 #define	TNC_RXBUFSIZE	1024
-class CCtnc : public TThread
+//---------------------------------------------------------------------------
+// SOLID: Dependency Inversion Principle (DIP) + Interface Segregation Principle (ISP)
+//
+// CCtnc ã¯ ISerialDevice ã‚’å®Ÿè£…ã™ã‚‹ã“ã¨ã§ã€ä¸Šä½ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãŒ
+// CCtnc ã®å…·ä½“ã‚¯ãƒ©ã‚¹ã‚’çŸ¥ã‚‰ãªãã¦ã‚ˆããªã‚‹ã€‚
+// Main.h ã¯ ISerialDevice* çµŒç”±ã§ CComm/CCtnc/CCradio ã‚’çµ±ä¸€æ“ä½œã§ãã‚‹ã€‚
+//---------------------------------------------------------------------------
+class CCtnc : public TThread, public ISerialDevice
 {
 public:
-	BOOL	m_CreateON;		// ƒNƒŠƒGƒCƒgƒtƒ‰ƒO
-	DCB		m_dcb;			// ‚c‚b‚a
-	HANDLE	m_fHnd;			// ƒtƒ@ƒCƒ‹ƒnƒ“ƒhƒ‹
-	HWND	m_wHnd;			// e‚ÌƒEƒCƒ“ƒhƒEƒnƒ“ƒhƒ‹
-	UINT	m_ID;			// ƒƒbƒZ[ƒW‚Ì‚h‚c”Ô†
-	volatile	int	m_Command;		// ƒXƒŒƒbƒh‚Ö‚ÌƒRƒ}ƒ“ƒh
-	BOOL	m_TxAbort;		// ‘—M’†~ƒtƒ‰ƒO
+	BOOL	m_CreateON;		// ï¿½Nï¿½ï¿½ï¿½Gï¿½Cï¿½gï¿½tï¿½ï¿½ï¿½O
+	DCB		m_dcb;			// ï¿½cï¿½bï¿½a
+	HANDLE	m_fHnd;			// ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½nï¿½ï¿½ï¿½hï¿½ï¿½
+	HWND	m_wHnd;			// ï¿½eï¿½ÌƒEï¿½Cï¿½ï¿½ï¿½hï¿½Eï¿½nï¿½ï¿½ï¿½hï¿½ï¿½
+	UINT	m_ID;			// ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½Ì‚hï¿½cï¿½Ôï¿½
+	volatile	int	m_Command;		// ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½Ö‚ÌƒRï¿½}ï¿½ï¿½ï¿½h
+	BOOL	m_TxAbort;		// ï¿½ï¿½ï¿½Mï¿½ï¿½ï¿½~ï¿½tï¿½ï¿½ï¿½O
 	AnsiString	Name;
 
 	char	m_txbuf[TNC_TXBUFSIZE];
@@ -215,27 +223,31 @@ public:
 	__fastcall ~CCtnc(){
 		Close();
 	};
-	inline BOOL IsOpen(void){
-		return m_CreateON;
-	};
+
+	// --- ISerialDevice å®Ÿè£… ---
+	BOOL    IsOpen()  const  { return m_CreateON; }
+	void    __fastcall Close(void);
+	void    __fastcall ReqClose(void);
+	void    __fastcall WaitClose(void);
+	void    Write(const void *pData, DWORD len);     // ISerialDevice::Write
+	void    PutChar(BYTE c);                          // ISerialDevice::PutChar
+	int     __fastcall TxBusy(void);
+	void    __fastcall SetPTT(int sw);               // ISerialDevice::SetPTT
+	// --- ISerialDevice å®Ÿè£… çµ‚ã‚ã‚Š ---
+
 	inline void UpdateHandle(HWND hwnd){
 		m_wHnd = hwnd;
 	};
 	BOOL __fastcall Open(CTNCPARA *cp, HWND hwnd, UINT nID, COMMPARA *pp);
-	void __fastcall Close(void);
-	void __fastcall ReqClose(void);
-	void __fastcall WaitClose(void);
 	BOOL __fastcall GetPTT(void);
 	DWORD __fastcall RecvLen(void);
-	int __fastcall TxBusy(void);
 	int __fastcall IORead(BYTE *p, DWORD len);
 	int __fastcall IOPutChar(BYTE c);
 
 	void __fastcall ClearRxFifo(void);
 	void __fastcall ClearTxFifo(void);
 	BOOL __fastcall PutRxFifo(BYTE c);
-	void __fastcall Write(void *p, DWORD len);
-	void __fastcall PutChar(char c);
+	void __fastcall PutRawChar(char c);               // æ—§ PutChar(char) å¾Œæ–¹äº’æ›ãƒ©ãƒƒãƒ‘ãƒ¼
 	void OutStr(LPCSTR fmt, ...);
 	void OutLine(LPCSTR fmt, ...);
 
@@ -258,7 +270,7 @@ public:
 void InitTNCPara(void);
 
 ///---------------------------------------------------------
-///  ƒeƒLƒXƒg•¶š—ñ‚e‚h‚e‚n
+///  ï¿½eï¿½Lï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½hï¿½eï¿½n
 class CTextFifo
 {
 private:

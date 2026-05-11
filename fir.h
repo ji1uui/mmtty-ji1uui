@@ -24,6 +24,7 @@
 
 //---------------------------------------------------------------------------
 #include "ComLib.h"
+#include "IFilter.h"
 #define	TAPMAX	512
 
 #define	PI	3.1415926535897932384626433832795
@@ -46,7 +47,7 @@ typedef struct {
 	double	att;
 	double	gain;
 	double	fc;
-	double	hp[TAPMAX+1];		/* ŒW””z—ñ		*/
+	double	hp[TAPMAX+1];		/* ï¿½Wï¿½ï¿½ï¿½zï¿½ï¿½		*/
 }FIR;
 void MakeFilter(double *HP, int tap, int type, double fs, double fcl, double fch, double att, double gain);
 void MakeFilter(double *HP, FIR *fp);
@@ -111,7 +112,8 @@ public:
 #endif
 
 #define	DELAYMAX	4096
-class CLMS
+// SOLID ISP/LSP: IFilter å®Ÿè£…ã«ã‚ˆã‚Šãƒ•ã‚£ãƒ«ã‚¿ãƒã‚§ãƒ¼ãƒ³ã§åˆ©ç”¨å¯èƒ½
+class CLMS : public IFilter
 {
 private:
 	double	*Z;					// FIR Z Application
@@ -121,9 +123,9 @@ private:
 	double	m_SpaceFreq;		// for RTTY
 	double	HBPF[TAPMAX+1];		// for RTTY
 
-	double	m_lmsADJSC;			// ƒXƒP[ƒ‹’²®’l
-	double	m_lmsErr;			// LMS Œë·ƒf[ƒ^
-	double	m_lmsMErr;			// LMS Œë·ƒf[ƒ^i~‚QƒÊj
+	double	m_lmsADJSC;			// ï¿½Xï¿½Pï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½l
+	double	m_lmsErr;			// LMS ï¿½ë·ï¿½fï¿½[ï¿½^
+	double	m_lmsMErr;			// LMS ï¿½ë·ï¿½fï¿½[ï¿½^ï¿½iï¿½~ï¿½Qï¿½Êj
 
 	void GetFW(double &fl, double &fh, double fq);
 public:
@@ -133,13 +135,13 @@ public:
 	int		m_lmsInv;			// LMS InvOutput
 	int		m_lmsDelay;			// LMS Delay
 	int		m_lmsAGC;			// LMS AGC
-	double	m_lmsMU2;			// LMS 2ƒÊ
-	double	m_lmsGM;			// LMS ƒÁ
-	double	*H;					// ƒAƒvƒŠƒP[ƒVƒ‡ƒ“ƒtƒBƒ‹ƒ^‚ÌŒW”
+	double	m_lmsMU2;			// LMS 2ï¿½ï¿½
+	double	m_lmsGM;			// LMS ï¿½ï¿½
+	double	*H;					// ï¿½Aï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½ÌŒWï¿½ï¿½
 
-	int		m_lmsNotch;			// ƒmƒbƒ`ü”g”
-	int		m_lmsNotch2;		// ƒmƒbƒ`ü”g”
-	int		m_twoNotch;			// ‚Q‚Â‚ß‚Ìƒmƒbƒ`‚Ì‹–‰Â
+	int		m_lmsNotch;			// ï¿½mï¿½bï¿½`ï¿½ï¿½ï¿½gï¿½ï¿½
+	int		m_lmsNotch2;		// ï¿½mï¿½bï¿½`ï¿½ï¿½ï¿½gï¿½ï¿½
+	int		m_twoNotch;			// ï¿½Qï¿½Â‚ß‚Ìƒmï¿½bï¿½`ï¿½Ì‹ï¿½ï¿½ï¿½
 	int		m_bpf;				// For RTTY
 public:
 	CLMS();
@@ -149,9 +151,15 @@ public:
 	double Do(double d);
 	void SetWindow(double mfq, double sfq);
 	inline double *GetHBPF(void){return HBPF;};
+
+	// IFilter å®Ÿè£…
+	double Process(double input) { return Do(input); }
+	void   Clear();
 };
 
-class CIIRTANK
+// SOLID ISP/LSP: IFilter ã‚’å®Ÿè£…ã™ã‚‹ã“ã¨ã§ãƒ•ã‚£ãƒ«ã‚¿ã‚’ãƒãƒªãƒ¢ãƒ¼ãƒ•ã‚£ãƒƒã‚¯ã«æ‰±ãˆã‚‹ã€‚
+// CompositeFilter ã‚„å‹•çš„ãƒ•ã‚£ãƒ«ã‚¿ãƒã‚§ãƒ¼ãƒ³ã§åˆ©ç”¨å¯èƒ½ã«ãªã‚‹ã€‚
+class CIIRTANK : public IFilter
 {
 private:
 	double	z1, z2;
@@ -162,10 +170,15 @@ public:
 	CIIRTANK();
 	void SetFreq(double f, double smp, double bw);
 	double Do(double d);
+
+	// IFilter å®Ÿè£…
+	double Process(double input) { return Do(input); }
+	void   Clear()               { z1 = z2 = 0.0; }
 };
 
 #define	IIRMAX	16
-class CIIR
+// SOLID ISP/LSP: IFilter å®Ÿè£…ã«ã‚ˆã‚Š CompositeFilter ã§çµ„ã¿åˆã‚ã›å¯èƒ½
+class CIIR : public IFilter
 {
 private:
 	double	*Z;
@@ -180,6 +193,9 @@ public:
 	void MakeIIR(double fc, double fs, int order, int bc, double rp);
 	double Do(double d);
 	void Clear(void);
+
+	// IFilter å®Ÿè£…
+	double Process(double input) { return Do(input); }
 };
 
 class CINTPXY2{			// IIR x2 INTP for XY Scope

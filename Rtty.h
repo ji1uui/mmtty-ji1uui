@@ -23,13 +23,15 @@
 //---------------------------------------------------------------------------
 #include "Fir.h"
 #include "CLX.h"
+#include "IDemodStrategy.h"
+#include "IModulatorState.h"
 
 #define	VERFFTDEM	1		// CPhaseX Version
 #define	VERAA6YQ	2		// CAA6YQ Version
 
-#define	BITDEBUG	0		// ƒLƒƒƒ‰ƒNƒ^’·‚Ì‘ª’è
-#define	TXDDEBUG	0		// FSK‚ÌƒLƒƒƒ‰ƒNƒ^’·‚Ì‘ª’è
-#define	FSKDEBUG	0		// FSK‚ÌƒfƒoƒbƒOƒ‚[ƒh
+#define	BITDEBUG	0		// ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½^ï¿½ï¿½ï¿½Ì‘ï¿½ï¿½ï¿½
+#define	TXDDEBUG	0		// FSKï¿½ÌƒLï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½^ï¿½ï¿½ï¿½Ì‘ï¿½ï¿½ï¿½
+#define	FSKDEBUG	0		// FSKï¿½Ìƒfï¿½oï¿½bï¿½Oï¿½ï¿½ï¿½[ï¿½h
 
 #ifndef SampFreq
 extern	double	SampFreq;
@@ -58,7 +60,7 @@ public:
     inline int __fastcall GetCount(void){return m_Cnt;};
 };
 //--------------------------------------------------------
-// CAGCƒNƒ‰ƒX
+// CAGCï¿½Nï¿½ï¿½ï¿½X
 // Added by JE3HHT on Aug.2010
 class CAGCX
 {
@@ -144,8 +146,8 @@ public:
 class CVCO
 {
 private:
-	double	m_c1;	// VCO‚Ì—˜“¾
-	double	m_c2;	// ƒtƒŠ[ƒ‰ƒ“ƒjƒ“ƒOü”g”
+	double	m_c1;	// VCOï¿½Ì—ï¿½ï¿½ï¿½
+	double	m_c2;	// ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½gï¿½ï¿½
 	int 	m_z;
 
 	int		m_TableSize;
@@ -169,8 +171,8 @@ public:
 class CVCOX
 {
 private:
-	double	m_c1;	// VCO‚Ì—˜“¾
-	double	m_c2;	// ƒtƒŠ[ƒ‰ƒ“ƒjƒ“ƒOü”g”
+	double	m_c1;	// VCOï¿½Ì—ï¿½ï¿½ï¿½
+	double	m_c2;	// ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½gï¿½ï¿½
 	double	m_z;
 
 	double	m_FreeFreq;
@@ -261,7 +263,7 @@ public:
 };
 
 //---------------------------------------------------------------------------
-// ƒ_ƒuƒ‹ƒoƒbƒtƒ@‚É‚æ‚éFIRƒtƒBƒ‹ƒ^
+// ï¿½_ï¿½uï¿½ï¿½ï¿½oï¿½bï¿½tï¿½@ï¿½É‚ï¿½ï¿½FIRï¿½tï¿½Bï¿½ï¿½ï¿½^
 // Added by JE3HHT on Aug.2010
 class CFIR2
 {
@@ -292,7 +294,7 @@ public:
     inline double __fastcall GetSampleFreq(void){return m_fs;};
 };
 //---------------------------------------------------------------------------
-// ƒ_ƒuƒ‹ƒoƒbƒtƒ@‚É‚æ‚éFIRƒtƒBƒ‹ƒ^(•¡‘f”—p)
+// ï¿½_ï¿½uï¿½ï¿½ï¿½oï¿½bï¿½tï¿½@ï¿½É‚ï¿½ï¿½FIRï¿½tï¿½Bï¿½ï¿½ï¿½^(ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½p)
 // Added by JE3HHT on Aug.2010
 class CFIRX
 {
@@ -318,7 +320,7 @@ public:
     inline double __fastcall GetSampleFreq(void){return m_fs;};
 };
 //---------------------------------------------------------------------------
-// ƒXƒ‰ƒCƒfƒBƒ“ƒOFFT
+// ï¿½Xï¿½ï¿½ï¿½Cï¿½fï¿½Bï¿½ï¿½ï¿½OFFT
 // Added by JE3HHT on Aug.2010
 class CSlideFFT
 {
@@ -345,7 +347,7 @@ public:
 };
 
 /*=============================================================================
-  CPHASEƒNƒ‰ƒX
+  CPHASEï¿½Nï¿½ï¿½ï¿½X
 =============================================================================*/
 #define	CPHASE_BASEFREQ	0.0
 class CPHASE
@@ -460,7 +462,7 @@ public:
 		m_out = loopLPF.Do(m_err);
 		// VCO
 		m_vcoout = vco.Do(m_out);
-		// ˆÊ‘Š”äŠr
+		// ï¿½Ê‘ï¿½ï¿½ï¿½r
 		m_err = m_vcoout * d;
 		return outLPF.Do(m_out) * 32768.0;
 	};
@@ -597,10 +599,10 @@ private:
 	double	HSpace[TAPMAX+1];
 	double	ZSpace[TAPMAX+1];
 
-	int		Count;		// ƒfƒ‚ƒWƒ…ƒŒ[ƒ^ƒfƒBƒXƒpƒbƒ`
-	double	i2;			// ƒfƒ‚ƒWƒ…ƒŒ[ƒ^2ndInput
+	int		Count;		// ï¿½fï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½fï¿½Bï¿½Xï¿½pï¿½bï¿½`
+	double	i2;			// ï¿½fï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^2ndInput
 
-	CDECM2	DECM2;		// ƒfƒ‚ƒWƒ…ƒŒ[ƒ^
+	CDECM2	DECM2;		// ï¿½fï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^
 
 	int		m_Smooz;
 	CSmooz	avgMark;
@@ -648,6 +650,15 @@ private:
 	CSmooz	SmoozSQ;
 
 	COVERLIMIT	OverLimit;
+	// SOLID OCP/SRP: Strategy ãƒ‘ã‚¿ãƒ¼ãƒ³ã«ã‚ˆã‚‹å¾©èª¿ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ ã®åˆ‡ã‚Šæ›¿ãˆã€‚
+	// m_type ã®å€¤ã«å¿œã˜ãŸ if-else åˆ†å²ã‚’å»ƒæ­¢ã—ã€IDemodStrategy ã«å§”è­²ã™ã‚‹ã€‚
+	// æ–°ã—ã„å¾©èª¿æ–¹å¼ã¯ IDemodStrategy ã‚’å®Ÿè£…ã™ã‚‹ã ã‘ã§è¿½åŠ ã§ãã‚‹ (OCP)ã€‚
+	// SetDemodStrategy() ã§å®Ÿè¡Œæ™‚ã«å·®ã—æ›¿ãˆå¯èƒ½ã€‚
+	IDemodStrategy *m_pDemodStrategy;
+
+	// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆæˆ¦ç•¥ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ (å¾Œæ–¹äº’æ›: m_type ã§åˆæœŸé¸æŠã•ã‚Œã‚‹)
+	CPhaseDemodStrategy  m_phaseStrategy;
+	CAA6YQDemodStrategy  m_aa6yqStrategy;
 public:
 	int		m_type;
 	double	m_iirfw;
@@ -661,8 +672,8 @@ public:
 	int		m_StopLen;
 	int		m_Parity;
 
-	int		m_majority;		// ‘½”ŒˆƒƒWƒbƒN
-	int		m_ignoreFream;	// ƒtƒŒ[ƒ~ƒ“ƒOƒGƒ‰[‚Ì–³‹
+	int		m_majority;		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½bï¿½N
+	int		m_ignoreFream;	// ï¿½tï¿½ï¿½ï¿½[ï¿½~ï¿½ï¿½ï¿½Oï¿½Gï¿½ï¿½ï¿½[ï¿½Ì–ï¿½ï¿½ï¿½
 
 	int		m_Limit;
 	int		m_LimitAGC;
@@ -713,6 +724,15 @@ public:
 	CFSKDEM();
 	void Do(double d);
 
+	// å¾©èª¿æˆ¦ç•¥ã‚’å®Ÿè¡Œæ™‚ã«å·®ã—æ›¿ãˆã‚‹ (OCP)
+	// pStrategy ãŒ NULL ã®å ´åˆã¯ m_type ã«åŸºã¥ããƒ‡ãƒ•ã‚©ãƒ«ãƒˆæˆ¦ç•¥ã‚’ä½¿ç”¨ã™ã‚‹
+	void SetDemodStrategy(IDemodStrategy *pStrategy) {
+		m_pDemodStrategy = pStrategy ? pStrategy
+		                 : (m_type == VERAA6YQ
+		                    ? static_cast<IDemodStrategy*>(&m_aa6yqStrategy)
+		                    : static_cast<IDemodStrategy*>(&m_phaseStrategy));
+	}
+
 	inline void ClearMode(void){m_mode = 0;};
 	double GetFilWidth(int tap);
 
@@ -755,6 +775,10 @@ public:
 };
 
 #define	MODBUFMAX	2048
+// SOLID SRP: State ãƒ‘ã‚¿ãƒ¼ãƒ³ã«ã‚ˆã‚Šå¤‰èª¿å™¨ã®çŠ¶æ…‹ç®¡ç†ã‚’åˆ†é›¢ã€‚
+// m_mode int ãƒ•ãƒ©ã‚° + if-else åˆ†å²ã«ä»£ã‚ã‚Šã€IModulatorState ã«çŠ¶æ…‹ãƒ­ã‚¸ãƒƒã‚¯ã‚’å§”è­²ã€‚
+// å„çŠ¶æ…‹ã‚¯ãƒ©ã‚¹ (CModIdleState/CModTransmitState/CModWaitState) ãŒ
+// è‡ªèº«ã®è²¬ä»»ã®ã¿ã‚’æ‹…å½“ã™ã‚‹ (SRP)ã€‚
 class CFSKMOD
 {
 private:
@@ -766,6 +790,14 @@ private:
 	double	m_SampFreq;
 
 	CVCO	vco;
+
+	// State ãƒ‘ã‚¿ãƒ¼ãƒ³: ç¾åœ¨ã®å¤‰èª¿çŠ¶æ…‹ã‚’ä¿æŒã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	IModulatorState   *m_pState;
+
+	// å…·ä½“çŠ¶æ…‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ (ã‚¤ãƒ³ãƒ©ã‚¤ãƒ³ä¿æŒã§ãƒ’ãƒ¼ãƒ—ç¢ºä¿ã‚’å›é¿)
+	CModIdleState      m_idleState;
+	CModTransmitState  m_txState;
+	CModWaitState      m_waitState;
 
 	BYTE	m_Buff[MODBUFMAX];
 	int		m_rp;
@@ -823,7 +855,20 @@ public:
     CAMPCONT	m_Amp;
 
 	CFSKMOD();
-	inline int IsIdle(void){return m_idle;};
+
+	// State ãƒ‘ã‚¿ãƒ¼ãƒ³: çŠ¶æ…‹ã‚’é·ç§»ã•ã›ã‚‹
+	// (Enter/Exit ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã§å„çŠ¶æ…‹ã®åˆæœŸåŒ–ãƒ»ã‚¯ãƒªãƒ¼ãƒ³ã‚¢ãƒƒãƒ—ã‚’è¡Œã†)
+	void TransitionTo(IModulatorState *pNewState) {
+		if (m_pState) m_pState->Exit(*this);
+		m_pState = pNewState;
+		if (m_pState) m_pState->Enter(*this);
+	}
+	void TransitionToIdle()    { TransitionTo(&m_idleState); }
+	void TransitionToTransmit(){ TransitionTo(&m_txState); }
+	void TransitionToWait()    { TransitionTo(&m_waitState); }
+
+	// IModulatorState ã® IsIdle() ã«å§”è­²
+	inline int IsIdle(void){ return m_pState ? m_pState->IsIdle() : m_idle; };
 	inline double GetBaudRate(void){return m_BaudRate;};
 	void SetBaudRate(double b);
 	void CalcBPF(void);
@@ -881,12 +926,12 @@ public:
 	inline void SetDem(CFSKDEM *p){pDem = p;};
 };
 
-#pragma option -a-	// ƒpƒbƒN‚Ìw¦
+#pragma option -a-	// ï¿½pï¿½bï¿½Nï¿½Ìwï¿½ï¿½
 typedef struct {
 	BYTE	Code;
 	BYTE	Fig;
 }BCODETBL;
-#pragma option -a.	// ƒpƒbƒN‰ğœ‚Ìw¦
+#pragma option -a.	// ï¿½pï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½Ìwï¿½ï¿½
 
 class CRTTY
 {
@@ -918,7 +963,7 @@ public:
 };
 
 #define	NOISEBPFTAP	12
-class CNoise		// MŒn—ñƒmƒCƒY N=22 (Tap=1)
+class CNoise		// Mï¿½nï¿½ï¿½mï¿½Cï¿½Y N=22 (Tap=1)
 {
 private:
 	double	H[NOISEBPFTAP+1];

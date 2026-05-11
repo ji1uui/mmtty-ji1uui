@@ -25,7 +25,7 @@
 #include "fir.h"
 
 //-------------------------------------------------
-// ‚e‚h‚qƒtƒBƒ‹ƒ^‚Ì‚½‚½‚«‚İ‰‰Z
+// ï¿½eï¿½hï¿½qï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ‰ï¿½ï¿½Z
 double __fastcall DoFIR(double *hp, double *zp, double d, int tap)
 {
 	memcpy(zp, &zp[1], sizeof(double)*tap);
@@ -82,7 +82,7 @@ CLMS::CLMS()
 	memset(H, 0, sizeof(double[TAPMAX+1]));
 	memset(D, 0, sizeof(double[DELAYMAX+1]));
 
-	m_lmsADJSC = 1.0 / double(32768 * 32768);			// ƒXƒP[ƒ‹’²®’l
+	m_lmsADJSC = 1.0 / double(32768 * 32768);			// ï¿½Xï¿½Pï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½l
 	m_lmsErr = m_lmsMErr = 0;
 
 	m_Type = 1;					// 0-LMS, 1-NOTICH
@@ -94,8 +94,8 @@ CLMS::CLMS()
 	m_lmsInv = 0;
 	m_lmsDelay = 0;				// LMS Delay
 	m_lmsAGC = 0;				// LMS AGC
-	m_lmsMU2 = 0.003;			// LMS 2ƒÊ
-	m_lmsGM = 0.9999;			// LMS ƒÁ
+	m_lmsMU2 = 0.003;			// LMS 2ï¿½ï¿½
+	m_lmsGM = 0.9999;			// LMS ï¿½ï¿½
 	m_bpf = 1;
 	SetWindow(2125, 2125+170);
 }
@@ -107,6 +107,15 @@ CLMS::~CLMS()
 	delete[] Z;
 }
 
+// IFilter::Clear - LMS ãƒ•ã‚£ãƒ«ã‚¿ã®ä¿‚æ•°ã¨çŠ¶æ…‹ãƒãƒƒãƒ•ã‚¡ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹
+void CLMS::Clear()
+{
+	memset(Z, 0, sizeof(double[TAPMAX+1]));
+	memset(H, 0, sizeof(double[TAPMAX+1]));
+	memset(D, 0, sizeof(double[DELAYMAX+1]));
+	m_lmsErr = m_lmsMErr = 0;
+}
+
 void CLMS::Copy(CLMS &other)
 {
 	m_Type = other.m_Type;
@@ -115,8 +124,8 @@ void CLMS::Copy(CLMS &other)
 	m_lmsInv = other.m_lmsInv;			// LMS InvOutput
 	m_lmsDelay = other.m_lmsDelay;		// LMS Delay
 	m_lmsAGC = other.m_lmsAGC;			// LMS AGC
-	m_lmsMU2 = other.m_lmsMU2;			// LMS 2ƒÊ
-	m_lmsGM = other.m_lmsGM;			// LMS ƒÁ
+	m_lmsMU2 = other.m_lmsMU2;			// LMS 2ï¿½ï¿½
+	m_lmsGM = other.m_lmsGM;			// LMS ï¿½ï¿½
 	m_lmsNotch = other.m_lmsNotch;
 	m_lmsNotch2 = other.m_lmsNotch2;
 	m_twoNotch = other.m_twoNotch;
@@ -190,7 +199,7 @@ void CLMS::SetWindow(double mfq, double sfq)
 	}
 }
 //-------------------------------------------------
-// “K‰ƒtƒBƒ‹ƒ^‚Ì‰‰Z
+// ï¿½Kï¿½ï¿½ï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½Ì‰ï¿½ï¿½Z
 double CLMS::Do(double d)
 {
 	double a = 0.0;
@@ -198,8 +207,8 @@ double CLMS::Do(double d)
 	double *zp = Z;
 	double *hp = H;
 	if( m_Type ){
-		if( !m_NotchTap ) return d;	// ƒXƒ‹[‚Ì
-		// ƒmƒbƒ`ƒtƒBƒ‹ƒ^
+		if( !m_NotchTap ) return d;	// ï¿½Xï¿½ï¿½ï¿½[ï¿½Ìï¿½
+		// ï¿½mï¿½bï¿½`ï¿½tï¿½Bï¿½ï¿½ï¿½^
 		memcpy(Z, &Z[1], sizeof(double)*m_NotchTap);
 		Z[m_NotchTap] = d;
 		for( i = 0; i <= m_NotchTap; i++, zp++, hp++ ){
@@ -218,23 +227,23 @@ double CLMS::Do(double d)
 		return a;
 	}
 	else {
-		if( !m_Tap ) return d;	// ƒXƒ‹[‚Ì
-		// ƒgƒ‰ƒ“ƒXƒo[ƒTƒ‹ƒtƒBƒ‹ƒ^
+		if( !m_Tap ) return d;	// ï¿½Xï¿½ï¿½ï¿½[ï¿½Ìï¿½
+		// ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½oï¿½[ï¿½Tï¿½ï¿½ï¿½tï¿½Bï¿½ï¿½ï¿½^
 		memcpy(Z, &Z[1], sizeof(double)*m_Tap);
 		Z[m_Tap] = D[0];
 		for( i = 0; i <= m_Tap; i++, zp++, hp++ ){
 			a += (*zp) * (*hp);
 		}
 	}
-	// Œë·ŒvZ
+	// ï¿½ë·ï¿½vï¿½Z
 	m_lmsErr = d - a;
-	m_lmsMErr = m_lmsErr * m_lmsMU2 * m_lmsADJSC;	// lmsADJSC = 1/(32768 * 32768) ƒXƒP[ƒŠƒ“ƒO’²®’l
+	m_lmsMErr = m_lmsErr * m_lmsMU2 * m_lmsADJSC;	// lmsADJSC = 1/(32768 * 32768) ï¿½Xï¿½Pï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½l
 
-	// ’x‰„Ší‚ÌˆÚ“®
+	// ï¿½xï¿½ï¿½ï¿½ï¿½ÌˆÚ“ï¿½
 	if( m_lmsDelay ) memcpy(D, &D[1], sizeof(double)*m_lmsDelay);
 	D[m_lmsDelay] = d;
 
-	// ŒW”XV
+	// ï¿½Wï¿½ï¿½ï¿½Xï¿½V
 	zp = Z;
 	hp = H;
 	if( m_lmsAGC ){
@@ -256,7 +265,7 @@ double CLMS::Do(double d)
 }
 
 //*********************************************************************
-// CDECM2	1/2ƒfƒVƒ[ƒ^ˆ—ƒNƒ‰ƒX
+// CDECM2	1/2ï¿½fï¿½Vï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
 //
 CDECM2::CDECM2()
 {
@@ -315,7 +324,7 @@ double CDECM2::Do(double d1, double d2)
 
 #if 0
 //*********************************************************************
-// CDECM2H	1/2ƒfƒVƒ[ƒ^ˆ—ƒNƒ‰ƒX 64tap
+// CDECM2H	1/2ï¿½fï¿½Vï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X 64tap
 //
 CDECM2H::CDECM2H()
 {
@@ -402,7 +411,7 @@ double CDECM2H::Do(double d1, double d2)
 #endif
 #if 0
 //*********************************************************************
-// CINTP2	~2ƒCƒ“ƒ^ƒ|[ƒŒ[ƒ^ˆ—ƒNƒ‰ƒX
+// CINTP2	ï¿½~2ï¿½Cï¿½ï¿½ï¿½^ï¿½|ï¿½[ï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
 //
 CINTP2::CINTP2()
 {
@@ -455,7 +464,7 @@ void CINTP2::Do(double &d1, double &d2, double d)
 }
 
 //*********************************************************************
-// CDECM3	1/3ƒfƒVƒ[ƒ^ˆ—ƒNƒ‰ƒX
+// CDECM3	1/3ï¿½fï¿½Vï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
 //
 CDECM3::CDECM3()
 {
@@ -528,7 +537,7 @@ double CDECM3::Do(double d1, double d2, double d3)
 }
 
 //*********************************************************************
-// CINTP3	~3ƒCƒ“ƒ^ƒ|[ƒŒ[ƒ^ˆ—ƒNƒ‰ƒX
+// CINTP3	ï¿½~3ï¿½Cï¿½ï¿½ï¿½^ï¿½|ï¿½[ï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
 //
 CINTP3::CINTP3()
 {
@@ -595,11 +604,11 @@ void CINTP3::Do(double &d1, double &d2, double &d3, double d)
 
 
 /**********************************************************************
-	‚e‚h‚qƒtƒBƒ‹ƒ^İŒvŠÖ”
+	ï¿½eï¿½hï¿½qï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½İŒvï¿½Öï¿½
 **********************************************************************/
 /*
 ====================================================
-	ƒxƒbƒZƒ‹ŠÖ”
+	ï¿½xï¿½bï¿½Zï¿½ï¿½ï¿½Öï¿½
 ====================================================
 */
 static double I0(double x)
@@ -621,7 +630,7 @@ static double I0(double x)
 
 /*
 ====================================================
-	‚e‚h‚qƒtƒBƒ‹ƒ^‚ÌİŒv
+	ï¿½eï¿½hï¿½qï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½ÌİŒv
 ====================================================
 */
 void MakeFilter(double *HP, int tap, int type, double fs, double fcl, double fch, double att, double gain)
@@ -665,7 +674,7 @@ void MakeFilter(double *HP, FIR *fp)
 
 	hp = fp->hp;
 	sum = PI*2.0*fp->fc/fp->fs;
-	if( fp->att >= 21 ){		// ƒCƒ“ƒpƒ‹ƒX‰“š‚Æ‘‹ŠÖ”‚ğŒvZ
+	if( fp->att >= 21 ){		// ï¿½Cï¿½ï¿½ï¿½pï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½Æ‘ï¿½ï¿½Öï¿½ï¿½ï¿½ï¿½vï¿½Z
 		for( j = 0; j <= (fp->n/2); j++, hp++ ){
 			fm = (double)(2 * j)/(double)fp->n;
 			win = I0(alpha * sqrt(1.0-(fm*fm)))/I0(alpha);
@@ -677,7 +686,7 @@ void MakeFilter(double *HP, FIR *fp)
 			}
 		}
 	}
-	else {						// ƒCƒ“ƒpƒ‹ƒX‰“š‚Ì‚İŒvZ
+	else {						// ï¿½Cï¿½ï¿½ï¿½pï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½Ì‚İŒvï¿½Z
 		for( j = 0; j <= (fp->n/2); j++, hp++ ){
 			if( !j ){
 				*hp = fp->fc * 2.0/fp->fs;
@@ -695,7 +704,7 @@ void MakeFilter(double *HP, FIR *fp)
 		for( j = 0; j <= (fp->n/2); j++, hp++ ) (*hp) /= sum;
 	}
 
-	// ü”g”•ÏŠ·
+	// ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ÏŠï¿½
 
 	if( fp->typ == ffHPF ){
 		hp = fp->hp;
@@ -722,7 +731,7 @@ void MakeFilter(double *HP, FIR *fp)
 }
 
 //---------------------------------------------------------------------------
-//‚e‚h‚qƒtƒBƒ‹ƒ^iƒqƒ‹ƒxƒ‹ƒg•ÏŠ·ƒtƒBƒ‹ƒ^j‚ÌİŒv
+//ï¿½eï¿½hï¿½qï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½iï¿½qï¿½ï¿½ï¿½xï¿½ï¿½ï¿½gï¿½ÏŠï¿½ï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½jï¿½ÌİŒv
 // Added by JE3HHT on Aug.2010
 void __fastcall MakeHilbert(double *H, int N, double fs, double fc1, double fc2)
 {
@@ -769,9 +778,9 @@ void __fastcall MakeHilbert(double *H, int N, double fs, double fc1, double fc2)
 }
 
 //---------------------------------------------------------------------
-// ü”g”“Á«ƒOƒ‰ƒtiƒtƒBƒ‹ƒ^ƒXƒŒƒbƒh“à‚ÅƒR[ƒ‹‚µ‚Ä‚Í‚¢‚¯‚È‚¢j
+// ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½tï¿½iï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½ï¿½ï¿½ÅƒRï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚Í‚ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½j
 //
-//	H(ejƒÖT) = [ƒ°0]Hm cos(mƒÖT) - j[ƒ°1]Hm sin(mƒÖT)
+//	H(ejï¿½ï¿½T) = [ï¿½ï¿½0]Hm cos(mï¿½ï¿½T) - j[ï¿½ï¿½1]Hm sin(mï¿½ï¿½T)
 //
 void DrawGraph(Graphics::TBitmap *pBitmap, const double *H, int Tap, int Over, int &nmax, int init, TColor col)
 {
@@ -790,9 +799,9 @@ void DrawGraph(Graphics::TBitmap *pBitmap, const double *H, int Tap, int Over, i
 		tp->Brush->Color = clWhite;
 		tp->FillRect(rc);
 	}
-	int	LM;		// ü”g”•\¦‚Ì‚ ‚éƒ‰ƒCƒ“”
-	int DM;		// “à•”ü‚Ì”
-	int MM;		// Àü‚ÌŠÔŠu
+	int	LM;		// ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½éƒ‰ï¿½Cï¿½ï¿½ï¿½ï¿½
+	int DM;		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½
+	int MM;		// ï¿½ï¿½ï¿½ï¿½ï¿½ÌŠÔŠu
 	switch(Over){
 		case 2:
 			max = 3000;
@@ -937,9 +946,9 @@ void DrawGraph2(Graphics::TBitmap *pBitmap, const double *H1, int Tap1, const do
 		tp->Brush->Color = clWhite;
 		tp->FillRect(rc);
 	}
-	int	LM;		// ü”g”•\¦‚Ì‚ ‚éƒ‰ƒCƒ“”
-	int DM;		// “à•”ü‚Ì”
-	int MM;		// Àü‚ÌŠÔŠu
+	int	LM;		// ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½éƒ‰ï¿½Cï¿½ï¿½ï¿½ï¿½
+	int DM;		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½
+	int MM;		// ï¿½ï¿½ï¿½ï¿½ï¿½ÌŠÔŠu
 	switch(Over){
 		case 2:
 			max = 3000;
@@ -1084,7 +1093,7 @@ void DrawGraph2(Graphics::TBitmap *pBitmap, const double *H1, int Tap1, const do
 }
 
 //---------------------------------------------------------------------
-// ü”g”“Á«ƒOƒ‰ƒtiƒtƒBƒ‹ƒ^ƒXƒŒƒbƒh“à‚ÅƒR[ƒ‹‚µ‚Ä‚Í‚¢‚¯‚È‚¢j
+// ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½tï¿½iï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½ï¿½ï¿½ÅƒRï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚Í‚ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½j
 //
 //
 void DrawGraphIIR(Graphics::TBitmap *pBitmap, double a0, double a1, double a2, double b1, double b2, int Over, int &nmax, int init, TColor col)
@@ -1104,9 +1113,9 @@ void DrawGraphIIR(Graphics::TBitmap *pBitmap, double a0, double a1, double a2, d
 		tp->Brush->Color = clWhite;
 		tp->FillRect(rc);
 	}
-	int	LM;		// ü”g”•\¦‚Ì‚ ‚éƒ‰ƒCƒ“”
-	int DM;		// “à•”ü‚Ì”
-	int MM;		// Àü‚ÌŠÔŠu
+	int	LM;		// ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½éƒ‰ï¿½Cï¿½ï¿½ï¿½ï¿½
+	int DM;		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½
+	int MM;		// ï¿½ï¿½ï¿½ï¿½ï¿½ÌŠÔŠu
 	switch(Over){
 		case 2:
 			max = 3000;
@@ -1232,7 +1241,7 @@ void DrawGraphIIR(Graphics::TBitmap *pBitmap, double a0, double a1, double a2, d
 }
 
 //---------------------------------------------------------------------
-// ü”g”“Á«ƒOƒ‰ƒtiƒtƒBƒ‹ƒ^ƒXƒŒƒbƒh“à‚ÅƒR[ƒ‹‚µ‚Ä‚Í‚¢‚¯‚È‚¢j
+// ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½tï¿½iï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½ï¿½ï¿½ÅƒRï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚Í‚ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½j
 //
 //
 void DrawGraphIIR(Graphics::TBitmap *pBitmap, CIIR *ip, int Over, int &nmax, int init, TColor col)
@@ -1252,9 +1261,9 @@ void DrawGraphIIR(Graphics::TBitmap *pBitmap, CIIR *ip, int Over, int &nmax, int
 		tp->Brush->Color = clWhite;
 		tp->FillRect(rc);
 	}
-	int	LM;		// ü”g”•\¦‚Ì‚ ‚éƒ‰ƒCƒ“”
-	int DM;		// “à•”ü‚Ì”
-	int MM;		// Àü‚ÌŠÔŠu
+	int	LM;		// ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½éƒ‰ï¿½Cï¿½ï¿½ï¿½ï¿½
+	int DM;		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½
+	int MM;		// ï¿½ï¿½ï¿½ï¿½ï¿½ÌŠÔŠu
 	switch(Over){
 		case 2:
 			max = 3000;
@@ -1405,14 +1414,14 @@ double asinh(double x)
 }
 
 //------------------------------------------------------------------
-// bc : 0-ƒoƒ^[ƒ[ƒX, 1-ƒ`ƒFƒrƒVƒt
-// rp : ’Ê‰ßˆæ‚ÌƒŠƒbƒvƒ‹
+// bc : 0-ï¿½oï¿½^ï¿½[ï¿½ï¿½ï¿½[ï¿½X, 1-ï¿½`ï¿½Fï¿½rï¿½Vï¿½t
+// rp : ï¿½Ê‰ßˆï¿½Ìƒï¿½ï¿½bï¿½vï¿½ï¿½
 void MakeIIR(double *A, double *B, double fc, double fs, int order, int bc, double rp)
 {
 	double	w0, wa, u, zt, x;
 	int		j, n;
 
-	if( bc ){		// ƒ`ƒFƒrƒVƒt
+	if( bc ){		// ï¿½`ï¿½Fï¿½rï¿½Vï¿½t
 		u = 1.0/double(order)*asinh(1.0/sqrt(pow(10.0,0.1*rp)-1.0));
 	}
 	wa = tan(PI*fc/fs);
@@ -1422,13 +1431,13 @@ void MakeIIR(double *A, double *B, double fc, double fs, int order, int bc, doub
 	double *pB = B;
 	double d1, d2;
 	for( j = 1; j <= order/2; j++, pA+=3, pB+=2 ){
-		if( bc ){	// ƒ`ƒFƒrƒVƒt
+		if( bc ){	// ï¿½`ï¿½Fï¿½rï¿½Vï¿½t
 			d1 = sinh(u)*cos(n*PI/(2*order));
 			d2 = cosh(u)*sin(n*PI/(2*order));
 			w0 = sqrt(d1 * d1 + d2 * d2);
 			zt = sinh(u)*cos(n*PI/(2*order))/w0;
 		}
-		else {		// ƒoƒ^[ƒ[ƒX
+		else {		// ï¿½oï¿½^ï¿½[ï¿½ï¿½ï¿½[ï¿½X
 			w0 = 1.0;
 			zt = cos(n*PI/(2*order));
 		}
@@ -1516,7 +1525,7 @@ double CIIR::Do(double d)
 }
 
 //*********************************************************************
-// CINTPXY	XYScope —p ~2ƒCƒ“ƒ^ƒ|[ƒŒ[ƒ^ˆ—ƒNƒ‰ƒX
+// CINTPXY	XYScope ï¿½p ï¿½~2ï¿½Cï¿½ï¿½ï¿½^ï¿½|ï¿½[ï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
 //
 CINTPXY2::CINTPXY2()
 {
@@ -1531,7 +1540,7 @@ void __fastcall CINTPXY2::Do(double *p, double d)
 
 #if 0
 //*********************************************************************
-// CINTPXY	XYScope —p ~4ƒCƒ“ƒ^ƒ|[ƒŒ[ƒ^ˆ—ƒNƒ‰ƒX
+// CINTPXY	XYScope ï¿½p ï¿½~4ï¿½Cï¿½ï¿½ï¿½^ï¿½|ï¿½[ï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
 //
 CINTPXY4::CINTPXY4()
 {
@@ -1547,7 +1556,7 @@ void __fastcall CINTPXY4::Do(double *p, double d)
 }
 
 //*********************************************************************
-// CINTPXY	XYScope —p ~8ƒCƒ“ƒ^ƒ|[ƒŒ[ƒ^ˆ—ƒNƒ‰ƒX
+// CINTPXY	XYScope ï¿½p ï¿½~8ï¿½Cï¿½ï¿½ï¿½^ï¿½|ï¿½[ï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
 //
 CINTPXY8::CINTPXY8()
 {
@@ -1567,7 +1576,7 @@ void __fastcall CINTPXY8::Do(double *p, double d)
 }
 
 //*********************************************************************
-// CINTPXYFIR	XYScope —p ~2ƒCƒ“ƒ^ƒ|[ƒŒ[ƒ^ˆ—ƒNƒ‰ƒX
+// CINTPXYFIR	XYScope ï¿½p ï¿½~2ï¿½Cï¿½ï¿½ï¿½^ï¿½|ï¿½[ï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
 //
 CINTPXY2FIR::CINTPXY2FIR()
 {
@@ -1617,7 +1626,7 @@ void CINTPXY2FIR::Do(double *dp, double d)
 #endif
 
 //*********************************************************************
-// CINTPXYFIR	XYScope —p ~4ƒCƒ“ƒ^ƒ|[ƒŒ[ƒ^ˆ—ƒNƒ‰ƒX
+// CINTPXYFIR	XYScope ï¿½p ï¿½~4ï¿½Cï¿½ï¿½ï¿½^ï¿½|ï¿½[ï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
 //
 CINTPXY4FIR::CINTPXY4FIR()
 {
@@ -1698,7 +1707,7 @@ void __fastcall CINTPXY4FIR::Do(double *dp, double d)
 }
 
 //*********************************************************************
-// CINTPXYFIR	XYScope —p ~8ƒCƒ“ƒ^ƒ|[ƒŒ[ƒ^ˆ—ƒNƒ‰ƒX
+// CINTPXYFIR	XYScope ï¿½p ï¿½~8ï¿½Cï¿½ï¿½ï¿½^ï¿½|ï¿½[ï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
 //
 CINTPXY8FIR::CINTPXY8FIR()
 {
@@ -1824,7 +1833,7 @@ void __fastcall CINTPXY8FIR::Do(double *dp, double d)
 
 #if OVERFIR
 //*********************************************************************
-// CDECM4	1/4ƒfƒVƒ[ƒ^ˆ—ƒNƒ‰ƒX
+// CDECM4	1/4ï¿½fï¿½Vï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
 //
 CDECM4::CDECM4()
 {
@@ -1939,7 +1948,7 @@ double __fastcall CDECM4::Do(double *dp)
 }
 
 //*********************************************************************
-// CINTP4	x4ƒCƒ“ƒ^ƒ|[ƒŒ[ƒ^ˆ—ƒNƒ‰ƒX
+// CINTP4	x4ï¿½Cï¿½ï¿½ï¿½^ï¿½|ï¿½[ï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
 //
 CINTP4::CINTP4()
 {
@@ -2038,7 +2047,7 @@ void __fastcall CINTP4::Do(double *dp, double d)
 #endif
 
 //*********************************************************************
-// COVERLIMIT	‚•i¿ƒŠƒ~ƒbƒ^
+// COVERLIMIT	ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½~ï¿½bï¿½^
 //
 COVERLIMIT::COVERLIMIT()
 {
@@ -2072,7 +2081,7 @@ double COVERLIMIT::Do(double d, double lmt)
 #else
 	double d1, d2, d3, d4;
 
-	// X4 ƒCƒ“ƒ^[ƒ|[ƒŒ[ƒ^
+	// X4 ï¿½Cï¿½ï¿½ï¿½^ï¿½[ï¿½|ï¿½[ï¿½ï¿½ï¿½[ï¿½^
 	d1 = iira.Do(d);
 	d2 = iira.Do(d);
 	d3 = iira.Do(d);
@@ -2091,7 +2100,7 @@ double COVERLIMIT::Do(double d, double lmt)
 	if( d4 > 16384.0 ) d4 = 16384.0;
 	if( d4 < -16384.0 ) d4 = -16384.0;
 
-	// 1/4 ƒfƒVƒ[ƒ^
+	// 1/4 ï¿½fï¿½Vï¿½ï¿½ï¿½[ï¿½^
 	iirb.Do(d1);
 	iirb.Do(d2);
 	iirb.Do(d3);
@@ -2100,7 +2109,7 @@ double COVERLIMIT::Do(double d, double lmt)
 }
 
 //*********************************************************************
-// CDECM2IIR	1/2ƒfƒVƒ[ƒ^ˆ—ƒNƒ‰ƒX
+// CDECM2IIR	1/2ï¿½fï¿½Vï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
 //
 CDECM2IIR::CDECM2IIR()
 {
@@ -2115,7 +2124,7 @@ double CDECM2IIR::Do(double d1, double d2)
 
 #if 0
 //*********************************************************************
-// CHILL ƒqƒ‹ƒxƒ‹ƒg•ÏŠ·ƒNƒ‰ƒX
+// CHILL ï¿½qï¿½ï¿½ï¿½xï¿½ï¿½ï¿½gï¿½ÏŠï¿½ï¿½Nï¿½ï¿½ï¿½X
 //
 CHILL::CHILL()
 {
