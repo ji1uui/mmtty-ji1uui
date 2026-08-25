@@ -288,6 +288,9 @@ void __fastcall TSound::Execute()
 	m_Stop = FALSE;
 	memset(Buff, 0, sizeof(Buff));
 	TaskPriority();
+	// Hint the scheduler to keep this audio thread on a non-zero core,
+	// leaving core 0 free for the OS and UI (soft preference, not a hard pin).
+	::SetThreadIdealProcessor(::GetCurrentThread(), 1);
 	::Sleep(200);		// 200ms
 	Wave.m_InFifoSize = sys.m_SoundFifoRX;
 	Wave.m_OutFifoSize = sys.m_SoundFifoTX;
@@ -1142,52 +1145,50 @@ LPCSTR __fastcall TSound::GetOutputSoundcard(unsigned int ID)
 
 void __fastcall CWaveFile::ReadWrite(double *s, int size)
 {
-	SHORT	d;
+	if( m_Handle == NULL ) return;
 
-	if( m_Handle != NULL ){
-		if( m_mode == 2 ){		// 書きこみ
-			if( !m_pause ){
-				for( ; size; s++, size-- ){
-					d = SHORT(*s);
-					if( mmioWrite(m_Handle, (const char*)&d, 2) != 2 ){
-						mmioClose(m_Handle, 0);
-						m_Handle = 0;
-						m_mode = 0;
-						break;
-					}
-					else {
-						m_pos += 2;
-					}
-				}
-			}
-		}
-		else {						// 読み出し
-			if( m_pause || m_dis ){
-				memset(s, 0, sizeof(double)*size);
+	SHORT *buf = new SHORT[size];
+
+	if( m_mode == 2 ){		// 書きこみ
+		if( !m_pause ){
+			for( int i = 0; i < size; i++ ) buf[i] = SHORT(s[i]);
+			LONG written = mmioWrite(m_Handle, (const char*)buf, size * 2);
+			if( written != LONG(size * 2) ){
+				mmioClose(m_Handle, 0);
+				m_Handle = 0;
+				m_mode = 0;
 			}
 			else {
-				for( ; size; s++, size-- ){
-					if( mmioRead(m_Handle, (char *)&d, 2) == 2 ){
-						*s = d;
-						m_pos += 2;
-					}
-					else if( m_autopause ){
-						m_pause = 1;
-						break;
-					}
-					else {
-						mmioClose(m_Handle, 0);
-						m_Handle = 0;
-						m_mode = 0;
-						break;
-					}
-				}
-				for( ; size; s++, size-- ){
-					*s = 0;
-				}
+				m_pos += written;
 			}
 		}
 	}
+	else {						// 読み出し
+		if( m_pause || m_dis ){
+			memset(s, 0, sizeof(double) * size);
+		}
+		else {
+			LONG nread = mmioRead(m_Handle, (char*)buf, size * 2);
+			int nsamples = (nread > 0) ? (nread / 2) : 0;
+			for( int i = 0; i < nsamples; i++ ){
+				s[i] = buf[i];
+			}
+			m_pos += nsamples * 2;
+			if( nread != LONG(size * 2) ){
+				if( m_autopause ){
+					m_pause = 1;
+				}
+				else {
+					mmioClose(m_Handle, 0);
+					m_Handle = 0;
+					m_mode = 0;
+				}
+			}
+			for( int i = nsamples; i < size; i++ ) s[i] = 0;
+		}
+	}
+
+	delete[] buf;
 }
 
 __fastcall CWaveFile::CWaveFile()

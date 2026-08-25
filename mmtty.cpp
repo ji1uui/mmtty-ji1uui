@@ -20,6 +20,8 @@
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
+
+#include "AppBootstrap.h"
 //---------------------------------------------------------------------------
 USEFORM("Main.cpp", MmttyWd);
 USEUNIT("ComLib.cpp");
@@ -65,30 +67,10 @@ USEFILE("mmw.h");
 USEUNIT("Hamlog5.cpp");
 USEFORM("TH5Len.cpp", TH5LenDlg);
 USEUNIT("CLX.cpp");
-//---------------------------------------------------------------------------
-#define DISDUPE		1
+USEUNIT("AppBootstrap.cpp");
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
-#if DISDUPE
-	LPSTR pCmd = GetCommandLine();
-    if( strstr(pCmd, "-Z") == NULL ){
-		HWND hWnd = FindWindow("TMmttyWd", NULL);
-		if( hWnd != NULL ){
-			if( !IsWindowVisible(hWnd) ) return 0;
-		}
-    }
-#endif
-	try
-	{
-		Application->Initialize();
-		Application->CreateForm(__classid(TMmttyWd), &MmttyWd);
-		Application->Run();
-	}
-	catch (Exception &exception)
-	{
-		Application->ShowException(&exception);
-	}
-	return 0;
+	return RunMmttyApplication();
 }
 //---------------------------------------------------------------------------

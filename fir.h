@@ -60,9 +60,9 @@ double __fastcall DoFIR(double *hp, double *zp, double d, int tap);
 
 class CDECM2{			// 36 Tap FIR 1/2 DECM
 private:
-	double	Z1[19];
-	double	Z2[18];
-	double	H[37];
+	alignas(32) double	Z1[19];
+	alignas(32) double	Z2[18];
+	alignas(32) double	H[37];
 public:
 	CDECM2();
 	double Do(double d1, double d2);
@@ -239,8 +239,8 @@ public:
 
 class CINTPXY4FIR{			// 64 Tap FIR x4 INTP
 private:
-	double	Z[17];
-	double	H[65];
+	alignas(32) double	Z[17];
+	alignas(32) double	H[65];
 public:
 	CINTPXY4FIR();
 	inline void Clear(void){memset(Z, 0, sizeof(Z));};
@@ -249,8 +249,8 @@ public:
 
 class CINTPXY8FIR{			// 96 Tap FIR x8 INTP
 private:
-	double	Z[13];
-	double	H[97];
+	alignas(32) double	Z[13];
+	alignas(32) double	H[97];
 public:
 	CINTPXY8FIR();
 	inline void Clear(void){memset(Z, 0, sizeof(Z));};
@@ -261,11 +261,11 @@ public:
 #if OVERFIR
 class CDECM4{				// 80 Tap FIR 1/4 DECM
 private:
-	double	Z1[21];
-	double	Z2[20];
-	double	Z3[20];
-	double	Z4[20];
-	double	H[81];
+	alignas(32) double	Z1[21];
+	alignas(32) double	Z2[20];
+	alignas(32) double	Z3[20];
+	alignas(32) double	Z4[20];
+	alignas(32) double	H[81];
 public:
 	CDECM4();
 	double __fastcall Do(double *dp);
@@ -273,8 +273,8 @@ public:
 
 class CINTP4{			// 80 Tap FIR x4 INTP
 private:
-	double	Z[21];
-	double	H[81];
+	alignas(32) double	Z[21];
+	alignas(32) double	H[81];
 public:
 	CINTP4();
 	inline void Clear(void){memset(Z, 0, sizeof(Z));};

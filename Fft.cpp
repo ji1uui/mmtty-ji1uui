@@ -21,6 +21,7 @@
 #pragma hdrstop
 
 #include <math.h>
+#include <immintrin.h>   // SSE2 intrinsics for vectorized windowing
 #include "fft.h"
 #include "ComLib.h"
 
@@ -42,7 +43,7 @@
 #define SCALEPOW_4 	 	(1.0/7.0)
 #define SCALEPOW_ADJ_4	0.048
 //-------------------------------------------------
-// ‚e‚e‚sˆ—ƒNƒ‰ƒX
+// ï¿½eï¿½eï¿½sï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½X
 CFFT::CFFT()
 {
 	m_FFTDIS = 0;
@@ -62,7 +63,7 @@ CFFT::CFFT()
 	makect(FFT_SIZE/4, m_Work, m_tSinCos + m_Work[0]);
 	for(int i = 0; i < FFT_SIZE; i++){
 		pStgBuf[i] = 1.0;
-		m_tWindow[i] = (0.5 - 0.5*cos( (PI2*i)/(FFT_SIZE-1) ));	//ƒnƒjƒ“ƒO‘‹
+		m_tWindow[i] = (0.5 - 0.5*cos( (PI2*i)/(FFT_SIZE-1) ));	//ï¿½nï¿½jï¿½ï¿½ï¿½Oï¿½ï¿½
 	}
 	m_StgSize = 1;
 	m_StgScale = 1.0;
@@ -72,7 +73,7 @@ CFFT::CFFT()
 }
 
 //-------------------------------------------------
-// ‚e‚e‚sˆ—ƒNƒ‰ƒX‚ÌÄ‰Šú‰»
+// ï¿½eï¿½eï¿½sï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½ÌÄï¿½ï¿½ï¿½ï¿½ï¿½
 void CFFT::InitFFT(void)
 {
 	m_CollectFFT = 0;
@@ -85,7 +86,7 @@ void CFFT::InitFFT(void)
 	makect(FFT_SIZE/4, m_Work, m_tSinCos + m_Work[0]);
 	for(int i = 0; i < FFT_SIZE; i++){
 		pStgBuf[i] = 1.0;
-		m_tWindow[i] = (0.5 - 0.5*cos( (PI2*i)/(FFT_SIZE-1) ));	//ƒnƒjƒ“ƒO‘‹
+		m_tWindow[i] = (0.5 - 0.5*cos( (PI2*i)/(FFT_SIZE-1) ));	//ï¿½nï¿½jï¿½ï¿½ï¿½Oï¿½ï¿½
 	}
 	m_StgSize = 1;
 	m_StgScale = 1.0;
@@ -120,14 +121,14 @@ CFFT::~CFFT()
 }
 
 //-------------------------------------------------
-// ƒf[ƒ^ûWiƒXƒŒƒbƒhŠO‚ÅÀs‚·‚éj
+// ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½Wï¿½iï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½Oï¿½Åï¿½ï¿½sï¿½ï¿½ï¿½ï¿½j
 void CFFT::TrigFFT(void)
 {
 	m_CollectFFTCount = 0;
-	m_CollectFFT = 0;		// Ÿ‚ÌûW‚ğƒgƒŠƒK
+	m_CollectFFT = 0;		// ï¿½ï¿½ï¿½Ìï¿½ï¿½Wï¿½ï¿½ï¿½gï¿½ï¿½ï¿½K
 }
 //-------------------------------------------------
-// ƒf[ƒ^ûWiƒXƒŒƒbƒh“à‚ÅÀs‚·‚éj
+// ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½Wï¿½iï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½ï¿½ï¿½Åï¿½ï¿½sï¿½ï¿½ï¿½ï¿½j
 void CFFT::CollectFFT(double *lp, int size)
 {
 	if( !m_CollectFFT ){
@@ -143,7 +144,7 @@ void CFFT::CollectFFT(double *lp, int size)
 	}
 }
 //-------------------------------------------------
-// ƒf[ƒ^ûWiƒXƒŒƒbƒhŠO‚ÅÀs‚·‚éj
+// ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½Wï¿½iï¿½Xï¿½ï¿½ï¿½bï¿½hï¿½Oï¿½Åï¿½ï¿½sï¿½ï¿½ï¿½ï¿½j
 void CFFT::CalcFFT(int size, double gain, int stg)
 {
 	Calc(m_CollectFFTBuf, size, gain, stg, m_fft);
@@ -175,7 +176,7 @@ void CFFT::makewt(int nw, int *ip, double *w)
 	}
 }
 //-------------------------------------------------
-// ƒf[ƒ^‚Ìˆ—‰»
+// ï¿½fï¿½[ï¿½^ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½
 void CFFT::makect(int nc, int *ip, double *c)
 {
 	int nch, j;
@@ -194,7 +195,7 @@ void CFFT::makect(int nc, int *ip, double *c)
 	}
 }
 //-------------------------------------------------
-// ƒf[ƒ^‚Ìˆ—‰»
+// ï¿½fï¿½[ï¿½^ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½
 void CFFT::bitrv2(int n, int *ip, double *a)
 {
 	int j, j1, k, k1, l, m, m2;
@@ -548,14 +549,25 @@ void CFFT::Calc(double * InBuf, int size, double gain, int stg, int* OutBuf)
 		m_StgScale = 1.0;
 		m_StgK = 0.0;
 	}
+	// Apply Hanning window with sample clamping.
+	// SSE2 path processes 2 doubles per cycle; scalar tail handles any remainder.
 	double *dp = InBuf;
-	for(i=0; i < FFT_SIZE; i++, dp++){
-		if( *dp > 32768.0 ){
-			*dp = 32768.0;
+	i = 0;
+#if defined(__SSE2__)
+	{
+		const __m128d vlo = _mm_set1_pd(-32768.0);
+		const __m128d vhi = _mm_set1_pd( 32768.0);
+		for( ; i <= FFT_SIZE - 2; i += 2, dp += 2 ){
+			__m128d x = _mm_loadu_pd(dp);
+			__m128d w = _mm_loadu_pd(&m_tWindow[i]);
+			x = _mm_max_pd(_mm_min_pd(x, vhi), vlo);
+			_mm_storeu_pd(dp, _mm_mul_pd(x, w));
 		}
-		else if( *dp < -32768.0 ){
-			*dp = -32768.0;
-		}
+	}
+#endif
+	for( ; i < FFT_SIZE; i++, dp++ ){
+		if( *dp >  32768.0 ) *dp =  32768.0;
+		else if( *dp < -32768.0 ) *dp = -32768.0;
 		(*dp) *= m_tWindow[i];
 	}
 	bitrv2(FFT_SIZE, m_Work + 2, InBuf);

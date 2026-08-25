@@ -2631,3 +2631,136 @@ double __fastcall CAA6YQ::Do(double d)
 //--------------------------------------------------------
 
 
+
+//---------------------------------------------------------------------------
+// CPhaseDemodStrategy (IDemodStrategy) 実装
+//
+// 旧 CFSKDEM::m_type==VERFFTDEM (case 3: FFT) の位相法処理を CPHASE に委譲する。
+//---------------------------------------------------------------------------
+void CPhaseDemodStrategy::SetSampleFreq(double sampleFreq)
+{
+	if (m_pPhase) m_pPhase->SetSampleFreq(sampleFreq);
+}
+//---------------------------------------------------------------------------
+void CPhaseDemodStrategy::SetMarkFreq(double markFreq)
+{
+	m_markFreq = markFreq;
+	if (m_pPhase) {
+		m_pPhase->SetCarrierFreq(markFreq);
+		if (m_spaceFreq > markFreq) m_pPhase->SetShift(m_spaceFreq - markFreq);
+	}
+}
+//---------------------------------------------------------------------------
+void CPhaseDemodStrategy::SetSpaceFreq(double spaceFreq)
+{
+	m_spaceFreq = spaceFreq;
+	if (m_pPhase && (m_spaceFreq > m_markFreq)) {
+		m_pPhase->SetShift(m_spaceFreq - m_markFreq);
+	}
+}
+//---------------------------------------------------------------------------
+void CPhaseDemodStrategy::Do(double sample)
+{
+	if (!m_pPhase) return;
+	m_pPhase->DoFSK(sample);
+	m_markOut  = m_pPhase->m_dm;
+	m_spaceOut = m_pPhase->m_ds;
+}
+//---------------------------------------------------------------------------
+void CPhaseDemodStrategy::Reset(void)
+{
+	m_markOut  = 0.0;
+	m_spaceOut = 0.0;
+}
+//---------------------------------------------------------------------------
+// CAA6YQDemodStrategy (IDemodStrategy) 実装
+//
+// 旧 CFSKDEM::m_type==VERAA6YQ の相関法処理を CAA6YQ に委譲する。
+//---------------------------------------------------------------------------
+void CAA6YQDemodStrategy::SetSampleFreq(double /*sampleFreq*/)
+{
+	// CAA6YQ はサンプル周波数を内部で保持しないため何もしない。
+}
+//---------------------------------------------------------------------------
+void CAA6YQDemodStrategy::SetMarkFreq(double markFreq)
+{
+	m_markFreq = markFreq;
+	if (m_pAA6YQ) m_pAA6YQ->SetMarkFreq(markFreq);
+}
+//---------------------------------------------------------------------------
+void CAA6YQDemodStrategy::SetSpaceFreq(double spaceFreq)
+{
+	m_spaceFreq = spaceFreq;
+	if (m_pAA6YQ) m_pAA6YQ->SetSpaceFreq(spaceFreq);
+}
+//---------------------------------------------------------------------------
+void CAA6YQDemodStrategy::Do(double sample)
+{
+	if (!m_pAA6YQ) return;
+	double d = m_pAA6YQ->Do(sample);
+	m_markOut  = d;
+	m_spaceOut = d;
+}
+//---------------------------------------------------------------------------
+void CAA6YQDemodStrategy::Reset(void)
+{
+	m_markOut  = 0.0;
+	m_spaceOut = 0.0;
+}
+//---------------------------------------------------------------------------
+// DemodStrategyFactory 実装
+//---------------------------------------------------------------------------
+IDemodStrategy* DemodStrategyFactory::Create(int type, CPHASE *pPhase, CAA6YQ *pAA6YQ)
+{
+	if (type == VERAA6YQ) return new CAA6YQDemodStrategy(pAA6YQ);
+	return new CPhaseDemodStrategy(pPhase);
+}
+//---------------------------------------------------------------------------
+// CModIdleState / CModTransmitState / CModWaitState (IModulatorState) 実装
+//
+// CFSKMOD::m_mode による状態遷移を明示的な State オブジェクトとして定義する。
+// 現状は m_pState 経由の呼び出しは未接続 (m_idle フラグによる後方互換動作を維持)
+// だが、TransitionTo*() から利用可能な完全な実装を提供する。
+//---------------------------------------------------------------------------
+void CModIdleState::Enter(CFSKMOD &mod)
+{
+	mod.m_idle = 1;
+}
+//---------------------------------------------------------------------------
+double CModIdleState::Process(CFSKMOD &mod)
+{
+	return mod.m_out;
+}
+//---------------------------------------------------------------------------
+void CModIdleState::Exit(CFSKMOD & /*mod*/)
+{
+}
+//---------------------------------------------------------------------------
+void CModTransmitState::Enter(CFSKMOD &mod)
+{
+	mod.m_idle = 0;
+}
+//---------------------------------------------------------------------------
+double CModTransmitState::Process(CFSKMOD &mod)
+{
+	return mod.m_out;
+}
+//---------------------------------------------------------------------------
+void CModTransmitState::Exit(CFSKMOD & /*mod*/)
+{
+}
+//---------------------------------------------------------------------------
+void CModWaitState::Enter(CFSKMOD &mod)
+{
+	mod.m_idle = 0;
+}
+//---------------------------------------------------------------------------
+double CModWaitState::Process(CFSKMOD &mod)
+{
+	return mod.m_out;
+}
+//---------------------------------------------------------------------------
+void CModWaitState::Exit(CFSKMOD & /*mod*/)
+{
+}
+//---------------------------------------------------------------------------
