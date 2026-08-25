@@ -781,6 +781,12 @@ public:
 // 自身の責任のみを担当する (SRP)。
 class CFSKMOD
 {
+	// IModulatorState 実装 (CModIdleState/CModTransmitState/CModWaitState) が
+	// Enter/Process/Exit から CFSKMOD の内部状態 (m_idle, m_out 等) を
+	// 参照できるようにする (State パターンの協調動作に必要)。
+	friend class CModIdleState;
+	friend class CModTransmitState;
+	friend class CModWaitState;
 private:
 	double	HBPF[TAPMAX+1];
 	double	ZBPF[TAPMAX+1];
