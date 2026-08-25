@@ -549,7 +549,7 @@ void CCradio::OutStr(LPCSTR fmt, ...)
 	char	bf[1024];
 
 	va_start(pp, fmt);
-	vsprintf( bf, fmt, pp );
+	vsnprintf( bf, sizeof(bf), fmt, pp );
 	va_end(pp);
 	Write(bf, strlen(bf));
 }
@@ -560,7 +560,7 @@ void CCradio::OutLine(LPCSTR fmt, ...)
 	char	bf[1024];
 
 	va_start(pp, fmt);
-	vsprintf( bf, fmt, pp );
+	vsnprintf( bf, sizeof(bf), fmt, pp );
 	va_end(pp);
 	Write(bf, strlen(bf));
 	char r[] = "\r";	//JA7UDE 0428

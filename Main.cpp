@@ -61,7 +61,7 @@ Msg.lParam := Message.LParam;*/
 	RemoteMMTTY(Msg);
 	Handled = true;
 }
-//ƒEƒCƒ“ƒhƒEƒƒbƒZ[ƒW‚Ìƒnƒ“ƒhƒ‰---------------------------------------------
+//ï¿½Eï¿½Cï¿½ï¿½ï¿½hï¿½Eï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½Ìƒnï¿½ï¿½ï¿½hï¿½ï¿½---------------------------------------------
 void __fastcall TMmttyWd::WndProc(TMessage &Message)
 {
 	switch(Message.Msg){
@@ -77,7 +77,7 @@ void __fastcall TMmttyWd::WndProc(TMessage &Message)
 	}
 }
 //---------------------------------------------------------------------------
-// WM_COPYDATA‚Ìˆ—
+// WM_COPYDATAï¿½Ìï¿½ï¿½ï¿½
 void __fastcall TMmttyWd::WndCopyData(TMessage &Message)
 {
 	COPYDATASTRUCT *cp = (COPYDATASTRUCT *)Message.LParam;
@@ -87,7 +87,7 @@ void __fastcall TMmttyWd::WndCopyData(TMessage &Message)
 	}
 	switch(cp->dwData){
 		case 0:
-		case 1:             // Hamlog‚©‚ç‚Ì•ÔM
+		case 1:             // Hamlogï¿½ï¿½ï¿½ï¿½Ì•ÔM
 			if( sys.m_LogLink != 1 ) return;
 		   switch(LogLink.AnaData(&Log.m_sd, cp)){
 				case 115:
@@ -99,7 +99,7 @@ void __fastcall TMmttyWd::WndCopyData(TMessage &Message)
 			}
 			Message.Result = TRUE;
 			break;
-		case 0x80001212:    // ü”g”ƒf[ƒ^‚Ìw’è
+		case 0x80001212:    // ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½Ìwï¿½ï¿½
 			if( cp->cbData && (cp->lpData != NULL) ){
 				char bf[16];
 				int len = cp->cbData;
@@ -167,11 +167,11 @@ __fastcall TMmttyWd::TMmttyWd(TComponent* Owner)
 		sys.m_LogLink = 0;
 	}
 	else {
-		sys.m_WinFontName = "‚l‚r ‚oƒSƒVƒbƒN";
+		sys.m_WinFontName = "ï¿½lï¿½r ï¿½oï¿½Sï¿½Vï¿½bï¿½N";
 		sys.m_WinFontCharset = SHIFTJIS_CHARSET;
-		sys.m_BtnFontName = "‚l‚r ƒSƒVƒbƒN";
+		sys.m_BtnFontName = "ï¿½lï¿½r ï¿½Sï¿½Vï¿½bï¿½N";
 		sys.m_BtnFontCharset = SHIFTJIS_CHARSET;
-		sys.m_FontName = "‚l‚r ƒSƒVƒbƒN";
+		sys.m_FontName = "ï¿½lï¿½r ï¿½Sï¿½Vï¿½bï¿½N";
 		sys.m_FontCharset = SHIFTJIS_CHARSET;
 		sys.m_TimeStampUTC = 0;
 		sys.m_HTMLHelp = "";
@@ -184,7 +184,7 @@ __fastcall TMmttyWd::TMmttyWd(TComponent* Owner)
 	sys.m_Help = "Mmtty.txt";
 	sys.m_HelpLog = "Mmttylog.txt";
 	sys.m_HelpDigital = "Digital.txt";
-	sys.m_HelpFontName = "‚l‚r ƒSƒVƒbƒN";
+	sys.m_HelpFontName = "ï¿½lï¿½r ï¿½Sï¿½Vï¿½bï¿½N";
 	sys.m_HelpFontCharset = SHIFTJIS_CHARSET;
 	sys.m_HelpFontSize = 10;
 	sys.m_HelpNotePad = 0;
@@ -480,7 +480,7 @@ __fastcall TMmttyWd::TMmttyWd(TComponent* Owner)
 	sys.m_logTimeStamp = 1;
 	sys.m_ShowTimeStamp = 1;
 
-//	sys.m_FontName = "‚l‚r ƒSƒVƒbƒN";
+//	sys.m_FontName = "ï¿½lï¿½r ï¿½Sï¿½Vï¿½bï¿½N";
 //	sys.m_FontCharset = SHIFTJIS_CHARSET;
 	sys.m_FontAdjX = 0;
 	sys.m_FontAdjY = 0;
@@ -504,15 +504,15 @@ __fastcall TMmttyWd::TMmttyWd(TComponent* Owner)
 	sys.m_AutoTimeOffset = 0;
 	sys.m_TimeOffset = 0;
 	sys.m_TimeOffsetMin = 0;
-//	Panel2->Top = GroupBox1->Height + 1;	// óM‰æ–ÊƒTƒCƒY‚Ì’²®
+//	Panel2->Top = GroupBox1->Height + 1;	// ï¿½ï¿½Mï¿½ï¿½ÊƒTï¿½Cï¿½Yï¿½Ì’ï¿½ï¿½ï¿½
 	UpdatePanel();
 	LogLink.SetHandle(Handle, CM_CMML);
 
 	ReadSampFreq();
 	pSound = new TSound(TRUE);
-	WriteProfile(1025, "Default", TRUE);				// ƒfƒtƒHƒ‹ƒgƒpƒ‰ƒ[ƒ^‚Ì‹L‰¯
+	WriteProfile(1025, "Default", TRUE);				// ï¿½fï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½Ì‹Lï¿½ï¿½
 	ReadRegister();
-	WriteProfile(1026, "Return to the startup", TRUE);	// ƒfƒtƒHƒ‹ƒgƒpƒ‰ƒ[ƒ^‚Ì‹L‰¯
+	WriteProfile(1026, "Return to the startup", TRUE);	// ï¿½fï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½Ì‹Lï¿½ï¿½
 	sprintf(bf, "%s"HELPNAME_A, BgnDir);
 	if( (sys.m_HTMLHelp == HELPNAME_A)||(sys.m_HTMLHelp == HELPNAME_B) ){
 		sys.m_HTMLHelp = "";
@@ -974,7 +974,7 @@ void __fastcall TMmttyWd::UpdateSystemFont(void)
 
 void __fastcall TMmttyWd::ReqPaletteChange(void)
 {
-	if( UsrPal != NULL ){		// 256FƒAƒ_ƒvƒ^[‚Ì
+	if( UsrPal != NULL ){		// 256ï¿½Fï¿½Aï¿½_ï¿½vï¿½^ï¿½[ï¿½Ìï¿½
 		ClosePalette();
 		m_ReqPaletteChange = 1;
 	}
@@ -984,7 +984,7 @@ void __fastcall TMmttyWd::UpdateColor(void)
 {
 	PanelRx->Color = sys.m_ColorRXBack;
 	PanelIn->Color = sys.m_ColorINBack;
-	if( UsrPal != NULL ){		// 256FƒAƒ_ƒvƒ^[‚Ì
+	if( UsrPal != NULL ){		// 256ï¿½Fï¿½Aï¿½_ï¿½vï¿½^ï¿½[ï¿½Ìï¿½
 		ClosePalette();
 		m_ReqPaletteChange = 1;
 	}
@@ -996,7 +996,7 @@ void __fastcall TMmttyWd::UpdateColor(void)
 	}
 }
 //---------------------------------------------------------------------------
-// ƒAƒCƒhƒ‹ˆ—
+// ï¿½Aï¿½Cï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void __fastcall TMmttyWd::OnIdle(TObject *Sender, bool &Done)
 {
 	if( Log.IsOpen() ){
@@ -1036,7 +1036,7 @@ void __fastcall TMmttyWd::TopWindow(void)
 }
 #endif
 //---------------------------------------------------------------------------
-// ƒRƒ“ƒgƒ[ƒ‹ƒpƒlƒ‹‚Ì’²®
+// ï¿½Rï¿½ï¿½ï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½pï¿½lï¿½ï¿½ï¿½Ì’ï¿½ï¿½ï¿½
 void __fastcall TMmttyWd::UpdateXY2(void)
 {
 	int w;
@@ -1068,7 +1068,7 @@ void __fastcall TMmttyWd::UpdateXY2(void)
 	}
 }
 //---------------------------------------------------------------------------
-// ƒRƒ“ƒgƒ[ƒ‹ƒpƒlƒ‹‚Ì’²®
+// ï¿½Rï¿½ï¿½ï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½pï¿½lï¿½ï¿½ï¿½Ì’ï¿½ï¿½ï¿½
 void __fastcall TMmttyWd::UpdateControlPanel(void)
 {
 	if( KPanel->Checked != PanelTop->Visible ){
@@ -1081,7 +1081,7 @@ void __fastcall TMmttyWd::UpdateControlPanel(void)
 	}
 }
 //---------------------------------------------------------------------------
-// óM‰æ–Ê‚ÌƒTƒCƒY’²®
+// ï¿½ï¿½Mï¿½ï¿½Ê‚ÌƒTï¿½Cï¿½Yï¿½ï¿½ï¿½ï¿½
 void __fastcall TMmttyWd::UpdatePanel(void)
 {
 	PanelRx->Top = (PanelQSO->Top + PanelQSO->Height);
@@ -1090,7 +1090,7 @@ void __fastcall TMmttyWd::UpdatePanel(void)
 	FifoEdit.SetPaintBox(PBoxIn, ScrollBarIn);
 }
 //---------------------------------------------------------------------------
-// ƒƒOƒpƒlƒ‹‚Ì’²®
+// ï¿½ï¿½ï¿½Oï¿½pï¿½lï¿½ï¿½ï¿½Ì’ï¿½ï¿½ï¿½
 void __fastcall TMmttyWd::AlignLogPanel(void)
 {
 	AlignQSO.NewAlign(PanelQSO);
@@ -1111,7 +1111,7 @@ void __fastcall TMmttyWd::AlignLogPanel(void)
 	}
 }
 //---------------------------------------------------------------------------
-// ƒTƒCƒY•ÏXƒCƒxƒ“ƒg
+// ï¿½Tï¿½Cï¿½Yï¿½ÏXï¿½Cï¿½xï¿½ï¿½ï¿½g
 void __fastcall TMmttyWd::FormResize(TObject *Sender)
 {
 	if( Timer->Enabled == FALSE ) return;
@@ -1119,7 +1119,7 @@ void __fastcall TMmttyWd::FormResize(TObject *Sender)
 	if( m_DisAlign ) return;
 	if( Remote & REMSHOWOFF ) return;
 
-	if( Remote ){		// ƒŠƒ‚[ƒg
+	if( Remote ){		// ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½gï¿½ï¿½
 		PanelRx->Visible = FALSE;
 		PanelIn->Visible = FALSE;
 		PanelStat->Visible = FALSE;
@@ -1154,7 +1154,7 @@ void __fastcall TMmttyWd::FormResize(TObject *Sender)
 			PanelWater->Width = ClientWidth - PanelWater->Left - 2;
 		}
 	}
-	else {		// ƒXƒ^ƒ“ƒhƒAƒ[ƒ“
+	else {		// ï¿½Xï¿½^ï¿½ï¿½ï¿½hï¿½Aï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½
 		if( PanelIn->Align == alNone ){
 			m_DisAlign++;
 			PanelMac->Align = alTop;
@@ -1256,7 +1256,7 @@ void __fastcall TMmttyWd::FormResize(TObject *Sender)
 	UpdateMacro();
 	UpdateControlPanel();
 
-	// ƒXƒ^[ƒ“ƒhƒAƒ[ƒ“‚ÌƒEƒCƒ“ƒhƒE‹Ö~ˆ—
+	// ï¿½Xï¿½^ï¿½[ï¿½ï¿½ï¿½hï¿½Aï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ÌƒEï¿½Cï¿½ï¿½ï¿½hï¿½Eï¿½Ö~ï¿½ï¿½ï¿½ï¿½
 	if( sys.m_DisWindow && (!Remote) ){
 		m_DisAlign++;
 		PanelMac->Align = alNone;
@@ -1267,7 +1267,7 @@ void __fastcall TMmttyWd::FormResize(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-// ƒTƒCƒY•ÏXƒRƒ“ƒgƒ[ƒ‹‚Ì“o˜^
+// ï¿½Tï¿½Cï¿½Yï¿½ÏXï¿½Rï¿½ï¿½ï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ì“oï¿½^
 void __fastcall TMmttyWd::EntryAlignControl(void)
 {
 	AlignMain.EntryControl(PanelTop, this, NULL);
@@ -1275,7 +1275,7 @@ void __fastcall TMmttyWd::EntryAlignControl(void)
 	AlignMain.EntryControl(PanelQSO, this, NULL);
 	AlignMain.EntryControl(PanelStat, this, NULL);
 
-// ƒgƒbƒvƒpƒlƒ‹‚Ì“o˜^
+// ï¿½gï¿½bï¿½vï¿½pï¿½lï¿½ï¿½ï¿½Ì“oï¿½^
 	AlignTop.EntryControl(GroupCtr, PanelTop, GroupCtr->Font);
 	AlignTop.EntryControl(SBTXOFF, PanelTop, SBTXOFF->Font);
 	AlignTop.EntryControl(SBTX, PanelTop, SBTX->Font);
@@ -1312,7 +1312,7 @@ void __fastcall TMmttyWd::EntryAlignControl(void)
 		AlignTop.EntryControl(GetSB(i), PanelTop, GetSB(i)->Font);
 	}
 
-// QSOƒpƒlƒ‹‚Ì“o˜^
+// QSOï¿½pï¿½lï¿½ï¿½ï¿½Ì“oï¿½^
 	AlignQSO.EntryControl(LCall, PanelQSO, LCall->Font);
 	AlignQSO.EntryControl(HisCall, PanelQSO, HisCall->Font);
 	AlignQSO.EntryControl(LName, PanelQSO, LName->Font);
@@ -1328,7 +1328,7 @@ void __fastcall TMmttyWd::EntryAlignControl(void)
 	AlignQSO.EntryControl(SBFind, PanelQSO, SBFind->Font);
 	AlignQSO.EntryControl(Freq, PanelQSO, Freq->Font);
 
-// “ü—Íƒ{ƒ^ƒ“ƒpƒlƒ‹‚Ì“o˜^
+// ï¿½ï¿½ï¿½Íƒ{ï¿½^ï¿½ï¿½ï¿½pï¿½lï¿½ï¿½ï¿½Ì“oï¿½^
 	AlignStat.EntryControl(SBINClear, PanelStat, SBINClear->Font);
 	AlignStat.EntryControl(SBIN1, PanelStat, SBIN1->Font);
 	AlignStat.EntryControl(SBIN2, PanelStat, SBIN2->Font);
@@ -1498,8 +1498,8 @@ void __fastcall TMmttyWd::SetFSKPara(COMMPARA *cp)
 	cp->Baud = int(pSound->FSKDEM.GetBaudRate() + 0.5);
 	cp->BitLen = pSound->FSKDEM.m_BitLen;
 		// 0-1bit, 1-1.5bit, 2-2bit, 3-1.5bit, 4-1.5bit
-//ƒf[ƒ^’·5‚ÆƒXƒgƒbƒv ƒrƒbƒg2‚Ì‘g‚İ‡‚í‚¹‚Í–³Œø‚Å‚·B
-//ƒf[ƒ^’·6¤ 7¤ 8‚ÆƒXƒgƒbƒv ƒrƒbƒg1.5‚Æ‚Ì‘g‚İ‡‚í‚¹‚à–³Œø‚Å‚·B
+//ï¿½fï¿½[ï¿½^ï¿½ï¿½5ï¿½ÆƒXï¿½gï¿½bï¿½v ï¿½rï¿½bï¿½g2ï¿½Ì‘gï¿½İï¿½ï¿½í‚¹ï¿½Í–ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½B
+//ï¿½fï¿½[ï¿½^ï¿½ï¿½6ï¿½ 7ï¿½ 8ï¿½ÆƒXï¿½gï¿½bï¿½v ï¿½rï¿½bï¿½g1.5ï¿½Æ‚Ì‘gï¿½İï¿½ï¿½í‚¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½B
 	switch(pSound->FSKMOD.m_StopLen){
 		case 2:
 			cp->Stop = (cp->BitLen >= 6) ? TWOSTOPBITS : ONE5STOPBITS;
@@ -1573,7 +1573,7 @@ void __fastcall TMmttyWd::OpenClosePTT(void)
 		if( pComm->Open(ComPort, sys.m_TxRxInv, sys.m_TxPort ? &cm : NULL) ){
 			pComm->pMod = &pSound->FSKMOD;
 			pComm->EnbTX(SBTX->Down);
-			if( sys.m_TxPort ) pComm->Resume();		// Txd‘—Mƒ^ƒXƒN‚ğ“®ì‚³‚¹‚é
+			if( sys.m_TxPort ) pComm->Resume();		// Txdï¿½ï¿½ï¿½Mï¿½^ï¿½Xï¿½Nï¿½ğ“®ì‚³ï¿½ï¿½ï¿½ï¿½
 		}
 		else {
 			if( sys.m_TxPort && (cm.BitLen == 5) && (cm.Stop == TWOSTOPBITS) ){
@@ -1581,7 +1581,7 @@ void __fastcall TMmttyWd::OpenClosePTT(void)
 				if( pComm->Open(ComPort, sys.m_TxRxInv, &cm) == TRUE ){
 					pComm->pMod = &pSound->FSKMOD;
 					pComm->EnbTX(SBTX->Down);
-					pComm->Resume();				// Txd‘—Mƒ^ƒXƒN‚ğ“®ì‚³‚¹‚é
+					pComm->Resume();				// Txdï¿½ï¿½ï¿½Mï¿½^ï¿½Xï¿½Nï¿½ğ“®ì‚³ï¿½ï¿½ï¿½ï¿½
 					goto _noerr;
 				}
 			}
@@ -1589,10 +1589,10 @@ void __fastcall TMmttyWd::OpenClosePTT(void)
 			pComm = NULL;
 			if( !Remote || !m_RemoteTimer ){
 				if (cm.Baud<110){ //1.70F notify user if attempting to open port at low speed, as many devices can't do this
-					ErrorMB( (Font->Charset != SHIFTJIS_CHARSET)? "Cannot open '%s' at '%s' baud; if the selected serial port can't handle this baud rate, use EXTFSK.":"'%s'‚ğƒ{[ƒŒ[ƒg'%s'‚ÅŠJ‚¯‚Ü‚¹‚ñ.‚à‚µA‘I‘ğ‚µ‚½ƒVƒŠƒAƒ‹ƒ|[ƒg‚ª‚±‚Ìƒ{[ƒŒ[ƒg‚ğƒTƒ|[ƒg‚µ‚Ä‚¢‚È‚¢‚Æ‚«‚ÍEXTFSK‚ğg‚Á‚Ä‚­‚¾‚³‚¢B", sys.m_TxRxName.c_str(),AnsiString(cm.Baud).c_str());
+					ErrorMB( (Font->Charset != SHIFTJIS_CHARSET)? "Cannot open '%s' at '%s' baud; if the selected serial port can't handle this baud rate, use EXTFSK.":"'%s'ï¿½ï¿½ï¿½{ï¿½[ï¿½ï¿½ï¿½[ï¿½g'%s'ï¿½ÅŠJï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½.ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Vï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½|ï¿½[ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Ìƒ{ï¿½[ï¿½ï¿½ï¿½[ï¿½gï¿½ï¿½ï¿½Tï¿½|ï¿½[ï¿½gï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½EXTFSKï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B", sys.m_TxRxName.c_str(),AnsiString(cm.Baud).c_str());
 				}
 				else {
-					ErrorMB( (Font->Charset != SHIFTJIS_CHARSET)? "Cannot open '%s'":"'%s'‚ªƒI[ƒvƒ“‚Å‚«‚Ü‚¹‚ñ.", sys.m_TxRxName.c_str());
+					ErrorMB( (Font->Charset != SHIFTJIS_CHARSET)? "Cannot open '%s'":"'%s'ï¿½ï¿½ï¿½Iï¿½[ï¿½vï¿½ï¿½ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½.", sys.m_TxRxName.c_str());
 				}
 			}
 		}
@@ -1810,7 +1810,7 @@ void __fastcall TMmttyWd::FormCloseQuery(TObject *Sender, bool &CanClose)
 	::VirtualUnlock(this, sizeof(TMmttyWd));
 }
 //---------------------------------------------------------------------------
-// ƒŒƒWƒXƒgƒŠ‚©‚ç‚Ì“Ç‚İo‚µ
+// ï¿½ï¿½ï¿½Wï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì“Ç‚İoï¿½ï¿½
 void __fastcall TMmttyWd::ReadSampFreq(void)
 {
 	char	bf[256];
@@ -1831,14 +1831,14 @@ void __fastcall TMmttyWd::ReadSampFreq(void)
 	delete pIniFile;
 }
 //---------------------------------------------------------------------------
-// ƒŒƒWƒXƒgƒŠ‚©‚ç‚Ì“Ç‚İo‚µ
+// ï¿½ï¿½ï¿½Wï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì“Ç‚İoï¿½ï¿½
 void __fastcall TMmttyWd::ReadCombList(TMemIniFile *tp, AnsiString &as, LPCSTR pKey, LPCSTR pDef)
 {
 	as = tp->ReadString("ComboList", pKey, pDef);
 	if( as.IsEmpty() ) as = pDef;
 }
 //---------------------------------------------------------------------------
-// ƒŒƒWƒXƒgƒŠ‚©‚ç‚Ì“Ç‚İo‚µ
+// ï¿½ï¿½ï¿½Wï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì“Ç‚İoï¿½ï¿½
 void __fastcall TMmttyWd::ReadRegister(void)
 {
 	char	bf[256];
@@ -2227,7 +2227,7 @@ void __fastcall TMmttyWd::ReadRegister(void)
 }
 
 //---------------------------------------------------------------------------
-// ƒŒƒWƒXƒgƒŠ‚Ö‚Ì‘‚«‚İ
+// ï¿½ï¿½ï¿½Wï¿½Xï¿½gï¿½ï¿½ï¿½Ö‚Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void __fastcall TMmttyWd::WriteRegister(void)
 {
 	char	bf[256];
@@ -2510,7 +2510,7 @@ void __fastcall TMmttyWd::WriteRegister(void)
 			CrLf2Yen(ws, sys.m_MsgList[i]);
 			pIniFile->WriteString("MsgList", bf, ws);
 		}
-		else {		// Á‹—p
+		else {		// ï¿½ï¿½ï¿½ï¿½ï¿½p
 			pIniFile->WriteString("MsgList", bf, "");
 			pIniFile->WriteString("MsgName", bf, "");
 			break;
@@ -2576,7 +2576,7 @@ void __fastcall TMmttyWd::WriteRegister(void)
 
 	}
 	catch(...){
-		ErrorMB((Font->Charset != SHIFTJIS_CHARSET)?"Cannot update MMTTY.INI":"MMTTY.INI‚ğXV‚Å‚«‚Ü‚¹‚ñ.");
+		ErrorMB((Font->Charset != SHIFTJIS_CHARSET)?"Cannot update MMTTY.INI":"MMTTY.INIï¿½ï¿½ï¿½Xï¿½Vï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½.");
 	}
 }
 //---------------------------------------------------------------------------
@@ -2735,7 +2735,7 @@ void __fastcall TMmttyWd::TimerTimer(TObject *Sender)
 		if( IsTxIdle() ){
 			if( m_Macro ){
 				switch(m_MacroStat){
-					case 1:			// óMØ‚è‘Ö‚¦
+					case 1:			// ï¿½ï¿½Mï¿½Ø‚ï¿½Ö‚ï¿½
 						if( m_MacTimer && (m_MacRetry >= 1) && (m_MacRetry <= 16) ){
 							if( sys.m_UserTimer[m_MacRetry-1] ){
 								m_MacTimer = (sys.m_UserTimer[m_MacRetry-1] * 100) + GetTickCount();
@@ -2748,7 +2748,7 @@ void __fastcall TMmttyWd::TimerTimer(TObject *Sender)
 						m_Macro = 0;
 						ToRX(0);
 						break;
-					case 2:			// ŒJ‚è•Ô‚µ
+					case 2:			// ï¿½Jï¿½ï¿½Ô‚ï¿½
 						OutputStr(m_NowStr.c_str());
 						break;
 					default:
@@ -2856,7 +2856,7 @@ _try:;
 			if( FifoEdit.GetLen() < 2 ) break;
 		}
 	}
-	if( m_PaletteTimer ){				// 256FƒrƒfƒI‚Ì
+	if( m_PaletteTimer ){				// 256ï¿½Fï¿½rï¿½fï¿½Iï¿½Ìï¿½
 		m_PaletteTimer--;
 		if( !m_PaletteTimer ){
 			PBoxWater->Invalidate();
@@ -2942,7 +2942,7 @@ void __fastcall TMmttyWd::UpdateBARTG(void)
 //---------------------------------------------------------------------------
 void __fastcall TMmttyWd::ClearMacroTimer(void)
 {
-	if( m_MacTimer ){		// ƒ}ƒNƒ‘—M‚Ì‹­§“I‚È’†~
+	if( m_MacTimer ){		// ï¿½}ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½Mï¿½Ì‹ï¿½ï¿½ï¿½ï¿½Iï¿½È’ï¿½ï¿½~
 		m_MacTimer = 0;
 		GetSB(m_MacRetry-1)->Down = FALSE;
 		if( (pSound != NULL) && pSound->m_Tx ) ToRX(1);
@@ -2958,8 +2958,8 @@ void __fastcall TMmttyWd::UpdateLogLink(void)
 	}
 }
 //---------------------------------------------------------------------------
-// æs•ÒWƒpƒbƒh‚Ì•\¦
-// ƒtƒH[ƒJƒX‚Ì’²®
+// ï¿½ï¿½sï¿½ÒWï¿½pï¿½bï¿½hï¿½Ì•\ï¿½ï¿½
+// ï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½Ì’ï¿½ï¿½ï¿½
 void __fastcall TMmttyWd::AdjustFocus(void)
 {
     if( !Visible ) return;
@@ -3205,7 +3205,7 @@ void __fastcall TMmttyWd::ShiftFreqChange(TObject *Sender)
 	SetShift(sf);
 }
 //---------------------------------------------------------------------------
-// ƒNƒCƒbƒNƒVƒtƒgƒ`ƒFƒ“ƒW
+// ï¿½Nï¿½Cï¿½bï¿½Nï¿½Vï¿½tï¿½gï¿½`ï¿½Fï¿½ï¿½ï¿½W
 void __fastcall TMmttyWd::Label3Click(TObject *Sender)
 {
 	if( m_DisEvent ) return;
@@ -3355,7 +3355,7 @@ void __fastcall TMmttyWd::FormPaint(TObject *Sender)
 				if( sys.m_Call != "NOCALL" ){
 					as = sys.m_Call;
 				}
-				if( InputMB("MMTTY", (Font->Charset != SHIFTJIS_CHARSET)?"Please enter your callsign":"‚ ‚È‚½‚ÌƒR[ƒ‹ƒTƒCƒ“‚ğ“ü—Í‚µ‚Ä‰º‚³‚¢.", as) == TRUE ){
+				if( InputMB("MMTTY", (Font->Charset != SHIFTJIS_CHARSET)?"Please enter your callsign":"ï¿½ï¿½ï¿½È‚ï¿½ï¿½ÌƒRï¿½[ï¿½ï¿½ï¿½Tï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½Ä‰ï¿½ï¿½ï¿½ï¿½ï¿½.", as) == TRUE ){
 					if( !as.IsEmpty() ){
 						char bf[MLCALL+1];
 						StrCopy(bf, as.c_str(), MLCALL);
@@ -3377,7 +3377,7 @@ void __fastcall TMmttyWd::FormPaint(TObject *Sender)
 
 		if( !Remote ){
 			if( !f1stInst ) Log.DoBackup();
-			Log.Open(NULL, !f1stInst);		// ƒJƒŒƒ“ƒgƒƒOƒtƒ@ƒCƒ‹‚ÌƒI[ƒvƒ“
+			Log.Open(NULL, !f1stInst);		// ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Oï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ÌƒIï¿½[ï¿½vï¿½ï¿½
 			LogLink.UpdateLink(sys.m_LogLink);
 		}
 		UpdateTextData();
@@ -3438,12 +3438,12 @@ void __fastcall TMmttyWd::ToRX(int sw)
 		if( pTnc ) pTnc->m_PTT = 0;
 		if( Remote & REMVIATX ) FifoEdit.Clear();
 		if( pComm != NULL ) pComm->DisDiddle(-1);
-		pSound->FSKMOD.SetDiddleTimer(-1);		// Diddle ‹Ö~
+		pSound->FSKMOD.SetDiddleTimer(-1);		// Diddle ï¿½Ö~
 		pSound->TrigBCC();
 		pSound->FSKMOD.DeleteTXBuf();
 		SBTX->Caption = "REQ";
 		SBTX->Update();
-		if( !sw ){							// ‘—MŠ®—¹‘Ò‚¿
+		if( !sw ){							// ï¿½ï¿½ï¿½Mï¿½ï¿½ï¿½ï¿½ï¿½Ò‚ï¿½
 			if( sys.m_TxPort != txTXDOnly ){
 				for( int i = 0; (pSound->GetBCC() >= 0) && (i < 200); i++ ){
 					RecvJob();
@@ -3498,7 +3498,7 @@ void __fastcall TMmttyWd::ToRX(int sw)
 //---------------------------------------------------------------------------
 void __fastcall TMmttyWd::UpdateNet(void)
 {
-	if( SBTX->Down ){	// ‘—MØ‚è‘Ö‚¦
+	if( SBTX->Down ){	// ï¿½ï¿½ï¿½Mï¿½Ø‚ï¿½Ö‚ï¿½ï¿½ï¿½
 		if( sys.m_TxNet && (!sys.m_TxFixShift) ){
 			pSound->FSKMOD.SetMarkFreq(pSound->FSKDEM.GetMarkFreq());
 			pSound->FSKMOD.SetSpaceFreq(pSound->FSKDEM.GetSpaceFreq());
@@ -3529,7 +3529,7 @@ void __fastcall TMmttyWd::UpdateNet(void)
 			RemoteFreq();
 		}
 	}
-	else {				// óMØ‚è‘Ö‚¦
+	else {				// ï¿½ï¿½Mï¿½Ø‚ï¿½Ö‚ï¿½ï¿½ï¿½
 		if( !sys.m_TxNet || sys.m_TxFixShift ){
 			pSound->FSKDEM.SetMarkFreq(m_RxMarkFreq);
 			pSound->FSKDEM.SetSpaceFreq(m_RxSpaceFreq);
@@ -3543,7 +3543,7 @@ void __fastcall TMmttyWd::UpdateNet(void)
 	}
 }
 //---------------------------------------------------------------------------
-// ‹­§“I‚ÈóM
+// ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½Èï¿½M
 void __fastcall TMmttyWd::SBTXOFFClick(TObject *Sender)
 {
 	ClearMacroTimer();
@@ -3648,7 +3648,7 @@ void __fastcall TMmttyWd::SBTXClick(TObject *Sender)
 	AdjustFocus();
 }
 //---------------------------------------------------------------------------
-// ƒL[ƒ{[ƒh
+// ï¿½Lï¿½[ï¿½{ï¿½[ï¿½h
 void __fastcall TMmttyWd::PushKey(char Key)
 {
 	Key = char(toupper(Key));
@@ -3669,7 +3669,7 @@ void __fastcall TMmttyWd::PushKey(char Key)
 	FifoEdit.PutChar(Key);
 }
 //---------------------------------------------------------------------------
-// ƒL[ƒ{[ƒh
+// ï¿½Lï¿½[ï¿½{ï¿½[ï¿½h
 void __fastcall TMmttyWd::FormKeyPress(TObject *Sender, char &Key)
 {
 	if( HisCall->Focused() ) return;
@@ -3717,7 +3717,7 @@ void __fastcall TMmttyWd::FormKeyDown(TObject *Sender, WORD &Key,
 		FifoEdit.LineBackSpace();
 		Key = 0;
 	}
-// ƒ†[ƒU[’è‹`‰Â”\‚ÈƒL[
+// ï¿½ï¿½ï¿½[ï¿½Uï¿½[ï¿½ï¿½`ï¿½Â”\ï¿½ÈƒLï¿½[
 	else if( nKey == sys.m_SysKey[kkUOS] ){
 		SBUOS->Down = SBUOS->Down ? 0 : 1;
 		SBUOSClick(NULL);
@@ -3986,14 +3986,14 @@ void __fastcall TMmttyWd::FormKeyDown(TObject *Sender, WORD &Key,
 	}
 	else {
 		int i;
-		for( i = 0; i < 16; i++ ){				// ƒ}ƒNƒƒ{ƒ^ƒ“
+		for( i = 0; i < 16; i++ ){				// ï¿½}ï¿½Nï¿½ï¿½ï¿½{ï¿½^ï¿½ï¿½
 			if( nKey == sys.m_UserKey[i] ){
 				MacBtnExec(i);
 				Key = 0;
 				return;
 			}
 		}
-		for( i = 0; i < MSGLISTMAX; i++ ){		// ƒƒbƒZ[ƒWƒŠƒXƒg
+		for( i = 0; i < MSGLISTMAX; i++ ){		// ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½ï¿½Xï¿½g
 			if( nKey == sys.m_MsgKey[i] ){
 				AnsiString as = sys.m_MsgName[i];
 				FindMsgList(as);
@@ -4010,7 +4010,7 @@ void __fastcall TMmttyWd::FormKeyDown(TObject *Sender, WORD &Key,
 				}
 			}
 		}
-		for( i = 0; i < 16; i++ ){				// ƒ}ƒNƒ•ÒWƒ{ƒ^ƒ“
+		for( i = 0; i < 16; i++ ){				// ï¿½}ï¿½Nï¿½ï¿½ï¿½ÒWï¿½{ï¿½^ï¿½ï¿½
 			if( nKey == sys.m_UserEditKey[i] ){
 				EditMB(i);
 				Key = 0;
@@ -4020,7 +4020,7 @@ void __fastcall TMmttyWd::FormKeyDown(TObject *Sender, WORD &Key,
 	}
 }
 //---------------------------------------------------------------------------
-// ƒL[ƒ{[ƒh
+// ï¿½Lï¿½[ï¿½{ï¿½[ï¿½h
 void __fastcall TMmttyWd::FormKeyUp(TObject *Sender, WORD &Key,
 	TShiftState Shift)
 {
@@ -4495,7 +4495,7 @@ void __fastcall TMmttyWd::FindCall(void)
 	if( Log.FindSet(&Log.m_Find, Log.m_sd.call) ){
 		Log.SetFreq(&Log.m_sd, AnsiString(Freq->Text).c_str());	//JA7UDE 0428
 		SDMMLOG	sd;
-		Log.GetData(&sd, Log.m_Find.pFindTbl[0]);	// ˆê”ÔÅV‚Ìƒf[ƒ^
+		Log.GetData(&sd, Log.m_Find.pFindTbl[0]);	// ï¿½ï¿½ÔÅVï¿½Ìƒfï¿½[ï¿½^
 		if( Log.m_Find.m_FindCmp1Max && ((!Log.m_LogSet.m_CheckBand) || Log.FindSameBand()) ){
 			m_Dupe = 1;
 		}
@@ -4657,7 +4657,7 @@ void __fastcall TMmttyWd::PBoxRxMouseUp(TObject *Sender, TMouseButton Button,
 
 	ClearMacroTimer();
 	AdjustFocus();
-	if( Button == mbRight ){		// ‰Eƒ{ƒ^ƒ“
+	if( Button == mbRight ){		// ï¿½Eï¿½{ï¿½^ï¿½ï¿½
 		PrintText.ShiftText(X, Y);
 		return;
 	}
@@ -4668,7 +4668,7 @@ void __fastcall TMmttyWd::PBoxRxMouseUp(TObject *Sender, TMouseButton Button,
 			if( strlen(bf) >= 16 ) bf[16] = 0;
 			SetYourCallsign(bf);
 		}
-		else if( Log.m_LogSet.m_Contest ){		// ƒRƒ“ƒeƒXƒg’†
+		else if( Log.m_LogSet.m_Contest ){		// ï¿½Rï¿½ï¿½ï¿½eï¿½Xï¿½gï¿½ï¿½
 			if( (strlen(bf) <= 2) ||
 				!IsCall(bf) ||
 				((strlen(bf) == 3) && !HisCall->Text.IsEmpty())
@@ -4724,27 +4724,27 @@ void __fastcall TMmttyWd::PBoxRxMouseUp(TObject *Sender, TMouseButton Button,
 		}
 		else if( IsRST(bf) ){
 			if( (!Log.m_LogSet.m_DefMyRST) && SBQSO->Down && !MyRST->Text.IsEmpty() ){
-				if( YesNoMB((Font->Charset != SHIFTJIS_CHARSET)? "Change MyRST ?":"MyRST‚ğ•ÏX‚µ‚Ü‚·‚©?") != IDYES ) return;
+				if( YesNoMB((Font->Charset != SHIFTJIS_CHARSET)? "Change MyRST ?":"MyRSTï¿½ï¿½ÏXï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½?") != IDYES ) return;
 			}
 			SetYourRST(bf);
 		}
 		else if( IsCall(bf) ){
 			if( strcmpi(bf, sys.m_Call.c_str()) ){
 				if( SBQSO->Down && !HisCall->Text.IsEmpty() ){
-					if( YesNoMB((Font->Charset != SHIFTJIS_CHARSET)?"Change Callsign?":"ƒR[ƒ‹ƒTƒCƒ“‚ğ•ÏX‚µ‚Ü‚·‚©?") != IDYES ) return;
+					if( YesNoMB((Font->Charset != SHIFTJIS_CHARSET)?"Change Callsign?":"ï¿½Rï¿½[ï¿½ï¿½ï¿½Tï¿½Cï¿½ï¿½ï¿½ï¿½ÏXï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½?") != IDYES ) return;
 				}
 				SetYourCallsign(bf);
 			}
 		}
 		else if( m_NameQTH ){
 			if( SBQSO->Down && !HisQTH->Text.IsEmpty() ){
-				if( YesNoMB((Font->Charset != SHIFTJIS_CHARSET)?"Change QTH?":"‚p‚s‚g‚ğ•ÏX‚µ‚Ü‚·‚©?") != IDYES ) return;
+				if( YesNoMB((Font->Charset != SHIFTJIS_CHARSET)?"Change QTH?":"ï¿½pï¿½sï¿½gï¿½ï¿½ÏXï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½?") != IDYES ) return;
 			}
 			SetYourQTH(bf);
 		}
 		else if( IsName(bf) ){
 			if( SBQSO->Down && !HisName->Text.IsEmpty() ){
-				if( YesNoMB((Font->Charset != SHIFTJIS_CHARSET)?"Change Name?":"–¼‘O‚ğ•ÏX‚µ‚Ü‚·‚©?") != IDYES ) return;
+				if( YesNoMB((Font->Charset != SHIFTJIS_CHARSET)?"Change Name?":"ï¿½ï¿½ï¿½Oï¿½ï¿½ÏXï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½?") != IDYES ) return;
 			}
 			SetYourName(bf);
 		}
@@ -4762,7 +4762,7 @@ void __fastcall TMmttyWd::ScrollBarRxChange(TObject *Sender)
 
 #if USEPAL
 //---------------------------------------------------------------------------
-// Œ»İ‚Ì˜_—ƒpƒŒƒbƒg‚ğ•Ô‚·iTControl::GetPalette‚ÌƒI[ƒoƒ‰ƒCƒhŠÖ”j
+// ï¿½ï¿½ï¿½İ‚Ì˜_ï¿½ï¿½ï¿½pï¿½ï¿½ï¿½bï¿½gï¿½ï¿½Ô‚ï¿½ï¿½iTControl::GetPaletteï¿½ÌƒIï¿½[ï¿½oï¿½ï¿½ï¿½Cï¿½hï¿½Öï¿½ï¿½j
 HPALETTE __fastcall TMmttyWd::GetPalette(void)
 {
 	m_PaletteQuery = 1;
@@ -4782,7 +4782,7 @@ HPALETTE __fastcall TMmttyWd::GetPalette(void)
 	return UsrPal;
 }
 //---------------------------------------------------------------------------
-// ƒpƒŒƒbƒg‚ğíœ‚·‚é
+// ï¿½pï¿½ï¿½ï¿½bï¿½gï¿½ï¿½ï¿½íœï¿½ï¿½ï¿½ï¿½
 void __fastcall TMmttyWd::ClosePalette(void)
 {
 	if( UsrPal != NULL ){
@@ -4809,7 +4809,7 @@ void __fastcall TMmttyWd::ClosePalette(void)
 	}
 }
 //---------------------------------------------------------------------------
-// ƒpƒŒƒbƒg‚ğ“o˜^‚·‚é
+// ï¿½pï¿½ï¿½ï¿½bï¿½gï¿½ï¿½oï¿½^ï¿½ï¿½ï¿½ï¿½
 void __fastcall TMmttyWd::SetupPalette(RGBQUAD *pTbl, int max)
 {
 	struct { /* lgpl */
@@ -4862,8 +4862,8 @@ void __fastcall TMmttyWd::SetupPalette(RGBQUAD *pTbl, int max)
 	}
 }
 //---------------------------------------------------------------------------
-// ƒJƒ‰[ƒCƒ“ƒfƒbƒNƒX‚ğ“o˜^‚·‚é
-// 256Color‚ÌƒJƒ‰[ƒCƒ“ƒfƒbƒNƒX‚Í‚O`‚P‚U‚Ü‚Å
+// ï¿½Jï¿½ï¿½ï¿½[ï¿½Cï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½ï¿½oï¿½^ï¿½ï¿½ï¿½ï¿½
+// 256Colorï¿½ÌƒJï¿½ï¿½ï¿½[ï¿½Cï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½Í‚Oï¿½`ï¿½Pï¿½Uï¿½Ü‚ï¿½
 int __fastcall TMmttyWd::EntryColor(RGBQUAD *pTbl, TColor col, int n)
 {
 	DWORD   dd = DWORD(col);        // xBGR
@@ -4889,7 +4889,7 @@ int __fastcall TMmttyWd::EntryColor(RGBQUAD *pTbl, TColor col, int n)
 	return TRUE;
 }
 //---------------------------------------------------------------------------
-// ƒrƒbƒgƒ}ƒbƒv‚ÌƒJƒ‰[ƒe[ƒuƒ‹‚ğ“o˜^‚·‚é
+// ï¿½rï¿½bï¿½gï¿½}ï¿½bï¿½vï¿½ÌƒJï¿½ï¿½ï¿½[ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½ï¿½oï¿½^ï¿½ï¿½ï¿½ï¿½
 void __fastcall TMmttyWd::SetColorIndex(void)
 {
 	RGBQUAD tbl[256];
@@ -4908,17 +4908,17 @@ void __fastcall TMmttyWd::SetColorIndex(void)
 			tbl[n].rgbGreen=(unsigned char)(ColorTable[n] >> 8);
 			tbl[n].rgbBlue =(unsigned char)(ColorTable[n] >> 16);
 		}
-#if 0	// ƒJƒ‰[‰‰Z‚ğs‚í‚È‚¢‚Ì‚Å•s—v
+#if 0	// ï¿½Jï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½sï¿½ï¿½È‚ï¿½ï¿½Ì‚Å•sï¿½v
 
-		// 16`255‚Í‚·‚×‚Ä•
+		// 16ï¿½`255ï¿½Í‚ï¿½ï¿½×‚Äï¿½
 		for( ;n < 256; n++ ){
 			memset(&tbl[n], 0, sizeof(RGBQUAD));
 		}
 
-		// ƒzƒƒCƒgi•K‚¸0xff‚É“o˜^j
+		// ï¿½zï¿½ï¿½ï¿½Cï¿½gï¿½iï¿½Kï¿½ï¿½0xffï¿½É“oï¿½^ï¿½j
 		EntryColor(tbl, clWhite, 0x01ff);
 
-		// Šî–{F‚Ì“o˜^
+		// ï¿½ï¿½{ï¿½Fï¿½Ì“oï¿½^
 		const TColor tt[]={
 			clAqua, clBlack, clBlue, clDkGray, clFuchsia, clGray, clGreen, clLime,
 			clLtGray, clMaroon, clNavy, clOlive, clPurple, clRed, clSilver, clTeal,
@@ -5019,7 +5019,7 @@ void __fastcall TMmttyWd::WriteFifoEdit(LPCSTR s)
 	LPSTR bp = new char[strlen(s)+1];
 	strcpy(bp, s);
 	LPSTR p;
-	for( p = bp; *p; p++ ){		// %E ‚ÍI—¹‚ğ’è‹`I—¹
+	for( p = bp; *p; p++ ){		// %E ï¿½ÍIï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½Iï¿½ï¿½
 		if( (*p == '%') && (*(p+1) == 'E') ){
 			*p = 0;
 			break;
@@ -5063,7 +5063,7 @@ void __fastcall TMmttyWd::SBIN4Click(TObject *Sender)
 void __fastcall TMmttyWd::SBINMouseUp(int n)
 {
 	TEditDlgBox *pBox = new TEditDlgBox(this);
-	pBox->Caption = (Font->Charset != SHIFTJIS_CHARSET)? "Edit Button":"“ü—Íƒ{ƒ^ƒ“•ÒW";
+	pBox->Caption = (Font->Charset != SHIFTJIS_CHARSET)? "Edit Button":"ï¿½ï¿½ï¿½Íƒ{ï¿½^ï¿½ï¿½ï¿½ÒW";
 	pBox->ButtonName->Text = sys.m_InBtnName[n];
 	if( pBox->Execute(sys.m_InBtn[n], sys.m_InBtnKey[n], &sys.m_InBtnCol[n], NULL, 0) == TRUE ){
 		if( !pBox->ButtonName->Text.IsEmpty() ){
@@ -5113,7 +5113,7 @@ void __fastcall TMmttyWd::UpdateMsgList(void)
 	m_DisEvent--;
 }
 //---------------------------------------------------------------------------
-// ƒVƒ‡[ƒgƒJƒbƒg‚Å’T‚·
+// ï¿½Vï¿½ï¿½ï¿½[ï¿½gï¿½Jï¿½bï¿½gï¿½Å’Tï¿½ï¿½
 void __fastcall TMmttyWd::FindMsgLst(WORD nKey)
 {
 	for( int i = 0; i < MSGLISTMAX; i++ ){
@@ -5125,7 +5125,7 @@ void __fastcall TMmttyWd::FindMsgLst(WORD nKey)
 	}
 }
 //---------------------------------------------------------------------------
-// –¼Ì‚Å’T‚·
+// ï¿½ï¿½ï¿½Ì‚Å’Tï¿½ï¿½
 void __fastcall TMmttyWd::FindMsgList(AnsiString fs)	//JA7UDE 0428
 {
 	if( m_DisEvent ) return;
@@ -5161,7 +5161,7 @@ void __fastcall TMmttyWd::SBINEditClick(TObject *Sender)
 	TopWindow(this);
 }
 //---------------------------------------------------------------------------
-// ƒIƒvƒVƒ‡ƒ“ƒƒjƒ…[‚ğŠJ‚­
+// ï¿½Iï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Jï¿½ï¿½
 void __fastcall TMmttyWd::DoOption(TObject *Sender, int sw)
 {
 //	CWaitCursor	wait;
@@ -5220,7 +5220,7 @@ void __fastcall TMmttyWd::DoOption(TObject *Sender, int sw)
 				InfoMB( "Please restart %s for the new sampling frequency.", Remote ? "application":"MMTTY");
 			}
 			else {
-				InfoMB( "V‚µ‚¢ƒTƒ“ƒvƒŠƒ“ƒOü”g”‚ğ“K—p‚³‚¹‚é‚½‚ß‚É%s‚ğÄ‹N“®‚µ‚Ä‰º‚³‚¢.", Remote ? "ƒAƒvƒŠƒP[ƒVƒ‡ƒ“":"MMTTY" );
+				InfoMB( "ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Tï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½Kï¿½pï¿½ï¿½ï¿½ï¿½ï¿½é‚½ï¿½ß‚ï¿½%sï¿½ï¿½ï¿½Ä‹Nï¿½ï¿½ï¿½ï¿½ï¿½Ä‰ï¿½ï¿½ï¿½ï¿½ï¿½.", Remote ? "ï¿½Aï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½":"MMTTY" );
 			}
 		}
 		if( (pttname != sys.m_TxRxName) || ((pComm == NULL)&&strcmp(sys.m_TxRxName.c_str(), "NONE")) ){
@@ -5246,7 +5246,7 @@ void __fastcall TMmttyWd::DoOption(TObject *Sender, int sw)
 	if( Remote ) PostApp(TXM_SHOWSETUP, 0);
 }
 //---------------------------------------------------------------------------
-// ƒIƒvƒVƒ‡ƒ“ƒƒjƒ…[‚ğŠJ‚­
+// ï¿½Iï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Jï¿½ï¿½
 void __fastcall TMmttyWd::KOptionClick(TObject *Sender)
 {
 	DoOption(Sender, 0);
@@ -5266,7 +5266,7 @@ void __fastcall TMmttyWd::HisCallKeyPress(TObject *Sender, char &Key)
 	}
 }
 //---------------------------------------------------------------------------
-// ƒIƒVƒƒXƒR[ƒv•\¦
+// ï¿½Iï¿½Vï¿½ï¿½ï¿½Xï¿½Rï¿½[ï¿½vï¿½\ï¿½ï¿½
 void __fastcall TMmttyWd::KOSClick(TObject *Sender)
 {
 	TTScope *pBox = new TTScope(this);
@@ -5321,7 +5321,7 @@ void __fastcall TMmttyWd::KWebWSKClick(TObject *Sender)
 	WebRef.ShowHTML("http://home.b01.itscom.net/ja1wsk/");
 }
 //---------------------------------------------------------------------------
-// MMTTY.Txt‚Ì•\¦ƒƒjƒ…[
+// MMTTY.Txtï¿½Ì•\ï¿½ï¿½ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[
 void __fastcall TMmttyWd::KHlpTxtClick(TObject *Sender)
 {
 	ShowHelp(this, sys.m_Help.c_str());
@@ -5436,7 +5436,7 @@ int __fastcall TMmttyWd::OutputFile(LPCSTR pName)
 		fclose(fp);
 	}
 	else {
-		ErrorMB((Font->Charset != SHIFTJIS_CHARSET) ? "'%s' was not found":"'%s'‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ.", pName);
+		ErrorMB((Font->Charset != SHIFTJIS_CHARSET) ? "'%s' was not found":"'%s'ï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½.", pName);
 		return FALSE;
 	}
 	ToTX(in.c_str());
@@ -5454,8 +5454,8 @@ void __fastcall TMmttyWd::KFileOutClick(TObject *Sender)
 		OpenDialog->Filter = "Text files(*.txt)|*.txt|All files(*.*)|*.*|";
 	}
 	else {
-		OpenDialog->Title = "‘—M‚·‚éƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚ğŠJ‚­";
-		OpenDialog->Filter = "ƒeƒLƒXƒgƒtƒ@ƒCƒ‹(*.txt)|*.txt|‚·‚×‚Ä‚Ìƒtƒ@ƒCƒ‹(*.*)|*.*|";
+		OpenDialog->Title = "ï¿½ï¿½ï¿½Mï¿½ï¿½ï¿½ï¿½eï¿½Lï¿½Xï¿½gï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½ï¿½";
+		OpenDialog->Filter = "ï¿½eï¿½Lï¿½Xï¿½gï¿½tï¿½@ï¿½Cï¿½ï¿½(*.txt)|*.txt|ï¿½ï¿½ï¿½×‚Ä‚Ìƒtï¿½@ï¿½Cï¿½ï¿½(*.*)|*.*|";
 	}
 	OpenDialog->FileName = "";
 	OpenDialog->DefaultExt = "txt";
@@ -5478,8 +5478,8 @@ void __fastcall TMmttyWd::KSaveRxClick(TObject *Sender)
 		SaveDialog->Filter = "Text files(*.txt)|*.txt|";
 	}
 	else {
-		SaveDialog->Title = "ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚Ìì¬";
-		SaveDialog->Filter = "ƒeƒLƒXƒgƒtƒ@ƒCƒ‹(*.txt)|*.txt|";
+		SaveDialog->Title = "ï¿½eï¿½Lï¿½Xï¿½gï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ìì¬";
+		SaveDialog->Filter = "ï¿½eï¿½Lï¿½Xï¿½gï¿½tï¿½@ï¿½Cï¿½ï¿½(*.txt)|*.txt|";
 	}
 	SaveDialog->FileName = "Recv.txt";
 	SaveDialog->DefaultExt = "txt";
@@ -5494,14 +5494,14 @@ void __fastcall TMmttyWd::KSaveRxClick(TObject *Sender)
 		if( fp != NULL ){
 			fputs(as.c_str(), fp);
 			if( fclose(fp) ){
-				ErrorMB( (Font->Charset != SHIFTJIS_CHARSET) ? "Write Error to '%s'":"'%s'‚É³‚µ‚­‘‚«‚±‚ß‚Ü‚¹‚ñ‚Å‚µ‚½.", SaveDialog->FileName.c_str());
+				ErrorMB( (Font->Charset != SHIFTJIS_CHARSET) ? "Write Error to '%s'":"'%s'ï¿½Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß‚Ü‚ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½.", SaveDialog->FileName.c_str());
 			}
 			else {
 				SetDirName(OutFileDir, AnsiString(SaveDialog->FileName).c_str());	//JA7UDE 0428
 			}
 		}
 		else {
-			ErrorMB((Font->Charset != SHIFTJIS_CHARSET)?"Write Error to '%s'": "'%s'‚ğì¬‚Å‚«‚Ü‚¹‚ñ.", SaveDialog->FileName.c_str());
+			ErrorMB((Font->Charset != SHIFTJIS_CHARSET)?"Write Error to '%s'": "'%s'ï¿½ï¿½ï¿½ì¬ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½.", SaveDialog->FileName.c_str());
 		}
 	}
 	TopWindow(this);
@@ -5694,7 +5694,7 @@ void __fastcall TMmttyWd::QSOIN(void)
 	CWaitCursor w;
 	if( Log.FindSet(&Log.m_Find, Log.m_sd.call) ){
 		SDMMLOG	sd;
-		Log.GetData(&sd, Log.m_Find.pFindTbl[0]);	// ˆê”ÔÅV‚Ìƒf[ƒ^
+		Log.GetData(&sd, Log.m_Find.pFindTbl[0]);	// ï¿½ï¿½ÔÅVï¿½Ìƒfï¿½[ï¿½^
 		if( !Log.m_sd.name[0] && Log.m_LogSet.m_CopyName ) strcpy(Log.m_sd.name, sd.name);
 		if( !Log.m_sd.qth[0] && Log.m_LogSet.m_CopyQTH ) strcpy(Log.m_sd.qth, sd.qth);
 		if( !Log.m_sd.rem[0] && Log.m_LogSet.m_CopyREM ) strcpy(Log.m_sd.rem, sd.rem);
@@ -5793,7 +5793,7 @@ void __fastcall TMmttyWd::QSOOUT(int sw)
 			r = YesNoCancelMB("No HisRST... Are you sure?");
 		}
 		else {
-			r = YesNoCancelMB("HisRST‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ.\r\n\r\n‚±‚Ìƒf[ƒ^‚ğ—LŒø‚É‚µ‚Ü‚·‚©H");
+			r = YesNoCancelMB("HisRSTï¿½ï¿½ï¿½İ’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½.\r\n\r\nï¿½ï¿½ï¿½Ìƒfï¿½[ï¿½^ï¿½ï¿½Lï¿½ï¿½ï¿½É‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½H");
 		}
 		switch(r){
 			case IDCANCEL:
@@ -5820,7 +5820,7 @@ void __fastcall TMmttyWd::QSOOUT(int sw)
 			r = YesNoCancelMB("No MyRST... Are you sure?");
 		}
 		else {
-			r = YesNoCancelMB("MyRST‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ.\r\n\r\n‚±‚Ìƒf[ƒ^‚ğ—LŒø‚É‚µ‚Ü‚·‚©H");
+			r = YesNoCancelMB("MyRSTï¿½ï¿½ï¿½İ’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½.\r\n\r\nï¿½ï¿½ï¿½Ìƒfï¿½[ï¿½^ï¿½ï¿½Lï¿½ï¿½ï¿½É‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½H");
 		}
 		switch(r){
 			case IDCANCEL:
@@ -5838,7 +5838,7 @@ void __fastcall TMmttyWd::QSOOUT(int sw)
 				break;
 		}
 	}
-	if( !Log.m_sd.ur[0] || !Log.m_sd.my[0] ){	// –³Œøƒf[ƒ^
+	if( !Log.m_sd.ur[0] || !Log.m_sd.my[0] ){	// ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½[ï¿½^
 		Log.m_sd.send = 'I';
 	}
 	Log.PutData(&Log.m_sd, Log.m_CurNo);
@@ -5895,7 +5895,7 @@ void __fastcall TMmttyWd::SBQSOClick(TObject *Sender)
 		CWaitCursor w;
 		if( Log.FindSet(&Log.m_Find, Log.m_sd.call) ){
 			SDMMLOG	sd;
-			Log.GetData(&sd, Log.m_Find.pFindTbl[0]);	// ˆê”ÔÅV‚Ìƒf[ƒ^
+			Log.GetData(&sd, Log.m_Find.pFindTbl[0]);	// ï¿½ï¿½ÔÅVï¿½Ìƒfï¿½[ï¿½^
 			if( !Log.m_sd.name[0] && Log.m_LogSet.m_CopyName ) strcpy(Log.m_sd.name, sd.name);
 			if( !Log.m_sd.qth[0] && Log.m_LogSet.m_CopyQTH ) strcpy(Log.m_sd.qth, sd.qth);
 			if( !Log.m_sd.rem[0] && Log.m_LogSet.m_CopyREM ) strcpy(Log.m_sd.rem, sd.rem);
@@ -5962,7 +5962,7 @@ void __fastcall TMmttyWd::SBQSOClick(TObject *Sender)
 				r = YesNoCancelMB("No HisRST... Are you sure?");
 			}
 			else {
-				r = YesNoCancelMB("HisRST‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ.\r\n\r\n‚±‚Ìƒf[ƒ^‚ğ—LŒø‚É‚µ‚Ü‚·‚©H");
+				r = YesNoCancelMB("HisRSTï¿½ï¿½ï¿½İ’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½.\r\n\r\nï¿½ï¿½ï¿½Ìƒfï¿½[ï¿½^ï¿½ï¿½Lï¿½ï¿½ï¿½É‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½H");
 			}
 			switch(r){
 				case IDCANCEL:
@@ -5989,7 +5989,7 @@ void __fastcall TMmttyWd::SBQSOClick(TObject *Sender)
 				r = YesNoCancelMB("No MyRST... Are you sure?");
 			}
 			else {
-				r = YesNoCancelMB("MyRST‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ.\r\n\r\n‚±‚Ìƒf[ƒ^‚ğ—LŒø‚É‚µ‚Ü‚·‚©H");
+				r = YesNoCancelMB("MyRSTï¿½ï¿½ï¿½İ’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½.\r\n\r\nï¿½ï¿½ï¿½Ìƒfï¿½[ï¿½^ï¿½ï¿½Lï¿½ï¿½ï¿½É‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½H");
 			}
 			switch(r){
 				case IDCANCEL:
@@ -6007,7 +6007,7 @@ void __fastcall TMmttyWd::SBQSOClick(TObject *Sender)
 					break;
 			}
 		}
-		if( !Log.m_sd.ur[0] || !Log.m_sd.my[0] ){	// –³Œøƒf[ƒ^
+		if( !Log.m_sd.ur[0] || !Log.m_sd.my[0] ){	// ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½[ï¿½^
 			Log.m_sd.send = 'I';
 		}
 		Log.PutData(&Log.m_sd, Log.m_CurNo);
@@ -6042,7 +6042,7 @@ void __fastcall TMmttyWd::SBQSOClick(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-// ƒoƒ“ƒh‚Ì•ÏX
+// ï¿½oï¿½ï¿½ï¿½hï¿½Ì•ÏX
 void __fastcall TMmttyWd::FreqChange(TObject *Sender)
 {
 	if( m_DisEvent ) return;
@@ -6096,7 +6096,7 @@ void __fastcall TMmttyWd::SBInitClick(TObject *Sender)
 			r = IDYES;
 		}
 		else {
-			r = YesNoMB( (Font->Charset != SHIFTJIS_CHARSET) ? "Delete on this QSO. Are you sure?":"‚±‚ÌQSO‚ğ–³Œø‚É‚µ‚Ü‚·‚©H" );
+			r = YesNoMB( (Font->Charset != SHIFTJIS_CHARSET) ? "Delete on this QSO. Are you sure?":"ï¿½ï¿½ï¿½ï¿½QSOï¿½ğ–³Œï¿½ï¿½É‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½H" );
 		}
 		if( r == IDYES ){
 			Log.DeleteLast();
@@ -6175,8 +6175,8 @@ void __fastcall TMmttyWd::KOpenLogClick(TObject *Sender)
 		OpenDialog->Filter = "MMLOG Data Files(*.mdt)|*.mdt|";
 	}
 	else {
-		OpenDialog->Title = "ƒƒOƒtƒ@ƒCƒ‹‚ÌƒI[ƒvƒ“";
-		OpenDialog->Filter = "MMLOGƒf[ƒ^ƒtƒ@ƒCƒ‹(*.mdt)|*.mdt|";
+		OpenDialog->Title = "ï¿½ï¿½ï¿½Oï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ÌƒIï¿½[ï¿½vï¿½ï¿½";
+		OpenDialog->Filter = "MMLOGï¿½fï¿½[ï¿½^ï¿½tï¿½@ï¿½Cï¿½ï¿½(*.mdt)|*.mdt|";
 	}
 	OpenDialog->FileName = "";
 	OpenDialog->DefaultExt = "mdt";
@@ -6549,8 +6549,8 @@ void __fastcall TMmttyWd::KRxRecClick(TObject *Sender)
 		SaveDialog->Filter = "MMTTY Sound Files(*.mmv)|*.mmv|";
 	}
 	else {
-		SaveDialog->Title = "MMTTYƒTƒEƒ“ƒhƒtƒ@ƒCƒ‹‚Ìì¬";
-		SaveDialog->Filter = "MMTTYƒTƒEƒ“ƒhƒtƒ@ƒCƒ‹(*.mmv)|*.mmv|";
+		SaveDialog->Title = "MMTTYï¿½Tï¿½Eï¿½ï¿½ï¿½hï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ìì¬";
+		SaveDialog->Filter = "MMTTYï¿½Tï¿½Eï¿½ï¿½ï¿½hï¿½tï¿½@ï¿½Cï¿½ï¿½(*.mmv)|*.mmv|";
 	}
 	SaveDialog->FileName = "Recv.mmv";
 	SaveDialog->DefaultExt = "mmv";
@@ -6578,8 +6578,8 @@ void __fastcall TMmttyWd::KRxPlayClick(TObject *Sender)
 		OpenDialog->Filter = "MMTTY Sound Files(*.mmv)|*.mmv|";
 	}
 	else {
-		OpenDialog->Title = "MMTTYƒTƒEƒ“ƒhƒtƒ@ƒCƒ‹‚ÌÄ¶";
-		OpenDialog->Filter = "MMTTYƒTƒEƒ“ƒhƒtƒ@ƒCƒ‹(*.mmv)|*.mmv|";
+		OpenDialog->Title = "MMTTYï¿½Tï¿½Eï¿½ï¿½ï¿½hï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ÌÄï¿½";
+		OpenDialog->Filter = "MMTTYï¿½Tï¿½Eï¿½ï¿½ï¿½hï¿½tï¿½@ï¿½Cï¿½ï¿½(*.mmv)|*.mmv|";
 	}
 	OpenDialog->FileName = "";
 	OpenDialog->DefaultExt = "mmv";
@@ -6967,7 +6967,7 @@ void __fastcall TMmttyWd::KExtEntClick(int n, TMenuItem *mp)
 		r = InputMB("Assign External Program", "Input Menu text", as);
 	}
 	else {
-		r = InputMB("ŠO•”ƒvƒƒOƒ‰ƒ€“o˜^", "ƒƒjƒ…[‚É•\¦‚·‚é–¼‘O‚ğ“ü—Í‚µ‚Ä‰º‚³‚¢.", as);
+		r = InputMB("ï¿½Oï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½oï¿½^", "ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½É•\ï¿½ï¿½ï¿½ï¿½ï¿½é–¼ï¿½Oï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½Ä‰ï¿½ï¿½ï¿½ï¿½ï¿½.", as);
 	}
 	if( r == TRUE ){
 		OpenDialog->Options >> ofCreatePrompt;
@@ -6977,8 +6977,8 @@ void __fastcall TMmttyWd::KExtEntClick(int n, TMenuItem *mp)
 			OpenDialog->Filter = "Program files(*.exe;*.lnk)|*.exe;*.lnk|All Files(*.*)|*.*|";
 		}
 		else {
-			OpenDialog->Title = "Às‚·‚éƒvƒƒOƒ‰ƒ€‚ğ‘I‘ğ";
-			OpenDialog->Filter = "ƒvƒƒOƒ‰ƒ€ƒtƒ@ƒCƒ‹(*.exe;*.lnk)|*.exe;*.lnk|‚·‚×‚Ä‚Ìƒtƒ@ƒCƒ‹(*.*)|*.*|";
+			OpenDialog->Title = "ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½";
+			OpenDialog->Filter = "ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½(*.exe;*.lnk)|*.exe;*.lnk|ï¿½ï¿½ï¿½×‚Ä‚Ìƒtï¿½@ï¿½Cï¿½ï¿½(*.*)|*.*|";
 		}
 		OpenDialog->FileName = sys.m_ExtCmd[n];
 		OpenDialog->DefaultExt = "exe";
@@ -7422,7 +7422,7 @@ void __fastcall TMmttyWd::KAndyHelp(TObject *Sender)
 		ErrorMB( "'%s' was not found.\r\n\r\nPlease search in the MMTTY English Web Site.", sys.m_HTMLHelp.c_str());
 	}
 	else {
-		ErrorMB( "'%s'‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ.\r\n\r\nMMTTY English Web Site ‚©‚çƒ_ƒEƒ“ƒ[ƒh‚µ‚Ä‰º‚³‚¢.", sys.m_HTMLHelp.c_str());
+		ErrorMB( "'%s'ï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½.\r\n\r\nMMTTY English Web Site ï¿½ï¿½ï¿½ï¿½_ï¿½Eï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½Ä‰ï¿½ï¿½ï¿½ï¿½ï¿½.", sys.m_HTMLHelp.c_str());
 	}
 #endif
 }
@@ -7477,7 +7477,7 @@ void __fastcall TMmttyWd::KPasteClick(TObject *Sender)
 	AdjustFocus();
 }
 //---------------------------------------------------------------------------
-// TNCƒf[ƒ^óM‚ÌƒCƒxƒ“ƒg
+// TNCï¿½fï¿½[ï¿½^ï¿½ï¿½Mï¿½ÌƒCï¿½xï¿½ï¿½ï¿½g
 void __fastcall TMmttyWd::OnTncEvent(TMessage &Message)
 {
 	if( pTnc == NULL ) return;
@@ -7659,7 +7659,7 @@ void __fastcall TMmttyWd::SetNMMT(void)
     }
 }
 //---------------------------------------------------------------------------
-// TNCƒf[ƒ^óM‚ÌƒCƒxƒ“ƒg
+// TNCï¿½fï¿½[ï¿½^ï¿½ï¿½Mï¿½ÌƒCï¿½xï¿½ï¿½ï¿½g
 //
 void __fastcall TMmttyWd::OnTncEvent(void)
 {
@@ -7864,14 +7864,14 @@ void __fastcall TMmttyWd::RxTnc241(char c)
 //			m_TNCStg = "";
 			break;
 		default:
-			if( TNC.TncMode ){		// Commandƒ‚[ƒh
+			if( TNC.TncMode ){		// Commandï¿½ï¿½ï¿½[ï¿½h
 				if( TNC.Echo ) pTnc->PutChar(c);
 				m_cmdTNC.WriteChar(c);
 				if( m_cmdTNC.LoadText(bf, sizeof(bf)) ){
 					CmdTnc241(bf);
 				}
 			}
-			else {					// ƒƒbƒZ[ƒWƒ‚[ƒh
+			else {					// ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½ï¿½[ï¿½h
 				if( TNC.Echo == 1 ) pTnc->PutChar(c);
 				if( (c != LF) && (c != '#') ){
 					bf[0] = c;
@@ -7914,7 +7914,7 @@ void __fastcall TMmttyWd::RxKAM(char c)
 //			m_TNCStg = "";
 			break;
 		default:
-			if( TNC.TncMode ){		// Commandƒ‚[ƒh
+			if( TNC.TncMode ){		// Commandï¿½ï¿½ï¿½[ï¿½h
 				if( TNC.Echo ) pTnc->PutChar(c);
 				m_cmdTNC.WriteChar(c);
 				if( m_cmdTNC.LoadText(bf, sizeof(bf)) ){
@@ -7976,7 +7976,7 @@ void __fastcall TMmttyWd::RxKAM(char c)
 						}
 				}
 			}
-			else {					// ƒƒbƒZ[ƒWƒ‚[ƒh
+			else {					// ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½ï¿½[ï¿½h
 				if( TNC.Echo == 1 ) pTnc->PutChar(c);
 				if( (c != LF) && (c != '#') ){
 					bf[0] = c;
@@ -8120,7 +8120,7 @@ void __fastcall TMmttyWd::OpenCloseTNC(void)
 		if( pTnc->m_CreateON != TRUE ){
 			delete pTnc;
 			pTnc = NULL;
-			ErrorMB( (Font->Charset != SHIFTJIS_CHARSET)? "Cannot open '%s' for TNC":"TNC–Í‹[ƒ|[ƒg'%s'‚ªƒI[ƒvƒ“‚Å‚«‚Ü‚¹‚ñ.", TNC.StrPort);
+			ErrorMB( (Font->Charset != SHIFTJIS_CHARSET)? "Cannot open '%s' for TNC":"TNCï¿½Í‹[ï¿½|ï¿½[ï¿½g'%s'ï¿½ï¿½ï¿½Iï¿½[ï¿½vï¿½ï¿½ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½.", TNC.StrPort);
 		}
 		else {
 			sys.m_DisTX &= ~1;
@@ -8252,7 +8252,7 @@ void __fastcall TMmttyWd::RemoteStat(void)
 			m_RemoteBaud = d;
 		}
     }
-	RemoteFreq();		// MMT‚Ì‚½‚ß‚ÉŒÄ‚Ño‚µ‚Ü‚·
+	RemoteFreq();		// MMTï¿½Ì‚ï¿½ï¿½ß‚ÉŒÄ‚Ñoï¿½ï¿½ï¿½Ü‚ï¿½
     if( !Remote ) return;
 	d = GetRemoteSwitch();
 	if( m_RemoteSwitch != d ){
@@ -8337,16 +8337,17 @@ void __fastcall TMmttyWd::SetRemoteFFT(void)
 
 	int i, x;
 	double smp = pMap->smpFFT ? 8000 : 11025;
-	if( sys.m_FFTGain >= 4 ){
+	const double gainScale = (sys.m_FFTGain >= 4) ? 0.1 : 1.0;
+
 	if( FFT_SIZE < 2048 ){
 		smp *= 0.5;
 		for( i = 0; i < 2048; i++ ){
 			x = (i * smp / SampFreq) + 0.5;
 			if( x < FFT_SIZE ){
-				pMap->arrayFFT[i] =  pSound->fftIN.m_fft[x] * 0.1;
+				pMap->arrayFFT[i] = pSound->fftIN.m_fft[x] * gainScale;
 			}
 			else {
-				for( ; i < 2048; i++ ) pMap->arrayFFT[i] =  0;
+				for( ; i < 2048; i++ ) pMap->arrayFFT[i] = 0;
 			}
 		}
 		pMap->smpFreq = pMap->smpFFT ? 8000 : 11025;
@@ -8355,51 +8356,19 @@ void __fastcall TMmttyWd::SetRemoteFFT(void)
 		for( i = 0; i < 2048; i++ ){
 			x = (i * smp / SampFreq) + 0.5;
 			if( x < FFT_SIZE ){
-				pMap->arrayFFT[i] =  pSound->fftIN.m_fft[x] * 0.1;
+				pMap->arrayFFT[i] = pSound->fftIN.m_fft[x] * gainScale;
 			}
 			else {
-				for( ; i < 2048; i++ ) pMap->arrayFFT[i] =  0;
+				for( ; i < 2048; i++ ) pMap->arrayFFT[i] = 0;
 			}
 		}
 		pMap->smpFreq = pMap->smpFFT ? 8000 : 11025;
 	}
 	else {
 		for( i = 0; i < 2048; i++ ){
-			pMap->arrayFFT[i] =  pSound->fftIN.m_fft[i] * 0.1;
+			pMap->arrayFFT[i] = pSound->fftIN.m_fft[i] * gainScale;
 		}
 		pMap->smpFreq = SampFreq;
-	}
-	}
-	else {
-	if( FFT_SIZE < 2048 ){
-		smp *= 0.5;
-		for( i = 0; i < 2048; i++ ){
-			x = (i * smp / SampFreq) + 0.5;
-			if( x < FFT_SIZE ){
-				pMap->arrayFFT[i] =  pSound->fftIN.m_fft[x];
-			}
-			else {
-				for( ; i < 2048; i++ ) pMap->arrayFFT[i] =  0;
-			}
-		}
-		pMap->smpFreq = pMap->smpFFT ? 8000 : 11025;
-	}
-	else if( SampType || pMap->smpFFT ){
-		for( i = 0; i < 2048; i++ ){
-			x = (i * smp / SampFreq) + 0.5;
-			if( x < FFT_SIZE ){
-				pMap->arrayFFT[i] =  pSound->fftIN.m_fft[x];
-			}
-			else {
-				for( ; i < 2048; i++ ) pMap->arrayFFT[i] =  0;
-			}
-		}
-		pMap->smpFreq = pMap->smpFFT ? 8000 : 11025;
-	}
-	else {
-		memcpy(pMap->arrayFFT, pSound->fftIN.m_fft, sizeof(pMap->arrayFFT));
-		pMap->smpFreq = SampFreq;
-	}
 	}
 	pMap->flagFFT = 1;
 }
@@ -8425,7 +8394,7 @@ void __fastcall TMmttyWd::RemoteMMTTY(tagMSG &Msg)
 	int		di;
 
 	switch(Msg.wParam){
-		case RXM_HANDLE:		// ƒEƒCƒ“ƒhƒEƒnƒ“ƒhƒ‹‚Ì’Ê’m
+		case RXM_HANDLE:		// ï¿½Eï¿½Cï¿½ï¿½ï¿½hï¿½Eï¿½nï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Ì’Ê’m
 			m_RemoteTimer = 0;
 			APP_HANDLE = (HWND)Msg.lParam;
 			if( APP_HANDLE != HWND_BROADCAST){
@@ -8435,10 +8404,10 @@ void __fastcall TMmttyWd::RemoteMMTTY(tagMSG &Msg)
 				PostApp(TXM_PTTEVENT, SBTX->Down);
 			}
 			break;
-		case RXM_REQHANDLE:		// ƒEƒCƒ“ƒhƒEƒnƒ“ƒhƒ‹‚Ì—v‹
+		case RXM_REQHANDLE:		// ï¿½Eï¿½Cï¿½ï¿½ï¿½hï¿½Eï¿½nï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Ì—vï¿½ï¿½
 			::PostMessage(APP_HANDLE, MSG_MMTTY, TXM_HANDLE, (DWORD)Handle);
 			break;
-		case RXM_PTT:			// ‘—ó‚ÌØ‚è‘Ö‚¦
+		case RXM_PTT:			// ï¿½ï¿½ï¿½ï¿½ÌØ‚ï¿½Ö‚ï¿½
 			switch(Msg.lParam){
 				case 0:
                 case 5:
@@ -8747,7 +8716,7 @@ void __fastcall TMmttyWd::KENTClick(TObject *Sender)
 }
 #if 0
 //---------------------------------------------------------------------------
-// Radioƒf[ƒ^óM‚ÌƒCƒxƒ“ƒg
+// Radioï¿½fï¿½[ï¿½^ï¿½ï¿½Mï¿½ÌƒCï¿½xï¿½ï¿½ï¿½g
 //
 //    	pRadio = new CCradio(TRUE);
 //     	pRadio->Open(PortTnc, &ParaTnc, Handle, CM_COMM_UP);
@@ -8775,7 +8744,7 @@ void __fastcall TMmttyWd::OpenCloseRadio(void)
 			delete pRadio;
 			pRadio = NULL;
 			if( !Remote || !m_RemoteTimer ){
-				ErrorMB( (Font->Charset != SHIFTJIS_CHARSET)? "Can't open '%s' for Radio commands":"RadioƒRƒ}ƒ“ƒhƒ|[ƒg'%s'‚ªƒI[ƒvƒ“‚Å‚«‚Ü‚¹‚ñ.", RADIO.StrPort);
+				ErrorMB( (Font->Charset != SHIFTJIS_CHARSET)? "Can't open '%s' for Radio commands":"Radioï¿½Rï¿½}ï¿½ï¿½ï¿½hï¿½|ï¿½[ï¿½g'%s'ï¿½ï¿½ï¿½Iï¿½[ï¿½vï¿½ï¿½ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½.", RADIO.StrPort);
 			}
 		}
 		else {
@@ -8823,7 +8792,7 @@ void __fastcall TMmttyWd::UpdateLWait(void)
 	m_DisEvent--;
 }
 //---------------------------------------------------------------------------
-// Wait‚ÌƒNƒŠƒbƒN
+// Waitï¿½ÌƒNï¿½ï¿½ï¿½bï¿½N
 void __fastcall TMmttyWd::LWaitClick(TObject *Sender)
 {
 	sys.m_LWait++;
@@ -8907,7 +8876,7 @@ void __fastcall TMmttyWd::UpdateProfile(void)
 	}
 }
 //---------------------------------------------------------------------------
-// ƒŒƒWƒXƒgƒŠ‚©‚ç‚Ì“Ç‚İo‚µ
+// ï¿½ï¿½ï¿½Wï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì“Ç‚İoï¿½ï¿½
 void __fastcall TMmttyWd::ReadProfileList(void)
 {
 	char	bf[256];
@@ -8938,7 +8907,7 @@ void __fastcall TMmttyWd::ReadProfileList(void)
 	UpdateProfile();
 }
 //---------------------------------------------------------------------------
-// ƒŒƒWƒXƒgƒŠ‚©‚ç‚Ì“Ç‚İo‚µ
+// ï¿½ï¿½ï¿½Wï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì“Ç‚İoï¿½ï¿½
 void __fastcall TMmttyWd::ReadProfile(int n, LPCSTR pName)
 {
 	char	bf[256];
@@ -9098,7 +9067,7 @@ void __fastcall TMmttyWd::ReadProfile(int n, LPCSTR pName)
     RemoteStat();
 }
 //---------------------------------------------------------------------------
-// ƒŒƒWƒXƒgƒŠ‚Ö‚Ì‘‚«o‚µ
+// ï¿½ï¿½ï¿½Wï¿½Xï¿½gï¿½ï¿½ï¿½Ö‚Ìï¿½ï¿½ï¿½ï¿½oï¿½ï¿½
 void __fastcall TMmttyWd::WriteProfile(int n, LPCSTR pName, int Flag)
 {
 	char	bf[256];
@@ -9233,7 +9202,7 @@ void __fastcall TMmttyWd::WriteProfile(int n, LPCSTR pName, int Flag)
 
 	}
 	catch(...){
-		ErrorMB((Font->Charset != SHIFTJIS_CHARSET)?"Cannot update UserPara.INI":"UserPara.INI‚ğXV‚Å‚«‚Ü‚¹‚ñ.");
+		ErrorMB((Font->Charset != SHIFTJIS_CHARSET)?"Cannot update UserPara.INI":"UserPara.INIï¿½ï¿½ï¿½Xï¿½Vï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½.");
 	}
 }
 //---------------------------------------------------------------------------
@@ -9260,7 +9229,7 @@ void __fastcall TMmttyWd::WriteProfile(int n)
 		r = InputMB("Assign profile", "Profile name", as);
 	}
 	else {
-		r = InputMB("ƒvƒƒtƒ@ƒCƒ‹‚Ì“o˜^", "ƒvƒƒtƒ@ƒCƒ‹‚Ì–¼‘O", as);
+		r = InputMB("ï¿½vï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ì“oï¿½^", "ï¿½vï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ì–ï¿½ï¿½O", as);
 	}
 	if( r == TRUE ){
 		if( tp != NULL ){
@@ -9388,8 +9357,8 @@ void __fastcall TMmttyWd::KSSVClick(TObject *Sender)
 		SaveDialog->Filter = "Profiles(*.pro)|*.pro|";
 	}
 	else {
-		SaveDialog->Title = "ƒvƒƒtƒ@ƒCƒ‹‚Ìì¬";
-		SaveDialog->Filter = "ƒvƒƒtƒ@ƒCƒ‹(*.pro)|*.pro|";
+		SaveDialog->Title = "ï¿½vï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ìì¬";
+		SaveDialog->Filter = "ï¿½vï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½(*.pro)|*.pro|";
 	}
 	char bf[128];
 	sprintf(bf, "%s.pro", ClipCall(sys.m_Call.c_str()));
@@ -9424,8 +9393,8 @@ void __fastcall TMmttyWd::KSLDClick(TObject *Sender)
 		OpenDialog->Filter = "Profiles(*.pro)|*.pro|All files(*.*)|*.*|";
 	}
 	else {
-		OpenDialog->Title = "ƒvƒƒtƒ@ƒCƒ‹‚Ìƒ[ƒh";
-		OpenDialog->Filter = "ƒvƒƒtƒ@ƒCƒ‹(*.pro)|*.pro|‚·‚×‚Ä‚Ìƒtƒ@ƒCƒ‹(*.*)|*.*|";
+		OpenDialog->Title = "ï¿½vï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ìƒï¿½ï¿½[ï¿½h";
+		OpenDialog->Filter = "ï¿½vï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½(*.pro)|*.pro|ï¿½ï¿½ï¿½×‚Ä‚Ìƒtï¿½@ï¿½Cï¿½ï¿½(*.*)|*.*|";
 	}
 	OpenDialog->FileName = "";
 	OpenDialog->DefaultExt = "pro";
@@ -9469,7 +9438,7 @@ void __fastcall TMmttyWd::KPttTimClick(TObject *Sender)
 	AnsiString as;
 
 	as = m_PttTimer;
-	if( InputMB("MMTTY", (Font->Charset != SHIFTJIS_CHARSET)?"Enter PTT timer value(sec). (0 = OFF)":"PTTƒ^ƒCƒ}[ŠÔi•bj‚ğ“ü—Í‚µ‚Ä‰º‚³‚¢. (0 = OFF)", as) == TRUE ){
+	if( InputMB("MMTTY", (Font->Charset != SHIFTJIS_CHARSET)?"Enter PTT timer value(sec). (0 = OFF)":"PTTï¿½^ï¿½Cï¿½}ï¿½[ï¿½ï¿½ï¿½Ôiï¿½bï¿½jï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½Ä‰ï¿½ï¿½ï¿½ï¿½ï¿½. (0 = OFF)", as) == TRUE ){
 		if( !as.IsEmpty() ){
 			int d;
 			sscanf(as.c_str(), "%lu", &d);
@@ -9488,7 +9457,7 @@ void __fastcall TMmttyWd::UpdatePttTimer(void)
 void __fastcall TMmttyWd::KROFClick(TObject *Sender)
 {
 	AnsiString	as = LogDir;
-	if( InputMB("MMTTY", (Font->Charset != SHIFTJIS_CHARSET)?"Please enter folder name":"ƒtƒHƒ‹ƒ_–¼‚ğ“ü—Í‚µ‚Ä‰º‚³‚¢.", as) == TRUE ){
+	if( InputMB("MMTTY", (Font->Charset != SHIFTJIS_CHARSET)?"Please enter folder name":"ï¿½tï¿½Hï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½Ä‰ï¿½ï¿½ï¿½ï¿½ï¿½.", as) == TRUE ){
 		StrCopy(LogDir, as.c_str(), 255);
 		if( sys.m_log ){
 			PrintText.MakeLogName();
@@ -9597,8 +9566,8 @@ void __fastcall TMmttyWd::SelectCombo(int sw)
 {
 	m_DisEvent++;
 
-	// DemoBox1‚Ì‘I‘ğ
-	if( m_Baud ){	// Baud•\¦
+	// DemoBox1ï¿½Ì‘Iï¿½ï¿½
+	if( m_Baud ){	// Baudï¿½\ï¿½ï¿½
 		if( sw ) SetComboBox(DemoBox1, m_asBaud.c_str());
 		DemoBox1->Text = pSound->FSKDEM.GetBaudRate();
 	}
@@ -9623,7 +9592,7 @@ void __fastcall TMmttyWd::SelectCombo(int sw)
 		}
 	}
 
-	// DemoBox2‚Ì‘I‘ğ
+	// DemoBox2ï¿½Ì‘Iï¿½ï¿½
 	switch(pSound->FSKDEM.m_type){
 		case 0:		// IIR or FIR
 		case 1:

@@ -23,7 +23,7 @@
 #include "Wave.h"
 
 //---------------------------------------------------------------------------
-// ‰Šú‰»
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 __fastcall CWave::CWave(void)
 {
 	m_Error = 0;
@@ -48,7 +48,7 @@ __fastcall CWave::CWave(void)
 }
 
 //---------------------------------------------------------------------------
-// I—¹Àsƒ‹[ƒ`ƒ“
+// ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½`ï¿½ï¿½
 __fastcall CWave::~CWave()
 {
 	::DeleteCriticalSection(&m_InCS);
@@ -60,7 +60,7 @@ __fastcall CWave::~CWave()
 }
 #if 0
 //---------------------------------------------------------------------------
-// ƒTƒEƒ“ƒhƒJ[ƒh‚Ì–â‚¢‡‚í‚¹
+// ï¿½Tï¿½Eï¿½ï¿½ï¿½hï¿½Jï¿½[ï¿½hï¿½Ì–â‚¢ï¿½ï¿½ï¿½í‚¹
 BOOL __fastcall CWave::IsFormatSupported(LPWAVEFORMATEX pWFX, UINT IDDevice)
 {
 	return (::waveOutOpen(
@@ -74,7 +74,7 @@ BOOL __fastcall CWave::IsFormatSupported(LPWAVEFORMATEX pWFX, UINT IDDevice)
 }
 #endif
 //---------------------------------------------------------------------------
-// ƒTƒEƒ“ƒhƒJ[ƒh‚Ì“ü—Í‚Å‚ÌƒI[ƒvƒ“
+// ï¿½Tï¿½Eï¿½ï¿½ï¿½hï¿½Jï¿½[ï¿½hï¿½Ì“ï¿½ï¿½Í‚Å‚ÌƒIï¿½[ï¿½vï¿½ï¿½
 //	WFX.wFormatTag = WAVE_FORMAT_PCM;
 //	WFX.nChannels = 1;
 //	WFX.wBitsPerSample = 16;
@@ -101,12 +101,12 @@ BOOL __fastcall CWave::InOpen(LPWAVEFORMATEX pWFX, UINT IDDevice, DWORD Size)
 	if( m_InMemSize & 3 ) m_InMemSize += 4 - (m_InMemSize & 3);
 	m_InAllocSize = m_InMemSize * m_InFifoSize;
 	m_InEvent = ::CreateEvent(NULL, FALSE, FALSE, NULL);
-	// ƒTƒEƒ“ƒhƒJ[ƒh‚ÌƒI[ƒvƒ“
+	// ï¿½Tï¿½Eï¿½ï¿½ï¿½hï¿½Jï¿½[ï¿½hï¿½ÌƒIï¿½[ï¿½vï¿½ï¿½
 	if( (m_Error = ::waveInOpen( &m_hin, IDDevice, pWFX, (DWORD)WaveInProc, (DWORD)this, CALLBACK_FUNCTION ) ) != MMSYSERR_NOERROR ){
 		InClose();
 		return FALSE;
 	}
-	// ƒoƒbƒtƒ@‚Ì€”õ
+	// ï¿½oï¿½bï¿½tï¿½@ï¿½Ìï¿½ï¿½ï¿½
 	m_pInBase = new char[m_InAllocSize];
 	::VirtualLock(m_pInBase, m_InAllocSize);
 	memset(m_pInBase, 0, m_InAllocSize);
@@ -127,7 +127,7 @@ BOOL __fastcall CWave::InOpen(LPWAVEFORMATEX pWFX, UINT IDDevice, DWORD Size)
 			return FALSE;
 		}
 	}
-	// æ‚è‚±‚İ‚ÌŠJn
+	// ï¿½ï¿½è‚±ï¿½İ‚ÌŠJï¿½n
 	if( (m_Error = ::waveInStart(m_hin) ) != MMSYSERR_NOERROR ){
 		InClose();
 		return FALSE;
@@ -190,10 +190,10 @@ BOOL __fastcall CWave::InRead(double* pData, int Len)
 	}
 
 	::EnterCriticalSection(&m_InCS);
-	if( !m_InBC ){                    // ‚Ü‚¾ƒf[ƒ^‚ª‘¶İ‚µ‚È‚¢
+	if( !m_InBC ){                    // ï¿½Ü‚ï¿½ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½
 		m_InWait++;
 		::LeaveCriticalSection(&m_InCS);
-		// ƒoƒbƒtƒ@‚Éƒf[ƒ^‚ª—­‚Ü‚é‚Ü‚Å‘Ò‚Â
+		// ï¿½oï¿½bï¿½tï¿½@ï¿½Éƒfï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½Ü‚Å‘Ò‚ï¿½
 		if( ::WaitForSingleObject( m_InEvent, WAVE_TIMEOUT_EVENT ) != WAIT_OBJECT_0 ){
 			m_Error = 1;
 			InClose();
@@ -203,7 +203,7 @@ BOOL __fastcall CWave::InRead(double* pData, int Len)
 	else {
 		::LeaveCriticalSection(&m_InCS);
 	}
-	// ƒf[ƒ^‚ğ•‚“®­”“_‚É•ÏŠ·
+	// ï¿½fï¿½[ï¿½^ï¿½ğ•‚“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½É•ÏŠï¿½
 	LPWAVEHDR hp = m_pInBuff[m_InRP];
 	if( m_IWFX.wBitsPerSample == 16 ){	// 16bits
 		SHORT *rp = (SHORT *)hp->lpData;
@@ -262,7 +262,7 @@ BOOL __fastcall CWave::InRead(double* pData, int Len)
 	}
 	hp->dwBytesRecorded = NULL;
 	::waveInAddBuffer(m_hin, hp, sizeof(WAVEHDR));
-	m_InBC--;     // ‚P–½—ß‚Å“WŠJ‚³‚ê‚é‚Ì‚Å CriticalSection ‚Í•s—v
+	m_InBC--;     // ï¿½Pï¿½ï¿½ï¿½ß‚Å“Wï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ CriticalSection ï¿½Í•sï¿½v
 	m_InRP++;
 	if( m_InRP >= m_InFifoSize){
 		m_InRP = 0;
@@ -272,15 +272,15 @@ BOOL __fastcall CWave::InRead(double* pData, int Len)
 //---------------------------------------------------------------------------
 //void CALLBACK WaveProc(hWave, uMsg, dwInstance, dwParam1, dwParam2)
 //
-//HWAVE hWave;	/* ƒEƒF[ƒuƒtƒH[ƒ€ ƒfƒoƒCƒX‚Ìƒnƒ“ƒhƒ‹	*/
-//UINT uMsg;	/* ‘—‚éƒƒbƒZ[ƒW	*/
-//DWORD dwInstance;	/* ƒCƒ“ƒXƒ^ƒ“ƒX ƒf[ƒ^	*/
-//DWORD dwParam1;	/* ƒAƒvƒŠƒP[ƒVƒ‡ƒ“’è‹`‚Ìƒpƒ‰ƒ[ƒ^	*/
-//DWORD dwParam2;	/* ƒAƒvƒŠƒP[ƒVƒ‡ƒ“’è‹`‚Ìƒpƒ‰ƒ[ƒ^	*/
+//HWAVE hWave;	/* ï¿½Eï¿½Fï¿½[ï¿½uï¿½tï¿½Hï¿½[ï¿½ï¿½ ï¿½fï¿½oï¿½Cï¿½Xï¿½Ìƒnï¿½ï¿½ï¿½hï¿½ï¿½	*/
+//UINT uMsg;	/* ï¿½ï¿½ï¿½éƒï¿½bï¿½Zï¿½[ï¿½W	*/
+//DWORD dwInstance;	/* ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½X ï¿½fï¿½[ï¿½^	*/
+//DWORD dwParam1;	/* ï¿½Aï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½Ìƒpï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^	*/
+//DWORD dwParam2;	/* ï¿½Aï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½Ìƒpï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^	*/
 void CALLBACK WaveInProc(HWAVE m_hin, UINT uMsg, CWave* pWave, DWORD dwParam1, DWORD dwParam2 )
 {
 	if( uMsg == MM_WIM_DATA ){
-		::EnterCriticalSection(&pWave->m_InCS);
+		TScopedCriticalSection lock(pWave->m_InCS);
 		pWave->m_InBC++;
 		pWave->m_InWP++;
 		if( pWave->m_InWP >= pWave->m_InFifoSize ) pWave->m_InWP = 0;
@@ -289,11 +289,10 @@ void CALLBACK WaveInProc(HWAVE m_hin, UINT uMsg, CWave* pWave, DWORD dwParam1, D
 			pWave->m_InWait--;
 			::SetEvent(pWave->m_InEvent);
 		}
-		::LeaveCriticalSection(&pWave->m_InCS);
 	}
 }
 //---------------------------------------------------------------------------
-// ƒTƒEƒ“ƒhƒJ[ƒh‚Ìo—Í‚Å‚ÌƒI[ƒvƒ“
+// ï¿½Tï¿½Eï¿½ï¿½ï¿½hï¿½Jï¿½[ï¿½hï¿½Ìoï¿½Í‚Å‚ÌƒIï¿½[ï¿½vï¿½ï¿½
 //	WFX.wFormatTag = WAVE_FORMAT_PCM;
 //	WFX.nChannels = 1;
 //	WFX.wBitsPerSample = 16;
@@ -328,7 +327,7 @@ BOOL __fastcall CWave::OutOpen(LPWAVEFORMATEX pWFX, UINT IDDevice, DWORD Size)
 		OutAbort();
 		return FALSE;
 	}
-	// ƒoƒbƒtƒ@[‚Ì€”õ
+	// ï¿½oï¿½bï¿½tï¿½@ï¿½[ï¿½Ìï¿½ï¿½ï¿½
 	m_pOutBase = new char[m_OutAllocSize];
 	::VirtualLock(m_pOutBase, m_OutAllocSize);
 	memset(m_pOutBase, 0, m_OutAllocSize);
@@ -388,7 +387,7 @@ BOOL __fastcall CWave::OutWrite(double *pData, int Len)
 		return FALSE;
 	}
 
-	// ‘—Mƒoƒbƒtƒ@‹ó‚«‘Ò‚¿
+	// ï¿½ï¿½ï¿½Mï¿½oï¿½bï¿½tï¿½@ï¿½ó‚«‘Ò‚ï¿½
 	EnterCriticalSection(&m_OutCS);
 	if( m_OutBC >= m_OutFifoSize ){
 		m_OutWait++;
@@ -403,7 +402,7 @@ BOOL __fastcall CWave::OutWrite(double *pData, int Len)
 		::LeaveCriticalSection(&m_OutCS);
 	}
 
-	// ƒf[ƒ^‚Ì•ÏŠ·
+	// ï¿½fï¿½[ï¿½^ï¿½Ì•ÏŠï¿½
 	LPWAVEHDR hp = m_pOutBuff[m_OutWP];
 	if(m_OWFX.wBitsPerSample == 16){		// 16bits
 		SHORT *wp = (SHORT *)hp->lpData;
@@ -443,7 +442,7 @@ BOOL __fastcall CWave::OutWrite(double *pData, int Len)
 		}
 	}
 	::waveOutWrite(m_hout, hp, sizeof(WAVEHDR) );
-	m_OutBC++;    // ‚P–½—ß‚Å“WŠJ‚³‚ê‚é‚Ì‚Å CriticalSection ‚Í•s—v
+	m_OutBC++;    // ï¿½Pï¿½ï¿½ï¿½ß‚Å“Wï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ CriticalSection ï¿½Í•sï¿½v
 	if(	m_OutFirst ){
 		if( (m_OutBC >= 8) || (m_OutBC >= (m_OutFifoSize-1)) ){
 			m_OutFirst = FALSE;
@@ -464,10 +463,10 @@ void __fastcall CWave::OutFlush()
 		return;
 	}
 	if(m_hout != NULL){
-		// ƒoƒbƒtƒ@‘—M‘Ò‚¿
+		// ï¿½oï¿½bï¿½tï¿½@ï¿½ï¿½ï¿½Mï¿½Ò‚ï¿½
 		while(1){
 			::EnterCriticalSection(&m_OutCS);
-			if( m_OutBC > 0 ){	          // –¢‘—oƒf[ƒ^‚ª‘¶İ‚·‚éê‡
+			if( m_OutBC > 0 ){	          // ï¿½ï¿½ï¿½ï¿½ï¿½oï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½ï¿½ê‡
 				m_OutWait++;
 				::LeaveCriticalSection(&m_OutCS);
 				if( ::WaitForSingleObject( m_OutEvent, WAVE_TIMEOUT_EVENT ) != WAIT_OBJECT_0 ){
@@ -494,7 +493,7 @@ void __fastcall CWave::OutAbort()
 	if(m_hout != NULL){
 		::waveOutReset(m_hout);
 		::Sleep(1);     // for the timing
-		// ƒoƒbƒtƒ@‚Ì‰ğ•ú
+		// ï¿½oï¿½bï¿½tï¿½@ï¿½Ì‰ï¿½ï¿½
 		if( m_pOutBase != NULL ){
 			for(int i = 0; i < m_OutFifoSize; i++ ){
 				if( m_pOutBuff[i] != NULL ){
@@ -521,15 +520,15 @@ void __fastcall CWave::OutAbort()
 //---------------------------------------------------------------------------
 //void CALLBACK WaveProc(hWave, uMsg, dwInstance, dwParam1, dwParam2)
 //
-//HWAVE hWave;	/* ƒEƒF[ƒuƒtƒH[ƒ€ ƒfƒoƒCƒX‚Ìƒnƒ“ƒhƒ‹	*/
-//UINT uMsg;	/* ‘—‚éƒƒbƒZ[ƒW	*/
-//DWORD dwInstance;	/* ƒCƒ“ƒXƒ^ƒ“ƒX ƒf[ƒ^	*/
-//DWORD dwParam1;	/* ƒAƒvƒŠƒP[ƒVƒ‡ƒ“’è‹`‚Ìƒpƒ‰ƒ[ƒ^	*/
-//DWORD dwParam2;	/* ƒAƒvƒŠƒP[ƒVƒ‡ƒ“’è‹`‚Ìƒpƒ‰ƒ[ƒ^	*/
+//HWAVE hWave;	/* ï¿½Eï¿½Fï¿½[ï¿½uï¿½tï¿½Hï¿½[ï¿½ï¿½ ï¿½fï¿½oï¿½Cï¿½Xï¿½Ìƒnï¿½ï¿½ï¿½hï¿½ï¿½	*/
+//UINT uMsg;	/* ï¿½ï¿½ï¿½éƒï¿½bï¿½Zï¿½[ï¿½W	*/
+//DWORD dwInstance;	/* ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½X ï¿½fï¿½[ï¿½^	*/
+//DWORD dwParam1;	/* ï¿½Aï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½Ìƒpï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^	*/
+//DWORD dwParam2;	/* ï¿½Aï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½Ìƒpï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^	*/
 void CALLBACK WaveOutProc(HWAVE m_hout, UINT uMsg, CWave* pWave, DWORD dwParam1, DWORD dwParam2 )
 {
 	if( uMsg == WOM_DONE ){
-		EnterCriticalSection(&pWave->m_OutCS);
+		TScopedCriticalSection lock(pWave->m_OutCS);
 		pWave->m_OutBCC--;
 		pWave->m_OutBC--;
 		pWave->m_OutRP++;
@@ -539,7 +538,6 @@ void CALLBACK WaveOutProc(HWAVE m_hout, UINT uMsg, CWave* pWave, DWORD dwParam1,
 			pWave->m_OutWait--;
 			SetEvent(pWave->m_OutEvent);
 		}
-		LeaveCriticalSection(&pWave->m_OutCS);
 	}
 }
 
